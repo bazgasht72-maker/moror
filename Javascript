@@ -1,0 +1,549 @@
+// ===== State =====
+let items = [];
+let tempAttachments = [];
+let editingItemId = null;
+const intervals = [0, 1, 3, 7, 14, 30, 60, 120, 180, 365]; // 0 => 20min
+let multiSelectMode = false;
+let selectedItems = [];
+let currentLanguage = 'fa';
+let currentSortOrder = 'desc';
+
+// ===== Translations =====
+const translations = {
+  fa: {
+    'header-title': 'مرور امروز',
+    'review-placeholder': 'امروز موردی برای مرور وجود ندارد. عالیه!',
+    'remaining-section-title': 'باقی‌مانده',
+    'completed-section-title': 'انجام‌شده در این بازدید',
+    'new-item-title': 'افزودن عنوان جدید',
+    'new-title-placeholder': 'عنوان را وارد کنید...',
+    'attachment-label': 'پیوست‌ها (اختیاری)',
+    'add-image-tooltip': 'اضافه کردن عکس',
+    'add-video-tooltip': 'اضافه کردن فیلم',
+    'add-audio-tooltip': 'اضافه کردن صوت',
+    'add-text-tooltip': 'اضافه کردن یادداشت متنی',
+    'save-item-btn': 'ذخیره عنوان',
+    'header-stats-total': 'کل عناوین: ',
+    'header-stats-mastered': 'پایان یافته: ',
+    'select-all-btn': 'انتخاب همه',
+    'delete-selected-btn': 'حذف انتخاب‌شده‌ها',
+    'edit-modal-title': 'ویرایش عنوان',
+    'edit-title-placeholder': 'عنوان جدید',
+    'save-edit-btn': 'ذخیره تغییرات',
+    'cancel-edit-btn': 'انصراف',
+    'settings-modal-title': 'تنظیمات',
+    'language-label': 'زبان:',
+    'theme-label': 'تم:',
+    'font-label': 'فونت:',
+    'save-settings-btn': 'ذخیره',
+    'cancel-settings-btn': 'انصراف',
+    'done-btn': 'انجام شد',
+    'delete-btn': 'حذف',
+    'edit-btn': 'ویرایش',
+    'reset-btn': 'ریست پیشرفت',
+    'text-modal-title': 'افزودن یادداشت متنی',
+    'modal-textarea-placeholder': 'یادداشت خود را اینجا بنویسید...',
+    'save-text-btn': 'ذخیره متن',
+    'cancel-text-btn': 'انصراف',
+    'attachments-title': 'پیوست‌ها:',
+    'review-schedule-title': 'برنامه‌ریزی مرور:',
+    'error-empty-title': 'عنوان نمی‌تواند خالی باشد!',
+    'error-file-size': 'فایل خیلی بزرگ است! حداکثر اندازه ۵۰ مگابایت است.',
+    'error-save': 'خطا در ذخیره‌سازی داده‌ها. لطفاً دوباره تلاش کنید.',
+    'error-load': 'خطا در بارگذاری داده‌ها. لطفاً دوباره تلاش کنید.',
+    'error-login': 'ورود در حالت تست غیرفعال است.',
+    'confirm-delete': 'آیا مطمئن هستید که می‌خواهید این عنوان را حذف کنید؟',
+    'confirm-delete-selected': 'آیا مطمئن هستید که می‌خواهید عناوین انتخاب‌شده را حذف کنید؟',
+    'confirm-reset': 'آیا مطمئن هستید که می‌خواهید پیشرفت این عنوان را ریست کنید؟',
+    'select-item': 'انتخاب آیتم',
+    'remove-attachment': 'حذف پیوست',
+    'completed': 'انجام‌شده',
+    'text-note': 'یادداشت متنی',
+    'image-alt': 'پیوست تصویر',
+    'video-alt': 'پیوست ویدیو',
+    'audio-alt': 'پیوست صوت',
+    'sort-by': 'مرتب‌سازی بر اساس:',
+    'sort-date': 'تاریخ',
+    'sort-title': 'عنوان',
+    'sort-progress': 'پیشرفت',
+    'sort-order': 'ترتیب:',
+    'sort-order-asc': 'صعودی',
+    'sort-order-desc': 'نزولی',
+    'all-items-title': 'همه کارها',
+    'today-tab': 'امروز',
+    'new-tab': 'جدید',
+    'all-tab': 'همه',
+    'overall-progress': 'پیشرفت کلی امروز:',
+    'completed-at': 'تکمیل در: '
+  },
+  en: { "header-title": "Today's Review", "review-placeholder": "No items to review today. Great job!", "remaining-section-title": "Remaining", "completed-section-title": "Completed in This Session", "new-item-title": "Add New Item", "new-title-placeholder": "Enter title...", "attachment-label": "Attachments (Optional)", "add-image-tooltip": "Add Image", "add-video-tooltip": "Add Video", "add-audio-tooltip": "Add Audio", "add-text-tooltip": "Add Text Note", "save-item-btn": "Save Item", "header-stats-total": "Total Items: ", "header-stats-mastered": "Mastered: ", "select-all-btn": "Select All", "delete-selected-btn": "Delete Selected", "edit-modal-title": "Edit Item", "edit-title-placeholder": "New Title", "save-edit-btn": "Save Changes", "cancel-edit-btn": "Cancel", "settings-modal-title": "Settings", "language-label": "Language:", "theme-label": "Theme:", "font-label": "Font:", "save-settings-btn": "Save", "cancel-settings-btn": "Cancel", "done-btn": "Done", "delete-btn": "Delete", "edit-btn": "Edit", "reset-btn": "Reset Progress", "text-modal-title": "Add Text Note", "modal-textarea-placeholder": "Write your note here...", "save-text-btn": "Save Text", "cancel-text-btn": "Cancel", "attachments-title": "Attachments:", "review-schedule-title": "Review Schedule:", "error-empty-title": "Title cannot be empty!", "error-file-size": "File is too large! Maximum size is 50MB.", "error-save": "Error saving data. Please try again.", "error-load": "Error loading data. Please try again.", "error-login": "Login disabled in demo mode.", "confirm-delete": "Are you sure you want to delete this item?", "confirm-delete-selected": "Are you sure you want to delete the selected items?", "confirm-reset": "Are you sure you want to reset the progress of this item?", "select-item": "Select item", "remove-attachment": "Remove attachment", "completed": "Completed", "text-note": "Text note", "image-alt": "Image attachment", "video-alt": "Video attachment", "audio-alt": "Audio attachment", "sort-by": "Sort by:", "sort-date": "Date", "sort-title": "Title", "sort-progress": "Progress", "sort-order": "Order:", "sort-order-asc": "Ascending", "sort-order-desc": "Descending", "all-items-title": "All Tasks", "today-tab": "Today", "new-tab": "New", "all-tab": "All", "overall-progress": "Overall Progress Today:", "completed-at": "Completed at: " },
+  ar: { "header-title": "مراجعة اليوم", "review-placeholder": "لا توجد عناصر للمراجعة اليوم. عمل رائع!", "remaining-section-title": "المتبقي", "completed-section-title": "تم الانتهاء في هذه الجلسة", "new-item-title": "إضافة عنصر جديد", "new-title-placeholder": "أدخل العنوان...", "attachment-label": "المرفقات (اختياري)", "add-image-tooltip": "إضافة صورة", "add-video-tooltip": "إضافة فيديو", "add-audio-tooltip": "إضافة صوت", "add-text-tooltip": "إضافة ملاحظة نصية", "save-item-btn": "حفظ العنصر", "header-stats-total": "إجمالي العناصر: ", "header-stats-mastered": "المكتمل: ", "select-all-btn": "تحديد الكل", "delete-selected-btn": "حذف المحدد", "edit-modal-title": "تعديل العنصر", "edit-title-placeholder": "عنوان جديد", "save-edit-btn": "حفظ التغييرات", "cancel-edit-btn": "إلغاء", "settings-modal-title": "الإعدادات", "language-label": "اللغة:", "theme-label": "الثيم:", "font-label": "الخط:", "save-settings-btn": "حفظ", "cancel-settings-btn": "إلغاء", "done-btn": "تم", "delete-btn": "حذف", "edit-btn": "تعديل", "reset-btn": "إعادة تعيين التقدم", "text-modal-title": "إضافة ملاحظة نصية", "modal-textarea-placeholder": "اكتب ملاحظتك هنا...", "save-text-btn": "حفظ النص", "cancel-text-btn": "إلغاء", "attachments-title": "المرفقات:", "review-schedule-title": "جدول المراجعة:", "error-empty-title": "العنوان لا يمكن أن يكون فارغًا!", "error-file-size": "الملف كبير جدًا! الحد الأقصى للحجم 50 ميجابايت.", "error-save": "خطأ في حفظ البيانات. حاول مرة أخرى.", "error-load": "خطأ في تحميل البيانات. حاول مرة أخرى.", "error-login": "تسجيل الدخول معطل في وضع العرض.", "confirm-delete": "هل أنت متأكد أنك تريد حذف هذا العنصر؟", "confirm-delete-selected": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟", "confirm-reset": "هل أنت متأكد أنك تريد إعادة تعيين تقدم هذا العنصر؟", "select-item": "تحديد العنصر", "remove-attachment": "إزالة المرفق", "completed": "مكتمل", "text-note": "ملاحظة نصية", "image-alt": "مرفق صورة", "video-alt": "مرفق فيديو", "audio-alt": "مرفق صوتي", "sort-by": "ترتيب حسب:", "sort-date": "التاريخ", "sort-title": "العنوان", "sort-progress": "التقدم", "sort-order": "الترتيب:", "sort-order-asc": "تصاعدي", "sort-order-desc": "تنازلي", "all-items-title": "كل المهام", "today-tab": "اليوم", "new-tab": "جديد", "all-tab": "الكل", "overall-progress": "التقدم الكلي اليوم:", "completed-at": "اكتمل في: " }
+};
+
+// ===== DOM =====
+const htmlEl = document.documentElement;
+const headerTitle = document.getElementById('header-title');
+const tabs = document.querySelectorAll('.tab-btn');
+const contentPanels = document.querySelectorAll('.content-panel');
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const reviewPanel = document.getElementById('review-panel');
+const reviewPlaceholder = document.getElementById('review-placeholder');
+const todayRemainingList = document.getElementById('today-remaining-list');
+const todayCompletedList = document.getElementById('today-completed-list');
+const remainingSection = document.getElementById('remaining-section');
+const completedSection = document.getElementById('completed-section');
+const newTitleInput = document.getElementById('newTitleInput');
+const saveItemBtn = document.getElementById('saveItemBtn');
+const fileUploadInput = document.getElementById('file-upload-input');
+const attachmentsPreview = document.getElementById('attachments-preview');
+const addImageBox = document.getElementById('add-image-box');
+const addVideoBox = document.getElementById('add-video-box');
+const addAudioBox = document.getElementById('add-audio-box');
+const addTextBox = document.getElementById('add-text-box');
+const textModal = document.getElementById('text-modal');
+const modalTextarea = document.getElementById('modal-textarea');
+const saveTextBtn = document.getElementById('save-text-btn');
+const cancelTextBtn = document.getElementById('cancel-text-btn');
+const editModal = document.getElementById('edit-modal');
+const editTitleInput = document.getElementById('edit-title-input');
+const editAttachmentsPreview = document.getElementById('edit-attachments-preview');
+const saveEditBtn = document.getElementById('save-edit-btn');
+const cancelEditBtn = document.getElementById('cancel-edit-btn');
+const settingsBtn = document.getElementById('settings-btn');
+const settingsModal = document.getElementById('settings-modal');
+const languageSelect = document.getElementById('language-select');
+const themeSelect = document.getElementById('theme-select');
+const fontSelect = document.getElementById('font-select');
+const saveSettingsBtn = document.getElementById('save-settings-btn');
+const cancelSettingsBtn = document.getElementById('cancel-settings-btn');
+const loginBtn = document.getElementById('login-btn');
+const multiSelectActions = document.getElementById('multi-select-actions');
+const selectAllBtn = document.getElementById('select-all-btn');
+const deleteSelectedBtn = document.getElementById('delete-selected-btn');
+const sortSelect = document.getElementById('sort-select');
+const sortOrderSelect = document.getElementById('sort-order-select');
+const totalCountEl = document.getElementById('total-count');
+const masteredCountEl = document.getElementById('mastered-count');
+const overallProgressBarContainer = document.getElementById('overall-progress-bar-container');
+const overallProgressBarFill = document.getElementById('overall-progress-bar-fill');
+const overallProgressBarText = document.getElementById('overall-progress-bar-text');
+const customModal = document.getElementById('custom-modal');
+const customModalTitle = document.getElementById('custom-modal-title');
+const customModalText = document.getElementById('custom-modal-text');
+const customModalConfirmBtn = document.getElementById('custom-modal-confirm-btn');
+const customModalCancelBtn = document.getElementById('custom-modal-cancel-btn');
+// --- New DOM elements for attachment popup ---
+const addAttachmentBtn = document.getElementById('add-attachment-btn');
+const attachmentPopupMenu = document.getElementById('attachment-popup-menu');
+
+// ===== Helpers =====
+const applyTheme = (theme) => {
+  if (theme === 'auto') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  htmlEl.setAttribute('data-theme', theme);
+  themeToggleBtn.querySelector('.material-icons-outlined').textContent = theme === 'light' ? 'dark_mode' : 'light_mode';
+  localStorage.setItem('themePreference', theme);
+};
+const toggleTheme = () => {
+  const t = htmlEl.getAttribute('data-theme');
+  applyTheme(t === 'light' ? 'dark' : 'light');
+};
+
+const formatDate = (date) => new Intl.DateTimeFormat(currentLanguage === 'fa' ? 'fa-IR' : currentLanguage === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
+const formatTime = (date) => new Intl.DateTimeFormat(currentLanguage === 'fa' ? 'fa-IR' : currentLanguage === 'ar' ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit', hour12: false }).format(date);
+
+const humanLabel = (idx) => {
+  const fa = ['۲۰ دقیقه بعد', '۱ روز بعد', '۳ روز بعد', '۷ روز بعد', '۱۴ روز بعد', '۳۰ روز بعد', '۶۰ روز بعد', '۱۲۰ روز بعد', '۱۸۰ روز بعد', '۳۶۵ روز بعد'];
+  const en = ['20 minutes later', '1 day later', '3 days later', '7 days later', '14 days later', '30 days later', '60 days later', '120 days later', '180 days later', '365 days later'];
+  const ar = ['بعد 20 دقيقة', 'بعد يوم', 'بعد 3 أيام', 'بعد 7 أيام', 'بعد 14 يومًا', 'بعد 30 يومًا', 'بعد 60 يومًا', 'بعد 120 يومًا', 'بعد 180 يومًا', 'بعد 365 يومًا'];
+  const dict = currentLanguage === 'fa' ? fa : currentLanguage === 'ar' ? ar : en;
+  return dict[idx] || '';
+};
+
+const getReviewScheduleHtml = (schedule, createdAt) => {
+  const baseDate = new Date(createdAt);
+  const title = translations[currentLanguage]['review-schedule-title'];
+  const word = currentLanguage === 'fa' ? 'مرور' : currentLanguage === 'ar' ? 'مراجعة' : 'Review';
+  const inner = schedule.map((r, i) => {
+    const d = new Date(baseDate);
+    if (i === 0 && intervals[i] === 0) d.setMinutes(d.getMinutes() + 20);
+    else d.setDate(d.getDate() + intervals[i]);
+    const statusClass = r.completed ? 'completed-schedule' : 'pending-schedule';
+    const icon = r.completed ? '<span class="material-icons-outlined schedule-tick">check_circle</span>' : '';
+    return `<div class="schedule-item ${statusClass}"><span class="schedule-label">${word} ${i+1}: ${humanLabel(i)}</span><span class="schedule-date">${formatDate(d)}</span>${icon}</div>`;
+  }).join('');
+  return `<div class="review-schedule-box"><h4>${title}</h4>${inner}</div>`;
+};
+
+const getAttachmentsHtml = (attachments) => {
+  if (!attachments || !Array.isArray(attachments) || attachments.length === 0) return '';
+  return `<div class="attachments-display"><h4>${translations[currentLanguage]['attachments-title']}</h4>${
+    attachments.map(att => {
+        switch (att.type) {
+            case 'image': return `<div class="attachment-content"><img src="${att.data}" alt="${translations[currentLanguage]['image-alt']}: ${att.name}" aria-label="${att.name}"></div>`;
+            case 'video': return `<div class="attachment-content"><video src="${att.data}" controls aria-label="${translations[currentLanguage]['video-alt']}: ${att.name}"></video></div>`;
+            case 'audio': return `<div class="attachment-content"><audio src="${att.data}" controls aria-label="${translations[currentLanguage]['audio-alt']}: ${att.name}"></audio></div>`;
+            case 'text': return `<div class="attachment-content"><div class="attachment-text-note">${att.data}</div></div>`;
+            default: return '';
+        }
+    }).join('')
+}</div>`;
+};
+
+const getProgressColorClass = (p) => p < 30 ? 'progress-red' : (p < 70 ? 'progress-yellow' : 'progress-green');
+
+const showConfirm = (text, title = 'تایید') => {
+  return new Promise((resolve) => {
+    customModalTitle.textContent = title;
+    customModalText.textContent = text;
+    customModal.classList.remove('hidden', 'alert-mode');
+    const confirmHandler = () => { customModal.classList.add('hidden'); resolve(true); cleanup(); };
+    const cancelHandler = () => { customModal.classList.add('hidden'); resolve(false); cleanup(); };
+    const cleanup = () => {
+      customModalConfirmBtn.removeEventListener('click', confirmHandler);
+      customModalCancelBtn.removeEventListener('click', cancelHandler);
+    };
+    customModalConfirmBtn.addEventListener('click', confirmHandler);
+    customModalCancelBtn.addEventListener('click', cancelHandler);
+  });
+};
+
+const showAlert = (text, title = 'خطا') => {
+  customModalTitle.textContent = title;
+  customModalText.textContent = text;
+  customModal.classList.remove('hidden');
+  customModal.classList.add('alert-mode');
+  const confirmHandler = () => {
+    customModal.classList.add('hidden');
+    customModalConfirmBtn.removeEventListener('click', confirmHandler);
+  };
+  customModalConfirmBtn.addEventListener('click', confirmHandler);
+};
+
+// ===== Storage (Local) =====
+const saveToStorage = () => { try { localStorage.setItem('studyItems_v5', JSON.stringify(items)); } catch (e) { showAlert(translations[currentLanguage]['error-save']); } };
+const loadFromLocalStorage = () => { try { items = JSON.parse(localStorage.getItem('studyItems_v5') || '[]'); } catch { items = []; } };
+
+// ===== Render =====
+const renderAll = () => { renderTodayList(); renderAllItemsList(); };
+
+const renderTodayList = () => {
+  const now = new Date();
+  const todayItemsTotal = items.filter(item => !item.isMastered && item.nextReview && new Date(item.nextReview) <= now);
+  const todayRemaining = todayItemsTotal.filter(item => !item.completedInSession);
+  const todayCompletedInSession = items.filter(item => item.completedInSession);
+  todayRemainingList.innerHTML = '';
+  todayCompletedList.innerHTML = '';
+  let overall = 0;
+  if (todayItemsTotal.length > 0) overall = (todayCompletedInSession.length / todayItemsTotal.length) * 100;
+  overallProgressBarFill.style.width = `${overall}%`;
+  overallProgressBarText.textContent = `${translations[currentLanguage]['overall-progress']} ${Math.round(overall)}%`;
+  overallProgressBarContainer.classList.toggle('hidden', todayItemsTotal.length === 0 && todayCompletedInSession.length === 0);
+
+  if (todayRemaining.length === 0 && todayCompletedInSession.length === 0) {
+    reviewPlaceholder.classList.remove('hidden');
+    remainingSection.classList.add('hidden');
+    completedSection.classList.add('hidden');
+  } else {
+    reviewPlaceholder.classList.add('hidden');
+    if (todayRemaining.length > 0) {
+      remainingSection.classList.remove('hidden');
+      todayRemaining.forEach((item, idx) => todayRemainingList.appendChild(createTodayListItem(item, idx)));
+    } else remainingSection.classList.add('hidden');
+    if (todayCompletedInSession.length > 0) {
+      completedSection.classList.remove('hidden');
+      completedSection.querySelector('.today-list').classList.remove('hidden');
+      todayCompletedInSession.forEach((item, idx) => todayCompletedList.appendChild(createTodayListItem(item, idx, true)));
+    } else {
+      completedSection.classList.add('hidden');
+      completedSection.querySelector('.today-list').classList.add('hidden');
+    }
+  }
+  document.querySelector('.tab-btn[data-tab="review-panel"]').classList.toggle('status-pending', todayRemaining.length > 0);
+};
+
+const createTodayListItem = (item, index, isCompleted = false) => {
+  const li = document.createElement('li');
+  li.className = `today-list-item ${isCompleted?'completed':''}`;
+  li.dataset.itemId = item.id;
+  const attachmentsHtml = getAttachmentsHtml(item.attachments);
+  const completionTimeHtml = isCompleted && item.completionTime ? `<span class="completion-time">${translations[currentLanguage]['completed-at']} ${formatTime(new Date(item.completionTime))}</span>` : '';
+  li.innerHTML = `<div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span>${completionTimeHtml}<span class="expand-arrow material-icons-outlined">expand_more</span></div><div class="item-details">${attachmentsHtml}${!isCompleted?`<button class="done-btn main-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['done-btn']}">${translations[currentLanguage]['done-btn']}</button>`:''}</div>`;
+  return li;
+};
+
+const renderAllItemsList = () => {
+  const container = document.getElementById('all-items-list');
+  let filtered = [...items];
+  const sortBy = sortSelect.value;
+  const sortOrder = sortOrderSelect.value;
+  filtered.sort((a, b) => {
+    let cmp = 0;
+    if (sortBy === 'date') cmp = new Date(a.createdAt) - new Date(b.createdAt);
+    else if (sortBy === 'title') cmp = a.title.localeCompare(b.title, currentLanguage === 'fa' ? 'fa' : 'en');
+    else if (sortBy === 'progress') {
+      const pa = a.reviewSchedule.length ? a.reviewSchedule.filter(r => r.completed).length / a.reviewSchedule.length : 0;
+      const pb = b.reviewSchedule.length ? b.reviewSchedule.filter(r => r.completed).length / b.reviewSchedule.length : 0;
+      cmp = pa - pb;
+    }
+    return sortOrder === 'asc' ? cmp : -cmp;
+  });
+  container.innerHTML = '';
+  filtered.forEach((item, idx) => container.appendChild(createAllItemsListItem(item, idx)));
+  totalCountEl.textContent = items.length;
+  masteredCountEl.textContent = items.filter(i => i.isMastered).length;
+  multiSelectActions.classList.toggle('hidden', !multiSelectMode && selectedItems.length === 0);
+};
+
+const createAllItemsListItem = (item, index) => {
+  const li = document.createElement('li');
+  li.className = 'all-items-item';
+  const completed = item.reviewSchedule.filter(r => r.completed).length;
+  const progress = item.reviewSchedule.length ? (completed / item.reviewSchedule.length) * 100 : 0;
+  const attachmentsHtml = getAttachmentsHtml(item.attachments);
+  const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt);
+  const created = formatDate(new Date(item.createdAt));
+  const isChecked = selectedItems.includes(item.id) ? 'checked' : '';
+  const color = getProgressColorClass(progress);
+  li.innerHTML = `<input type="checkbox" class="checkbox" data-id="${item.id}" aria-label="${translations[currentLanguage]['select-item']}" ${isChecked}><div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span><span class="creation-date">${created}</span><div class="item-inline-actions"><button class="edit-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['edit-btn']}"><span class="material-icons-outlined">edit</span></button><button class="delete-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['delete-btn']}"><span class="material-icons-outlined">delete</span></button></div></div><div class="item-details">${attachmentsHtml}<div class="review-progress-section"><div class="progress-circle ${color}" style="--p:${progress}">${Math.round(progress)}%</div><button class="review-collapsible-header collapsed"><h4>${translations[currentLanguage]['review-schedule-title']}</h4><span class="expand-arrow material-icons-outlined">expand_more</span></button><div class="collapsible-content hidden">${reviewHtml}</div></div><div class="item-actions-bottom"><button class="reset-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['reset-btn']}">${translations[currentLanguage]['reset-btn']}</button></div></div>`;
+  return li;
+};
+
+// ===== CRUD & Attachments =====
+const resetNewItemForm = () => { newTitleInput.value = ''; tempAttachments = []; attachmentsPreview.innerHTML = ''; };
+
+const saveItem = () => {
+  const title = newTitleInput.value.trim();
+  if (!title) { showAlert(translations[currentLanguage]['error-empty-title']); return; }
+  const now = new Date();
+  const schedule = intervals.map((it, idx) => {
+    const d = new Date(now);
+    if (idx === 0 && it === 0) d.setMinutes(d.getMinutes() + 20);
+    else d.setDate(d.getDate() + it);
+    return { scheduledFor: d.toISOString(), completed: false };
+  });
+  const newItem = { id: Date.now(), title, attachments: [...tempAttachments], level: 0, createdAt: now.toISOString(), nextReview: schedule[0].scheduledFor, isMastered: false, reviewSchedule: schedule, completedInSession: false, completionTime: null };
+  items.unshift(newItem);
+  saveToStorage();
+  resetNewItemForm();
+  renderAll();
+};
+
+const openEditModal = (item) => { editingItemId = item.id; editTitleInput.value = item.title; tempAttachments = [...item.attachments]; renderAttachmentsPreview(editAttachmentsPreview); editModal.classList.remove('hidden'); editModal.focus(); };
+const saveEdit = () => {
+  const item = items.find(i => i.id === editingItemId);
+  if (!item) return;
+  const t = editTitleInput.value.trim();
+  if (!t) { showAlert(translations[currentLanguage]['error-empty-title']); return; }
+  item.title = t;
+  item.attachments = [...tempAttachments];
+  saveToStorage();
+  closeEditModal();
+  renderAll();
+};
+const closeEditModal = () => { editModal.classList.add('hidden'); editingItemId = null; tempAttachments = []; editTitleInput.value = ''; editAttachmentsPreview.innerHTML = ''; };
+const deleteItem = async (id) => { if (!await showConfirm(translations[currentLanguage]['confirm-delete'])) return; items = items.filter(i => i.id !== id); saveToStorage(); renderAll(); };
+const deleteSelected = async () => { if (!await showConfirm(translations[currentLanguage]['confirm-delete-selected'])) return; items = items.filter(i => !selectedItems.includes(i.id)); selectedItems = []; toggleMultiSelect(false); saveToStorage(); renderAll(); };
+const resetProgress = async (id) => {
+  if (!await showConfirm(translations[currentLanguage]['confirm-reset'])) return;
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  item.level = 0;
+  item.isMastered = false;
+  item.completedInSession = false;
+  item.completionTime = null;
+  const now = new Date();
+  item.reviewSchedule = intervals.map((it, idx) => {
+    const d = new Date(now);
+    if (idx === 0 && it === 0) d.setMinutes(d.getMinutes() + 20);
+    else d.setDate(d.getDate() + it);
+    return { scheduledFor: d.toISOString(), completed: false };
+  });
+  item.nextReview = item.reviewSchedule[0].scheduledFor;
+  saveToStorage();
+  renderAll();
+};
+
+const triggerFileUpload = (accept) => { fileUploadInput.accept = accept; fileUploadInput.click(); };
+const handleFileUpload = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 50 * 1024 * 1024) { showAlert(translations[currentLanguage]['error-file-size']); return; }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const type = file.type.split('/')[0];
+    tempAttachments.push({ type, data: ev.target.result, name: file.name });
+    renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+};
+const openTextModal = () => { modalTextarea.value = ''; textModal.classList.remove('hidden'); modalTextarea.focus(); };
+const closeTextModal = () => { textModal.classList.add('hidden'); modalTextarea.value = ''; };
+const saveTextAttachment = () => { const txt = modalTextarea.value.trim(); if (txt) { tempAttachments.push({ type: 'text', data: txt, name: translations[currentLanguage]['text-note'] }); renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview); } closeTextModal(); };
+const renderAttachmentsPreview = (container) => { container.innerHTML = tempAttachments.map((att, i) => `<div class="preview-item"><span>${att.name}</span><button type="button" class="icon-btn" data-index="${i}" aria-label="${translations[currentLanguage]['remove-attachment']}"><span class="material-icons-outlined">close</span></button></div>`).join(''); };
+const handleAttachmentRemove = (e, container) => { const removeBtn = e.target.closest('button[data-index]'); if (removeBtn) { const i = parseInt(removeBtn.dataset.index, 10); if (!isNaN(i)) { tempAttachments.splice(i, 1); renderAttachmentsPreview(container); } } };
+
+// ===== Language/Theme/Font =====
+const applyFont = (font) => { if (font === 'system') font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"; document.documentElement.style.setProperty('--font-family', font); localStorage.setItem('fontPreference', font); };
+const applyLanguage = (lang) => {
+  currentLanguage = lang;
+  htmlEl.lang = lang;
+  htmlEl.dir = (lang === 'fa' || lang === 'ar') ? 'rtl' : 'ltr';
+  Object.keys(translations[lang]).forEach(key => {
+    const el = document.getElementById(key);
+    if (el) {
+      if (key.startsWith('header-stats')) {
+        if (el.childNodes.length > 0 && el.childNodes[0].nodeType === 3) el.childNodes[0].textContent = translations[lang][key];
+        else el.prepend(document.createTextNode(translations[lang][key]));
+      } else el.textContent = translations[lang][key];
+    }
+    if (key === 'new-title-placeholder') newTitleInput.placeholder = translations[lang][key];
+    if (key === 'modal-textarea-placeholder') modalTextarea.placeholder = translations[lang][key];
+    if (key === 'add-image-tooltip') addImageBox.dataset.tooltip = translations[lang][key];
+    if (key === 'add-video-tooltip') addVideoBox.dataset.tooltip = translations[lang][key];
+    if (key === 'add-audio-tooltip') addAudioBox.dataset.tooltip = translations[lang][key];
+    if (key === 'add-text-tooltip') addTextBox.dataset.tooltip = translations[lang][key];
+    if (sortSelect) {
+      sortSelect.querySelector('option[value="date"]').textContent = translations[lang]['sort-date'];
+      sortSelect.querySelector('option[value="title"]').textContent = translations[lang]['sort-title'];
+      sortSelect.querySelector('option[value="progress"]').textContent = translations[lang]['sort-progress'];
+    }
+    if (sortOrderSelect) {
+      sortOrderSelect.querySelector('option[value="asc"]').textContent = translations[lang]['sort-order-asc'];
+      sortOrderSelect.querySelector('option[value="desc"]').textContent = translations[lang]['sort-order-desc'];
+    }
+    if (key === 'today-tab') { const t = document.getElementById('today-tab'); if (t) t.textContent = translations[lang][key]; }
+    if (key === 'new-tab') { const t = document.getElementById('new-tab'); if (t) t.textContent = translations[lang][key]; }
+    if (key === 'all-tab') { const t = document.getElementById('all-tab'); if (t) t.textContent = translations[lang][key]; }
+  });
+  localStorage.setItem('languagePreference', lang);
+  renderAll();
+};
+
+// ===== Events =====
+document.addEventListener('DOMContentLoaded', () => {
+  applyTheme(localStorage.getItem('themePreference') || 'light');
+  applyLanguage(localStorage.getItem('languagePreference') || 'fa');
+  applyFont(localStorage.getItem('fontPreference') || 'system');
+  loadFromLocalStorage();
+  renderAll();
+
+  loginBtn.addEventListener('click', () => showAlert(translations[currentLanguage]['error-login']));
+
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    headerTitle.textContent = translations[currentLanguage][tab.dataset.tab.replace('-panel', '-title')] || translations[currentLanguage][`${tab.dataset.tab.split('-')[0]}-tab`] || tab.dataset.title;
+    contentPanels.forEach(p => p.classList.remove('active'));
+    document.getElementById(tab.dataset.tab).classList.add('active');
+    if (tab.dataset.tab === 'review-panel') renderTodayList();
+    if (tab.dataset.tab === 'all-items-panel') renderAllItemsList();
+    if (tab.dataset.tab === 'new-item-panel') resetNewItemForm();
+  }));
+
+  themeToggleBtn.addEventListener('click', toggleTheme);
+  saveItemBtn.addEventListener('click', saveItem);
+  newTitleInput.addEventListener('keydown', e => { if (e.key === 'Enter') saveItem(); });
+
+  addImageBox.addEventListener('click', () => triggerFileUpload('image/*'));
+  addVideoBox.addEventListener('click', () => triggerFileUpload('video/*'));
+  addAudioBox.addEventListener('click', () => triggerFileUpload('audio/*'));
+  addTextBox.addEventListener('click', openTextModal);
+  fileUploadInput.addEventListener('change', handleFileUpload);
+  saveTextBtn.addEventListener('click', saveTextAttachment);
+  cancelTextBtn.addEventListener('click', closeTextModal);
+  attachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, attachmentsPreview));
+
+  saveEditBtn.addEventListener('click', saveEdit);
+  cancelEditBtn.addEventListener('click', closeEditModal);
+  editAttachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, editAttachmentsPreview));
+
+  settingsBtn.addEventListener('click', () => {
+    languageSelect.value = localStorage.getItem('languagePreference') || 'fa';
+    themeSelect.value = localStorage.getItem('themePreference') || 'light';
+    fontSelect.value = localStorage.getItem('fontPreference') || 'system';
+    settingsModal.classList.remove('hidden');
+  });
+  saveSettingsBtn.addEventListener('click', () => { applyLanguage(languageSelect.value); applyTheme(themeSelect.value); applyFont(fontSelect.value); settingsModal.classList.add('hidden'); });
+  cancelSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
+
+  const allList = document.getElementById('all-items-list');
+  allList.addEventListener('click', (e) => {
+    const target = e.target;
+    const btn = target.closest('button');
+    const checkbox = target.closest('input[type="checkbox"]');
+    const revHeader = target.closest('.review-collapsible-header');
+    if (revHeader) { const parent = revHeader.closest('.review-progress-section'); const content = parent.querySelector('.collapsible-content'); revHeader.classList.toggle('collapsed'); content.classList.toggle('hidden'); return; }
+    if (btn || checkbox) {
+      if (btn && btn.classList.contains('edit-icon-btn')) { const it = items.find(i => i.id === Number(btn.dataset.id)); if (it) openEditModal(it); }
+      else if (btn && btn.classList.contains('delete-icon-btn')) { deleteItem(Number(btn.dataset.id)); }
+      else if (btn && btn.classList.contains('reset-btn')) { resetProgress(Number(btn.dataset.id)); }
+      return;
+    }
+    const mainRow = e.target.closest('.item-main-row');
+    if (mainRow) { mainRow.closest('.all-items-item').classList.toggle('expanded'); }
+  });
+
+  let touchStartTime;
+  allList.addEventListener('touchstart', (e) => { if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) touchStartTime = Date.now(); });
+  allList.addEventListener('touchend', (e) => {
+    if (Date.now() - touchStartTime > 500) {
+      if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) {
+        const li = e.target.closest('.all-items-item');
+        if (li) { const cb = li.querySelector('.checkbox'); if (cb) { if (!multiSelectMode) toggleMultiSelect(true); cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
+      }
+    }
+  });
+  allList.addEventListener('change', (e) => { if (e.target.classList.contains('checkbox')) { const id = Number(e.target.dataset.id); if (e.target.checked) selectedItems.push(id); else selectedItems = selectedItems.filter(x => x !== id); } multiSelectActions.classList.toggle('hidden', selectedItems.length === 0 && !multiSelectMode); });
+  selectAllBtn.addEventListener('click', () => { selectedItems = []; document.querySelectorAll('#all-items-list .checkbox').forEach(cb => { cb.checked = true; selectedItems.push(Number(cb.dataset.id)); }); multiSelectActions.classList.remove('hidden'); });
+  deleteSelectedBtn.addEventListener('click', deleteSelected);
+
+  sortSelect.addEventListener('change', renderAllItemsList);
+  sortOrderSelect.addEventListener('change', e => { currentSortOrder = e.target.value; renderAllItemsList(); });
+
+  reviewPanel.addEventListener('click', (e) => {
+    const header = e.target.closest('.collapsible-header');
+    if (header) { header.classList.toggle('collapsed'); header.nextElementSibling.classList.toggle('hidden'); }
+    const mainRow = e.target.closest('.item-main-row');
+    const doneBtn = e.target.closest('.done-btn');
+    if (mainRow && !doneBtn) { mainRow.closest('.today-list-item').classList.toggle('expanded'); }
+    if (doneBtn) {
+      const id = Number(doneBtn.dataset.id);
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+      item.completedInSession = true;
+      item.completionTime = new Date().toISOString();
+      const parentLi = doneBtn.closest('.today-list-item');
+      if (parentLi) { parentLi.style.opacity = '0'; }
+      setTimeout(() => {
+        item.reviewSchedule[item.level].completed = true;
+        item.level++;
+        if (item.level >= item.reviewSchedule.length) { item.isMastered = true; item.nextReview = null; } else { item.nextReview = item.reviewSchedule[item.level].scheduledFor; }
+        saveToStorage();
+        renderAll();
+      }, 300);
+    }
+  });
+
+  // --- New Event Listeners for attachment popup ---
+  addAttachmentBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    attachmentPopupMenu.classList.toggle('hidden');
+  });
+  window.addEventListener('click', () => {
+    if (!attachmentPopupMenu.classList.contains('hidden')) {
+      attachmentPopupMenu.classList.add('hidden');
+    }
+  });
+  attachmentPopupMenu.addEventListener('click', (event) => {
+    event.stopPropagation();
+  });
+});
+
+const toggleMultiSelect = (enable) => {
+  multiSelectMode = enable;
+  selectedItems = [];
+  document.querySelectorAll('.all-items-item .checkbox').forEach(cb => { cb.checked = false; cb.parentElement.classList.toggle('multi-select-mode', enable); });
+  multiSelectActions.classList.toggle('hidden', !enable);
+  renderAllItemsList();
+};
