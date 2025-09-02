@@ -1,3791 +1,1009 @@
-:root {
-  --primary-color: #4CAF50;
-  --accent-color: #2196F3;
-  --warning-color: #FFC107;
-  --danger-color: #F44336;
-  --success-color: #8BC34A;
-  --primary-rgb: 76, 175, 80;
-  --accent-rgb: 33, 150, 243;
-  --warning-rgb: 255, 193, 7;
-  --danger-rgb: 244, 67, 54;
-  --danger-light-color: #FFCDD2; /* قرمز ملایم برای دکمه انصراف */
-  --success-light-color: #E8F5E9; /* سبز ملایم برای toast */
-
-  --background-color: #F7F7F7;
-  --app-background: #FFFFFF;
-  --card-background: #FFFFFF;
-  --light-grey: #EEEEEE;
-  --border-color: #E0E0E0;
-
-  --text-color-primary: #212121;
-  --text-color-secondary: #757575;
-  --text-color-light: #9E9E9E; /* رنگ تیره‌تر برای کنتراست بهتر */
-
-  --input-bg-color: #F5F5F5;
-  --input-border-color: #E0E0E0;
-  --button-text-color: #FFFFFF;
-
-  --progress-red-color: #EF5350;
-  --progress-yellow-color: #FFCA28;
-  --progress-green-color: #66BB6A;
-  --review-schedule-box-bg: #FAFAFA;
-  --review-schedule-item-bg-pending: #F5F5F5;
-  --review-schedule-item-bg-completed: #E8F5E9;
-  --review-schedule-item-border-color: #E0E0E0;
-  --schedule-label-color-pending: var(--text-color-primary);
-  --schedule-label-color-completed: #4CAF50;
-  --schedule-date-color-pending: var(--text-color-secondary);
-  --schedule-date-color-completed: #66BB6A;
-  --schedule-tick-color: #4CAF50;
-  /* اضافه‌های مهم */
-  --modal-bg-color: var(--card-background);
-  --note-bg-color: var(--light-grey);
-  --item-bg-color: var(--app-background);
-
-  --font-family: 'Vazirmatn', sans-serif;
-  --theme-transition: all .3s ease-in-out;
-  --element-transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease;
-}
-
-[data-theme="dark"] {
-  --primary-color: #69F0AE;
-  --accent-color: #448AFF;
-  --warning-color: #FFEA00;
-  --danger-color: #FF5252;
-  --success-color: #00E676;
-  --primary-rgb: 105, 240, 174;
-  --accent-rgb: 68, 138, 255;
-  --warning-rgb: 255, 234, 0;
-  --danger-rgb: 255, 82, 82;
-
-  --background-color: #121212;
-  --app-background: #1E1E1E;
-  --card-background: #2C2C2C;
-  --light-grey: #3A3A3A;
-  --border-color: #4A4A4A;
-  --text-color-primary: #E0E0E0;
-  --text-color-secondary: #B0B0B0;
-  --text-color-light: #9E9E9E;
-  --input-bg-color: #212121;
-  --input-border-color: #5A5A5A;
-  --button-text-color: #212121;
-
-  --progress-red-color: #FF8A80;
-  --progress-yellow-color: #FFFF8D;
-  --progress-green-color: #B9F6CA;
-  --review-schedule-box-bg: #212121;
-  --review-schedule-item-bg-pending: #2C2C2C;
-  --review-schedule-item-bg-completed: #2E3D30;
-  --review-schedule-item-border-color: #4A4A4A;
-  --schedule-label-color-completed: #A5D6A7;
-  --schedule-date-color-completed: #81C784;
-  --schedule-tick-color: #A5D6A7;
-
-  --modal-bg-color: var(--card-background);
-  --note-bg-color: #2B2A21;
-  --item-bg-color: var(--app-background);
-}
-
-/* سنترکردن در CodePen */
-html,
-body {
-  height: 100%;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  margin: 0;
-  font-family: var(--font-family);
-  background: var(--background-color);
-  color: var(--text-color-primary);
-}
-
-.app-container {
-  width: min(100%, 900px);
-  background: var(--app-background);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  transition: var(--theme-transition);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="dark"] .app-container {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-header {
-  padding: 15px;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
-  position: sticky;
-  top: 0;
-  background: var(--app-background);
-  z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: var(--theme-transition);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-header h1 {
-  margin: 0;
-  flex-grow: 1;
-  font-size: 26px;
-  color: var(--primary-color);
-  font-weight: 700;
-}
-
-.icon-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: var(--text-color-secondary);
-  padding: 5px;
-  line-height: 1;
-  transition: var(--element-transition);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  border-radius: 50%;
-}
-
-.icon-btn:hover {
-  background: var(--light-grey);
-  color: var(--primary-color);
-}
-
-.theme-btn {
-  position: absolute;
-  left: 15px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  background: var(--input-bg-color);
-  padding: 8px;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.theme-btn .material-icons-outlined {
-  font-size: 24px;
-  color: var(--primary-color);
-}
-
-#settings-btn {
-  position: absolute;
-  right: 15px;
-}
-
-#login-btn {
-  position: absolute;
-  right: 55px;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: var(--input-bg-color);
-  border: 1px solid var(--border-color);
-  color: var(--text-color-primary);
-}
-
-main {
-  flex-grow: 1;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.main-btn {
-  padding: 12px;
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-  transition: var(--element-transition);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.main-btn:hover {
-  transform: translateY(-2px);
-}
-
-.main-btn:disabled {
-    background-color: var(--light-grey);
-    color: var(--text-color-light);
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
-.secondary-btn {
-  padding: 12px 15px;
-  background: transparent;
-  color: var(--danger-color);
-  border: 1px solid var(--danger-color);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: var(--element-transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.warning-btn {
-  padding: 10px 15px;
-  background: var(--danger-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.tab-container {
-  display: flex;
-  border-top: 1px solid var(--border-color);
-  background: var(--app-background);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 10px 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-color-secondary);
-  transition: var(--element-transition);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.tab-btn.active {
-  color: var(--primary-color);
-}
-
-.tab-btn.status-pending .tab-icon::after {
-  content: '';
-  position: absolute;
-  top: 5px;
-  right: 25%;
-  width: 8px;
-  height: 8px;
-  background: var(--danger-color);
-  border-radius: 50%;
-  border: 1px solid var(--app-background);
-}
-
-.content-panel {
-  display: none;
-}
-
-.content-panel.active {
-  display: block;
-}
-
-.all-items-list,
-.today-list {
-  list-style: none;
-  padding: 0;
-}
-
-.all-items-item,
-.today-list-item {
-  background: var(--card-background);
-  border-radius: 15px;
-  margin-bottom: 15px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.item-main-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px;
-  cursor: pointer;
-}
-
-.item-number {
-  font-weight: 700;
-  color: var(--text-color-secondary);
-  font-size: 16px;
-  background: var(--input-bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.item-title {
-  flex-grow: 1;
-  font-weight: 700;
-  font-size: 20px;
-}
-
-.creation-date {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin: 0 10px;
-  min-width: 90px;
-  text-align: center;
-}
-
-.item-inline-actions {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.item-inline-actions .icon-btn {
-  font-size: 20px;
-  padding: 6px;
-}
-
-.item-inline-actions .delete-icon-btn:hover {
-  background: rgba(var(--danger-rgb), 0.1);
-}
-
-.item-inline-actions .edit-icon-btn:hover {
-  background: rgba(var(--accent-rgb), 0.1);
-}
-
-.item-details {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  background: var(--app-background);
-  padding: 0 15px;
-  border-top: 1px solid var(--border-color);
-}
-
-.all-items-item.expanded .item-details {
-  max-height: 5000px;
-  opacity: 1;
-  padding-bottom: 15px;
-}
-
-.attachments-display {
-  margin-top: 15px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 15px;
-}
-
-.attachments-display h4 {
-  margin: 0 0 10px 0;
-  font-size: 15px;
-  color: var(--text-color-secondary);
-}
-
-.attachment-content {
-  margin-bottom: 10px;
-}
-
-.attachment-content img,
-.attachment-content video {
-  max-width: 100%;
-  border-radius: 8px;
-  display: block;
-}
-
-.attachment-content audio {
-  width: 100%;
-}
-
-.attachment-text-note {
-  padding: 15px;
-  background: var(--note-bg-color);
-  border-radius: 8px;
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.review-progress-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  margin-top: 15px;
-  flex-wrap: wrap;
-  background: var(--review-schedule-box-bg);
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.progress-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  font-weight: 700;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
-  color: var(--text-color-primary);
-}
-
-.progress-circle.progress-green {
-  background: conic-gradient(var(--progress-green-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-yellow {
-  background: conic-gradient(var(--progress-yellow-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-red {
-  background: conic-gradient(var(--progress-red-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.review-collapsible-header {
-  background: none;
-  margin: 0;
-  border: none;
-  border-radius: 10px;
-  flex-grow: 1;
-  min-width: 200px;
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.review-collapsible-header h4 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--text-color-primary);
-  font-weight: 600;
-}
-
-.review-collapsible-header .expand-arrow {
-  font-size: 20px;
-  color: var(--text-color-secondary);
-  transition: transform .3s ease;
-  padding: 5px;
-  border-radius: 50%;
-}
-
-.collapsible-content {
-  background: none;
-  border: none;
-  padding: 0 5px;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px;
-}
-
-.collapsible-content.hidden {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  overflow: hidden;
-}
-
-.schedule-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--review-schedule-item-bg-pending);
-  border: 1px solid var(--review-schedule-item-border-color);
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-.schedule-item:last-child {
-  margin-bottom: 0;
-}
-
-.schedule-item.completed-schedule {
-  background: var(--review-schedule-item-bg-completed);
-  border-color: var(--schedule-tick-color);
-}
-
-.schedule-item .schedule-label {
-  color: var(--schedule-label-color-pending);
-}
-
-.schedule-item.completed-schedule .schedule-label {
-  color: var(--schedule-label-color-completed);
-  text-decoration: line-through;
-}
-
-.schedule-item .schedule-date {
-  color: var(--schedule-date-color-pending);
-  font-size: 13px;
-  opacity: .9;
-}
-
-.schedule-item.completed-schedule .schedule-date {
-  color: var(--schedule-date-color-completed);
-}
-
-.item-actions-bottom {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.reset-btn {
-  padding: 12px 25px;
-  background: #FFF8E1;
-  color: #FFAB00;
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: var(--element-transition);
-  width: 100%;
-  box-shadow: 0 4px 10px rgba(var(--warning-rgb), .2);
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .6);
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .3s ease, visibility .3s ease;
-}
-
-.modal-overlay:not(.hidden) {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.modal-content {
-  background: var(--modal-bg-color);
-  padding: 25px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transform: translateY(20px) scale(.95);
-  opacity: 0;
-  transition: var(--element-transition);
-}
-
-.modal-overlay:not(.hidden) .modal-content {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-.modal-content h3 {
-  margin-top: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.modal-content input[type="text"] {
-    margin-bottom: 15px;
-}
-.modern-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.modern-input:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .15);
-}
-
-.modal-content textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 15px;
-  border: 1px solid var(--input-border-color);
-  font-size: 16px;
-  min-height: 150px;
-  resize: vertical;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-}
-
-.modal-content select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--input-border-color);
-  border-radius: 15px;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  font-size: 16px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23757575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-  background-repeat: no-repeat;
-  background-position: left 10px center;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.overall-progress-bar-container {
-  margin-bottom: 20px;
-  background: var(--card-background);
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
-}
-
-.overall-progress-bar-text {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-color-primary);
-  margin-bottom: 10px;
-  text-align: right;
-}
-
-.overall-progress-bar {
-  width: 100%;
-  height: 10px;
-  background: var(--light-grey);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.overall-progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: var(--primary-color);
-  border-radius: 5px;
-  transition: width .5s ease;
-}
-
-/* RTL جزئی */
-[dir="rtl"] #login-btn {
-  right: auto;
-  left: 55px;
-}
-
-[dir="rtl"] #theme-toggle-btn {
-  left: auto;
-  right: 15px;
-}
-
-[dir="rtl"] #settings-btn {
-  right: auto;
-  left: 15px;
-}
-
-.today-list-item .completion-time {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin-inline-start: 10px;
-  text-align: left;
-}
-
-/* === استایل‌های اصلاح‌شده برای "افزودن عنوان جدید" === */
-#new-item-panel .form-layout {
-  max-width: 760px;
-  margin: 12px auto 24px auto;
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-}
-
-#newTitleInput {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 15px; /* فاصله از نوار پیوست‌ها */
-}
-
-#newTitleInput::placeholder {
-    color: var(--text-color-light);
-    font-weight: 400;
-}
-
-
-#newTitleInput:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 33, 150, 243), .15);
-}
-
-/* استایل جدید برای نوار ابزار پیوست‌ها */
-#new-item-panel .attachment-options {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  background: var(--app-background);
-  transition: background-color .2s, border-color .2s;
-}
-
-
-#new-item-panel .option-box {
-  flex: 1;
-  /* تقسیم مساوی فضا */
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-color);
-  background: var(--card-background);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: transform .12s, box-shadow .2s, background-color .2s, border-color .2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
-}
-
-#new-item-panel .option-box:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent-color);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, .10);
-}
-
-#new-item-panel .option-box .material-icons-outlined {
-  font-size: 24px;
-  color: var(--text-color-secondary);
-}
-
-#attachments-preview, #edit-attachments-preview {
-  margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
-}
-
-#attachments-preview .preview-item, #edit-attachments-preview .preview-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--app-background);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  padding: 8px 10px;
-  font-size: 13px;
-}
-
-#new-item-panel #saveItemBtn {
-  margin-top: 20px;
-  height: 48px;
-  font-size: 16px;
-  border-radius: 15px;
-  box-shadow: 0 6px 16px rgba(var(--primary-rgb, 76, 175, 80), .22);
-}
-
-#new-item-panel #saveItemBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-#review-panel .placeholder p {
-  color: var(--text-color-secondary);
-}
-
-/* Custom Modal Styles */
-.modal-content p {
-  font-size: 16px;
-  color: var(--text-color-secondary);
-  line-height: 1.6;
-  margin: 15px 0 25px;
-}
-
-.modal-content.settings-content {
-  max-width: 600px;
-}
-
-.modal-content.algorithm-content {
-  max-width: 600px;
-}
-
-.modal-content.settings-content .modal-header-with-separator {
-  margin-bottom: 25px;
-}
-
-
-.modal-content.settings-content .modal-actions {
-  margin-top: 25px;
-}
-
-
-.modal-content.settings-content .settings-section {
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-}
-.modal-content.settings-content .settings-section:last-of-type {
-  border-bottom: none;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.main-btn {
-  padding: 12px;
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-  transition: var(--element-transition);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 2; /* 2/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.main-btn:hover {
-  transform: translateY(-2px);
-}
-
-.main-btn:disabled {
-    background-color: var(--light-grey);
-    color: var(--text-color-light);
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
-.secondary-btn {
-  padding: 12px 15px;
-  background: transparent;
-  color: var(--danger-color);
-  border: 1px solid var(--danger-color);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: var(--element-transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 1; /* 1/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.secondary-btn:hover {
-  transform: translateY(-2px); /* اضافه کردن افکت هاور */
-}
-.secondary-btn.primary-btn {
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-}
-.secondary-btn.primary-btn:hover {
-  transform: translateY(-2px);
-}
-
-
-.warning-btn {
-  padding: 10px 15px;
-  background: var(--danger-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.tab-container {
-  display: flex;
-  border-top: 1px solid var(--border-color);
-  background: var(--app-background);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 10px 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-color-secondary);
-  transition: var(--element-transition);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.tab-btn.active {
-  color: var(--primary-color);
-}
-
-.tab-btn.status-pending .tab-icon::after {
-  content: '';
-  position: absolute;
-  top: 5px;
-  right: 25%;
-  width: 8px;
-  height: 8px;
-  background: var(--danger-color);
-  border-radius: 50%;
-  border: 1px solid var(--app-background);
-}
-
-.content-panel {
-  display: none;
-}
-
-.content-panel.active {
-  display: block;
-}
-
-.all-items-list,
-.today-list {
-  list-style: none;
-  padding: 0;
-}
-
-.all-items-item,
-.today-list-item {
-  background: var(--card-background);
-  border-radius: 15px;
-  margin-bottom: 15px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.item-main-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px;
-  cursor: pointer;
-}
-
-.item-number {
-  font-weight: 700;
-  color: var(--text-color-secondary);
-  font-size: 16px;
-  background: var(--input-bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.item-title {
-  flex-grow: 1;
-  font-weight: 700;
-  font-size: 20px;
-}
-
-.creation-date {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin: 0 10px;
-  min-width: 90px;
-  text-align: center;
-}
-
-.item-inline-actions {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.item-inline-actions .icon-btn {
-  font-size: 20px;
-  padding: 6px;
-}
-
-.item-inline-actions .delete-icon-btn:hover {
-  background: rgba(var(--danger-rgb), 0.1);
-}
-
-.item-inline-actions .edit-icon-btn:hover {
-  background: rgba(var(--accent-rgb), 0.1);
-}
-
-.item-details {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  background: var(--app-background);
-  padding: 0 15px;
-  border-top: 1px solid var(--border-color);
-}
-
-.all-items-item.expanded .item-details {
-  max-height: 5000px;
-  opacity: 1;
-  padding-bottom: 15px;
-}
-
-.attachments-display {
-  margin-top: 15px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 15px;
-}
-
-.attachments-display h4 {
-  margin: 0 0 10px 0;
-  font-size: 15px;
-  color: var(--text-color-secondary);
-}
-
-.attachment-content {
-  margin-bottom: 10px;
-}
-
-.attachment-content img,
-.attachment-content video {
-  max-width: 100%;
-  border-radius: 8px;
-  display: block;
-}
-
-.attachment-content audio {
-  width: 100%;
-}
-
-.attachment-text-note {
-  padding: 15px;
-  background: var(--note-bg-color);
-  border-radius: 8px;
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.review-progress-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  margin-top: 15px;
-  flex-wrap: wrap;
-  background: var(--review-schedule-box-bg);
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.progress-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  font-weight: 700;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
-  color: var(--text-color-primary);
-}
-
-.progress-circle.progress-green {
-  background: conic-gradient(var(--progress-green-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-yellow {
-  background: conic-gradient(var(--progress-yellow-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-red {
-  background: conic-gradient(var(--progress-red-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.review-collapsible-header {
-  background: none;
-  margin: 0;
-  border: none;
-  border-radius: 10px;
-  flex-grow: 1;
-  min-width: 200px;
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.review-collapsible-header h4 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--text-color-primary);
-  font-weight: 600;
-}
-
-.review-collapsible-header .expand-arrow {
-  font-size: 20px;
-  color: var(--text-color-secondary);
-  transition: transform .3s ease;
-  padding: 5px;
-  border-radius: 50%;
-}
-
-.collapsible-content {
-  background: none;
-  border: none;
-  padding: 0 5px;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px;
-}
-
-.collapsible-content.hidden {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  overflow: hidden;
-}
-
-.schedule-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--review-schedule-item-bg-pending);
-  border: 1px solid var(--review-schedule-item-border-color);
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-.schedule-item:last-child {
-  margin-bottom: 0;
-}
-
-.schedule-item.completed-schedule {
-  background: var(--review-schedule-item-bg-completed);
-  border-color: var(--schedule-tick-color);
-}
-
-.schedule-item .schedule-label {
-  color: var(--schedule-label-color-pending);
-}
-
-.schedule-item.completed-schedule .schedule-label {
-  color: var(--schedule-label-color-completed);
-  text-decoration: line-through;
-}
-
-.schedule-item .schedule-date {
-  color: var(--schedule-date-color-pending);
-  font-size: 13px;
-  opacity: .9;
-}
-
-.schedule-item.completed-schedule .schedule-date {
-  color: var(--schedule-date-color-completed);
-}
-
-.item-actions-bottom {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.reset-btn {
-  padding: 12px 25px;
-  background: #FFF8E1;
-  color: #FFAB00;
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: var(--element-transition);
-  width: 100%;
-  box-shadow: 0 4px 10px rgba(var(--warning-rgb), .2);
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .6);
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .3s ease, visibility .3s ease;
-}
-
-.modal-overlay:not(.hidden) {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.modal-content {
-  background: var(--modal-bg-color);
-  padding: 25px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transform: translateY(20px) scale(.95);
-  opacity: 0;
-  transition: var(--element-transition);
-}
-
-.modal-overlay:not(.hidden) .modal-content {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-.modal-content h3 {
-  margin-top: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.modal-content input[type="text"] {
-    margin-bottom: 15px;
-}
-.modern-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.modern-input:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .15);
-}
-
-.modal-content textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 15px;
-  border: 1px solid var(--input-border-color);
-  font-size: 16px;
-  min-height: 150px;
-  resize: vertical;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-}
-
-.modal-content select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--input-border-color);
-  border-radius: 15px;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  font-size: 16px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23757575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-  background-repeat: no-repeat;
-  background-position: left 10px center;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.overall-progress-bar-container {
-  margin-bottom: 20px;
-  background: var(--card-background);
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
-}
-
-.overall-progress-bar-text {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-color-primary);
-  margin-bottom: 10px;
-  text-align: right;
-}
-
-.overall-progress-bar {
-  width: 100%;
-  height: 10px;
-  background: var(--light-grey);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.overall-progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: var(--primary-color);
-  border-radius: 5px;
-  transition: width .5s ease;
-}
-
-/* RTL جزئی */
-[dir="rtl"] #login-btn {
-  right: auto;
-  left: 55px;
-}
-
-[dir="rtl"] #theme-toggle-btn {
-  left: auto;
-  right: 15px;
-}
-
-[dir="rtl"] #settings-btn {
-  right: auto;
-  left: 15px;
-}
-
-.today-list-item .completion-time {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin-inline-start: 10px;
-  text-align: left;
-}
-
-/* === استایل‌های اصلاح‌شده برای "افزودن عنوان جدید" === */
-#new-item-panel .form-layout {
-  max-width: 760px;
-  margin: 12px auto 24px auto;
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-}
-
-#newTitleInput {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 15px; /* فاصله از نوار پیوست‌ها */
-}
-
-#newTitleInput::placeholder {
-    color: var(--text-color-light);
-    font-weight: 400;
-}
-
-
-#newTitleInput:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 33, 150, 243), .15);
-}
-
-/* استایل جدید برای نوار ابزار پیوست‌ها */
-#new-item-panel .attachment-options {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  background: var(--app-background);
-  transition: background-color .2s, border-color .2s;
-}
-
-
-#new-item-panel .option-box {
-  flex: 1;
-  /* تقسیم مساوی فضا */
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-color);
-  background: var(--card-background);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: transform .12s, box-shadow .2s, background-color .2s, border-color .2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
-}
-
-#new-item-panel .option-box:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent-color);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, .10);
-}
-
-#new-item-panel .option-box .material-icons-outlined {
-  font-size: 24px;
-  color: var(--text-color-secondary);
-}
-
-#attachments-preview, #edit-attachments-preview {
-  margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
-}
-
-#attachments-preview .preview-item, #edit-attachments-preview .preview-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--app-background);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  padding: 8px 10px;
-  font-size: 13px;
-}
-
-#new-item-panel #saveItemBtn {
-  margin-top: 20px;
-  height: 48px;
-  font-size: 16px;
-  border-radius: 15px;
-  box-shadow: 0 6px 16px rgba(var(--primary-rgb, 76, 175, 80), .22);
-}
-
-#new-item-panel #saveItemBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-#review-panel .placeholder p {
-  color: var(--text-color-secondary);
-}
-
-/* Custom Modal Styles */
-.modal-content p {
-  font-size: 16px;
-  color: var(--text-color-secondary);
-  line-height: 1.6;
-  margin: 15px 0 25px;
-}
-
-.modal-content.settings-content {
-  max-width: 600px;
-}
-
-.modal-content.algorithm-content {
-  max-width: 600px;
-}
-
-.modal-content.settings-content .modal-header-with-separator {
-  margin-bottom: 25px;
-}
-
-
-.modal-content.settings-content .modal-actions {
-  margin-top: 25px;
-}
-
-
-.modal-content.settings-content .settings-section {
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-}
-.modal-content.settings-content .settings-section:last-of-type {
-  border-bottom: none;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.main-btn {
-  padding: 12px;
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-  transition: var(--element-transition);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 2; /* 2/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.main-btn:hover {
-  transform: translateY(-2px);
-}
-
-.main-btn:disabled {
-    background-color: var(--light-grey);
-    color: var(--text-color-light);
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
-.secondary-btn {
-  padding: 12px 15px;
-  background: transparent;
-  color: var(--danger-color);
-  border: 1px solid var(--danger-color);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: var(--element-transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 1; /* 1/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.secondary-btn:hover {
-  transform: translateY(-2px); /* اضافه کردن افکت هاور */
-}
-.secondary-btn.primary-btn {
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-}
-.secondary-btn.primary-btn:hover {
-  transform: translateY(-2px);
-}
-
-
-.warning-btn {
-  padding: 10px 15px;
-  background: var(--danger-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.tab-container {
-  display: flex;
-  border-top: 1px solid var(--border-color);
-  background: var(--app-background);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 10px 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-color-secondary);
-  transition: var(--element-transition);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.tab-btn.active {
-  color: var(--primary-color);
-}
-
-.tab-btn.status-pending .tab-icon::after {
-  content: '';
-  position: absolute;
-  top: 5px;
-  right: 25%;
-  width: 8px;
-  height: 8px;
-  background: var(--danger-color);
-  border-radius: 50%;
-  border: 1px solid var(--app-background);
-}
-
-.content-panel {
-  display: none;
-}
-
-.content-panel.active {
-  display: block;
-}
-
-.all-items-list,
-.today-list {
-  list-style: none;
-  padding: 0;
-}
-
-.all-items-item,
-.today-list-item {
-  background: var(--card-background);
-  border-radius: 15px;
-  margin-bottom: 15px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.item-main-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px;
-  cursor: pointer;
-}
-
-.item-number {
-  font-weight: 700;
-  color: var(--text-color-secondary);
-  font-size: 16px;
-  background: var(--input-bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.item-title {
-  flex-grow: 1;
-  font-weight: 700;
-  font-size: 20px;
-}
-
-.creation-date {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin: 0 10px;
-  min-width: 90px;
-  text-align: center;
-}
-
-.item-inline-actions {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.item-inline-actions .icon-btn {
-  font-size: 20px;
-  padding: 6px;
-}
-
-.item-inline-actions .delete-icon-btn:hover {
-  background: rgba(var(--danger-rgb), 0.1);
-}
-
-.item-inline-actions .edit-icon-btn:hover {
-  background: rgba(var(--accent-rgb), 0.1);
-}
-
-.item-details {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  background: var(--app-background);
-  padding: 0 15px;
-  border-top: 1px solid var(--border-color);
-}
-
-.all-items-item.expanded .item-details {
-  max-height: 5000px;
-  opacity: 1;
-  padding-bottom: 15px;
-}
-
-.attachments-display {
-  margin-top: 15px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 15px;
-}
-
-.attachments-display h4 {
-  margin: 0 0 10px 0;
-  font-size: 15px;
-  color: var(--text-color-secondary);
-}
-
-.attachment-content {
-  margin-bottom: 10px;
-}
-
-.attachment-content img,
-.attachment-content video {
-  max-width: 100%;
-  border-radius: 8px;
-  display: block;
-}
-
-.attachment-content audio {
-  width: 100%;
-}
-
-.attachment-text-note {
-  padding: 15px;
-  background: var(--note-bg-color);
-  border-radius: 8px;
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.review-progress-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  margin-top: 15px;
-  flex-wrap: wrap;
-  background: var(--review-schedule-box-bg);
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.progress-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  font-weight: 700;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
-  color: var(--text-color-primary);
-}
-
-.progress-circle.progress-green {
-  background: conic-gradient(var(--progress-green-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-yellow {
-  background: conic-gradient(var(--progress-yellow-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-red {
-  background: conic-gradient(var(--progress-red-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.review-collapsible-header {
-  background: none;
-  margin: 0;
-  border: none;
-  border-radius: 10px;
-  flex-grow: 1;
-  min-width: 200px;
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.review-collapsible-header h4 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--text-color-primary);
-  font-weight: 600;
-}
-
-.review-collapsible-header .expand-arrow {
-  font-size: 20px;
-  color: var(--text-color-secondary);
-  transition: transform .3s ease;
-  padding: 5px;
-  border-radius: 50%;
-}
-
-.collapsible-content {
-  background: none;
-  border: none;
-  padding: 0 5px;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px;
-}
-
-.collapsible-content.hidden {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  overflow: hidden;
-}
-
-.schedule-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--review-schedule-item-bg-pending);
-  border: 1px solid var(--review-schedule-item-border-color);
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-.schedule-item:last-child {
-  margin-bottom: 0;
-}
-
-.schedule-item.completed-schedule {
-  background: var(--review-schedule-item-bg-completed);
-  border-color: var(--schedule-tick-color);
-}
-
-.schedule-item .schedule-label {
-  color: var(--schedule-label-color-pending);
-}
-
-.schedule-item.completed-schedule .schedule-label {
-  color: var(--schedule-label-color-completed);
-  text-decoration: line-through;
-}
-
-.schedule-item .schedule-date {
-  color: var(--schedule-date-color-pending);
-  font-size: 13px;
-  opacity: .9;
-}
-
-.schedule-item.completed-schedule .schedule-date {
-  color: var(--schedule-date-color-completed);
-}
-
-.item-actions-bottom {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.reset-btn {
-  padding: 12px 25px;
-  background: #FFF8E1;
-  color: #FFAB00;
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: var(--element-transition);
-  width: 100%;
-  box-shadow: 0 4px 10px rgba(var(--warning-rgb), .2);
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .6);
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .3s ease, visibility .3s ease;
-}
-
-.modal-overlay:not(.hidden) {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.modal-content {
-  background: var(--modal-bg-color);
-  padding: 25px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transform: translateY(20px) scale(.95);
-  opacity: 0;
-  transition: var(--element-transition);
-}
-
-.modal-overlay:not(.hidden) .modal-content {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-.modal-content h3 {
-  margin-top: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.modal-content input[type="text"] {
-    margin-bottom: 15px;
-}
-.modern-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.modern-input:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .15);
-}
-
-.modal-content textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 15px;
-  border: 1px solid var(--input-border-color);
-  font-size: 16px;
-  min-height: 150px;
-  resize: vertical;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-}
-
-.modal-content select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--input-border-color);
-  border-radius: 15px;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  font-size: 16px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23757575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-  background-repeat: no-repeat;
-  background-position: left 10px center;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.overall-progress-bar-container {
-  margin-bottom: 20px;
-  background: var(--card-background);
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
-}
-
-.overall-progress-bar-text {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-color-primary);
-  margin-bottom: 10px;
-  text-align: right;
-}
-
-.overall-progress-bar {
-  width: 100%;
-  height: 10px;
-  background: var(--light-grey);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.overall-progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: var(--primary-color);
-  border-radius: 5px;
-  transition: width .5s ease;
-}
-
-/* RTL جزئی */
-[dir="rtl"] #login-btn {
-  right: auto;
-  left: 55px;
-}
-
-[dir="rtl"] #theme-toggle-btn {
-  left: auto;
-  right: 15px;
-}
-
-[dir="rtl"] #settings-btn {
-  right: auto;
-  left: 15px;
-}
-
-.today-list-item .completion-time {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin-inline-start: 10px;
-  text-align: left;
-}
-
-/* === استایل‌های اصلاح‌شده برای "افزودن عنوان جدید" === */
-#new-item-panel .form-layout {
-  max-width: 760px;
-  margin: 12px auto 24px auto;
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-}
-
-#newTitleInput {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 15px; /* فاصله از نوار پیوست‌ها */
-}
-
-#newTitleInput::placeholder {
-    color: var(--text-color-light);
-    font-weight: 400;
-}
-
-
-#newTitleInput:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 33, 150, 243), .15);
-}
-
-/* استایل جدید برای نوار ابزار پیوست‌ها */
-#new-item-panel .attachment-options {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  background: var(--app-background);
-  transition: background-color .2s, border-color .2s;
-}
-
-
-#new-item-panel .option-box {
-  flex: 1;
-  /* تقسیم مساوی فضا */
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-color);
-  background: var(--card-background);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: transform .12s, box-shadow .2s, background-color .2s, border-color .2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
-}
-
-#new-item-panel .option-box:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent-color);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, .10);
-}
-
-#new-item-panel .option-box .material-icons-outlined {
-  font-size: 24px;
-  color: var(--text-color-secondary);
-}
-
-#attachments-preview, #edit-attachments-preview {
-  margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
-}
-
-#attachments-preview .preview-item, #edit-attachments-preview .preview-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--app-background);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  padding: 8px 10px;
-  font-size: 13px;
-}
-
-#new-item-panel #saveItemBtn {
-  margin-top: 20px;
-  height: 48px;
-  font-size: 16px;
-  border-radius: 15px;
-  box-shadow: 0 6px 16px rgba(var(--primary-rgb, 76, 175, 80), .22);
-}
-
-#new-item-panel #saveItemBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-#review-panel .placeholder p {
-  color: var(--text-color-secondary);
-}
-
-/* Custom Modal Styles */
-.modal-content p {
-  font-size: 16px;
-  color: var(--text-color-secondary);
-  line-height: 1.6;
-  margin: 15px 0 25px;
-}
-
-.modal-content.settings-content {
-  max-width: 600px;
-}
-
-.modal-content.algorithm-content {
-  max-width: 600px;
-}
-
-.modal-content.settings-content .modal-header-with-separator {
-  margin-bottom: 25px;
-}
-
-
-.modal-content.settings-content .modal-actions {
-  margin-top: 25px;
-}
-
-
-.modal-content.settings-content .settings-section {
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-}
-.modal-content.settings-content .settings-section:last-of-type {
-  border-bottom: none;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.main-btn {
-  padding: 12px;
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-  transition: var(--element-transition);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 2; /* 2/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.main-btn:hover {
-  transform: translateY(-2px);
-}
-
-.main-btn:disabled {
-    background-color: var(--light-grey);
-    color: var(--text-color-light);
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
-.secondary-btn {
-  padding: 12px 15px;
-  background: transparent;
-  color: var(--danger-color);
-  border: 1px solid var(--danger-color);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: var(--element-transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 1; /* 1/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.secondary-btn:hover {
-  transform: translateY(-2px); /* اضافه کردن افکت هاور */
-}
-.secondary-btn.primary-btn {
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-}
-.secondary-btn.primary-btn:hover {
-  transform: translateY(-2px);
-}
-
-
-.warning-btn {
-  padding: 10px 15px;
-  background: var(--danger-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.tab-container {
-  display: flex;
-  border-top: 1px solid var(--border-color);
-  background: var(--app-background);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 10px 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-color-secondary);
-  transition: var(--element-transition);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.tab-btn.active {
-  color: var(--primary-color);
-}
-
-.tab-btn.status-pending .tab-icon::after {
-  content: '';
-  position: absolute;
-  top: 5px;
-  right: 25%;
-  width: 8px;
-  height: 8px;
-  background: var(--danger-color);
-  border-radius: 50%;
-  border: 1px solid var(--app-background);
-}
-
-.content-panel {
-  display: none;
-}
-
-.content-panel.active {
-  display: block;
-}
-
-.all-items-list,
-.today-list {
-  list-style: none;
-  padding: 0;
-}
-
-.all-items-item,
-.today-list-item {
-  background: var(--card-background);
-  border-radius: 15px;
-  margin-bottom: 15px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.item-main-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px;
-  cursor: pointer;
-}
-
-.item-number {
-  font-weight: 700;
-  color: var(--text-color-secondary);
-  font-size: 16px;
-  background: var(--input-bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.item-title {
-  flex-grow: 1;
-  font-weight: 700;
-  font-size: 20px;
-}
-
-.creation-date {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin: 0 10px;
-  min-width: 90px;
-  text-align: center;
-}
-
-.item-inline-actions {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.item-inline-actions .icon-btn {
-  font-size: 20px;
-  padding: 6px;
-}
-
-.item-inline-actions .delete-icon-btn:hover {
-  background: rgba(var(--danger-rgb), 0.1);
-}
-
-.item-inline-actions .edit-icon-btn:hover {
-  background: rgba(var(--accent-rgb), 0.1);
-}
-
-.item-details {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  background: var(--app-background);
-  padding: 0 15px;
-  border-top: 1px solid var(--border-color);
-}
-
-.all-items-item.expanded .item-details {
-  max-height: 5000px;
-  opacity: 1;
-  padding-bottom: 15px;
-}
-
-.attachments-display {
-  margin-top: 15px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 15px;
-}
-
-.attachments-display h4 {
-  margin: 0 0 10px 0;
-  font-size: 15px;
-  color: var(--text-color-secondary);
-}
-
-.attachment-content {
-  margin-bottom: 10px;
-}
-
-.attachment-content img,
-.attachment-content video {
-  max-width: 100%;
-  border-radius: 8px;
-  display: block;
-}
-
-.attachment-content audio {
-  width: 100%;
-}
-
-.attachment-text-note {
-  padding: 15px;
-  background: var(--note-bg-color);
-  border-radius: 8px;
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.review-progress-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  margin-top: 15px;
-  flex-wrap: wrap;
-  background: var(--review-schedule-box-bg);
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.progress-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  font-weight: 700;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
-  color: var(--text-color-primary);
-}
-
-.progress-circle.progress-green {
-  background: conic-gradient(var(--progress-green-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-yellow {
-  background: conic-gradient(var(--progress-yellow-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-red {
-  background: conic-gradient(var(--progress-red-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.review-collapsible-header {
-  background: none;
-  margin: 0;
-  border: none;
-  border-radius: 10px;
-  flex-grow: 1;
-  min-width: 200px;
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.review-collapsible-header h4 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--text-color-primary);
-  font-weight: 600;
-}
-
-.review-collapsible-header .expand-arrow {
-  font-size: 20px;
-  color: var(--text-color-secondary);
-  transition: transform .3s ease;
-  padding: 5px;
-  border-radius: 50%;
-}
-
-.collapsible-content {
-  background: none;
-  border: none;
-  padding: 0 5px;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px;
-}
-
-.collapsible-content.hidden {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  overflow: hidden;
-}
-
-.schedule-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--review-schedule-item-bg-pending);
-  border: 1px solid var(--review-schedule-item-border-color);
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-.schedule-item:last-child {
-  margin-bottom: 0;
-}
-
-.schedule-item.completed-schedule {
-  background: var(--review-schedule-item-bg-completed);
-  border-color: var(--schedule-tick-color);
-}
-
-.schedule-item .schedule-label {
-  color: var(--schedule-label-color-pending);
-}
-
-.schedule-item.completed-schedule .schedule-label {
-  color: var(--schedule-label-color-completed);
-  text-decoration: line-through;
-}
-
-.schedule-item .schedule-date {
-  color: var(--schedule-date-color-pending);
-  font-size: 13px;
-  opacity: .9;
-}
-
-.schedule-item.completed-schedule .schedule-date {
-  color: var(--schedule-date-color-completed);
-}
-
-.item-actions-bottom {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.reset-btn {
-  padding: 12px 25px;
-  background: #FFF8E1;
-  color: #FFAB00;
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: var(--element-transition);
-  width: 100%;
-  box-shadow: 0 4px 10px rgba(var(--warning-rgb), .2);
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .6);
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .3s ease, visibility .3s ease;
-}
-
-.modal-overlay:not(.hidden) {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.modal-content {
-  background: var(--modal-bg-color);
-  padding: 25px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transform: translateY(20px) scale(.95);
-  opacity: 0;
-  transition: var(--element-transition);
-}
-
-.modal-overlay:not(.hidden) .modal-content {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-.modal-content h3 {
-  margin-top: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.modal-content input[type="text"] {
-    margin-bottom: 15px;
-}
-.modern-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.modern-input:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .15);
-}
-
-.modal-content textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 15px;
-  border: 1px solid var(--input-border-color);
-  font-size: 16px;
-  min-height: 150px;
-  resize: vertical;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-}
-
-.modal-content select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--input-border-color);
-  border-radius: 15px;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  font-size: 16px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23757575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-  background-repeat: no-repeat;
-  background-position: left 10px center;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.overall-progress-bar-container {
-  margin-bottom: 20px;
-  background: var(--card-background);
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
-}
-
-.overall-progress-bar-text {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-color-primary);
-  margin-bottom: 10px;
-  text-align: right;
-}
-
-.overall-progress-bar {
-  width: 100%;
-  height: 10px;
-  background: var(--light-grey);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.overall-progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: var(--primary-color);
-  border-radius: 5px;
-  transition: width .5s ease;
-}
-
-/* RTL جزئی */
-[dir="rtl"] #login-btn {
-  right: auto;
-  left: 55px;
-}
-
-[dir="rtl"] #theme-toggle-btn {
-  left: auto;
-  right: 15px;
-}
-
-[dir="rtl"] #settings-btn {
-  right: auto;
-  left: 15px;
-}
-
-.today-list-item .completion-time {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin-inline-start: 10px;
-  text-align: left;
-}
-
-/* === استایل‌های اصلاح‌شده برای "افزودن عنوان جدید" === */
-#new-item-panel .form-layout {
-  max-width: 760px;
-  margin: 12px auto 24px auto;
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-}
-
-#newTitleInput {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 15px; /* فاصله از نوار پیوست‌ها */
-}
-
-#newTitleInput::placeholder {
-    color: var(--text-color-light);
-    font-weight: 400;
-}
-
-
-#newTitleInput:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 33, 150, 243), .15);
-}
-
-/* استایل جدید برای نوار ابزار پیوست‌ها */
-#new-item-panel .attachment-options {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  background: var(--app-background);
-  transition: background-color .2s, border-color .2s;
-}
-
-
-#new-item-panel .option-box {
-  flex: 1;
-  /* تقسیم مساوی فضا */
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-color);
-  background: var(--card-background);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: transform .12s, box-shadow .2s, background-color .2s, border-color .2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
-}
-
-#new-item-panel .option-box:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent-color);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, .10);
-}
-
-#new-item-panel .option-box .material-icons-outlined {
-  font-size: 24px;
-  color: var(--text-color-secondary);
-}
-
-#attachments-preview, #edit-attachments-preview {
-  margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
-}
-
-#attachments-preview .preview-item, #edit-attachments-preview .preview-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--app-background);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  padding: 8px 10px;
-  font-size: 13px;
-}
-
-#new-item-panel #saveItemBtn {
-  margin-top: 20px;
-  height: 48px;
-  font-size: 16px;
-  border-radius: 15px;
-  box-shadow: 0 6px 16px rgba(var(--primary-rgb, 76, 175, 80), .22);
-}
-
-#new-item-panel #saveItemBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-#review-panel .placeholder p {
-  color: var(--text-color-secondary);
-}
-
-/* Custom Modal Styles */
-.modal-content p {
-  font-size: 16px;
-  color: var(--text-color-secondary);
-  line-height: 1.6;
-  margin: 15px 0 25px;
-}
-
-.modal-content.settings-content {
-  max-width: 600px;
-}
-
-.modal-content.algorithm-content {
-  max-width: 600px;
-}
-
-.modal-content.settings-content .modal-header-with-separator {
-  margin-bottom: 25px;
-}
-
-
-.modal-content.settings-content .modal-actions {
-  margin-top: 25px;
-}
-
-
-.modal-content.settings-content .settings-section {
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-}
-.modal-content.settings-content .settings-section:last-of-type {
-  border-bottom: none;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.main-btn {
-  padding: 12px;
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-  transition: var(--element-transition);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 2; /* 2/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.main-btn:hover {
-  transform: translateY(-2px);
-}
-
-.main-btn:disabled {
-    background-color: var(--light-grey);
-    color: var(--text-color-light);
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
-.secondary-btn {
-  padding: 12px 15px;
-  background: transparent;
-  color: var(--danger-color);
-  border: 1px solid var(--danger-color);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: var(--element-transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 1; /* 1/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.secondary-btn:hover {
-  transform: translateY(-2px); /* اضافه کردن افکت هاور */
-}
-.secondary-btn.primary-btn {
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-}
-.secondary-btn.primary-btn:hover {
-  transform: translateY(-2px);
-}
-
-
-.warning-btn {
-  padding: 10px 15px;
-  background: var(--danger-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.tab-container {
-  display: flex;
-  border-top: 1px solid var(--border-color);
-  background: var(--app-background);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 10px 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-color-secondary);
-  transition: var(--element-transition);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.tab-btn.active {
-  color: var(--primary-color);
-}
-
-.tab-btn.status-pending .tab-icon::after {
-  content: '';
-  position: absolute;
-  top: 5px;
-  right: 25%;
-  width: 8px;
-  height: 8px;
-  background: var(--danger-color);
-  border-radius: 50%;
-  border: 1px solid var(--app-background);
-}
-
-.content-panel {
-  display: none;
-}
-
-.content-panel.active {
-  display: block;
-}
-
-.all-items-list,
-.today-list {
-  list-style: none;
-  padding: 0;
-}
-
-.all-items-item,
-.today-list-item {
-  background: var(--card-background);
-  border-radius: 15px;
-  margin-bottom: 15px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.item-main-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px;
-  cursor: pointer;
-}
-
-.item-number {
-  font-weight: 700;
-  color: var(--text-color-secondary);
-  font-size: 16px;
-  background: var(--input-bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  width: 35px;
-  height: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.item-title {
-  flex-grow: 1;
-  font-weight: 700;
-  font-size: 20px;
-}
-
-.creation-date {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin: 0 10px;
-  min-width: 90px;
-  text-align: center;
-}
-
-.item-inline-actions {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-left: auto;
-  flex-shrink: 0;
-}
-
-.item-inline-actions .icon-btn {
-  font-size: 20px;
-  padding: 6px;
-}
-
-.item-inline-actions .delete-icon-btn:hover {
-  background: rgba(var(--danger-rgb), 0.1);
-}
-
-.item-inline-actions .edit-icon-btn:hover {
-  background: rgba(var(--accent-rgb), 0.1);
-}
-
-.item-details {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  background: var(--app-background);
-  padding: 0 15px;
-  border-top: 1px solid var(--border-color);
-}
-
-.all-items-item.expanded .item-details {
-  max-height: 5000px;
-  opacity: 1;
-  padding-bottom: 15px;
-}
-
-.attachments-display {
-  margin-top: 15px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 15px;
-}
-
-.attachments-display h4 {
-  margin: 0 0 10px 0;
-  font-size: 15px;
-  color: var(--text-color-secondary);
-}
-
-.attachment-content {
-  margin-bottom: 10px;
-}
-
-.attachment-content img,
-.attachment-content video {
-  max-width: 100%;
-  border-radius: 8px;
-  display: block;
-}
-
-.attachment-content audio {
-  width: 100%;
-}
-
-.attachment-text-note {
-  padding: 15px;
-  background: var(--note-bg-color);
-  border-radius: 8px;
-  white-space: pre-wrap;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.review-progress-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  margin-top: 15px;
-  flex-wrap: wrap;
-  background: var(--review-schedule-box-bg);
-  border-radius: 10px;
-  padding: 15px;
-}
-
-.progress-circle {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  font-weight: 700;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .15);
-  color: var(--text-color-primary);
-}
-
-.progress-circle.progress-green {
-  background: conic-gradient(var(--progress-green-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-yellow {
-  background: conic-gradient(var(--progress-yellow-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.progress-circle.progress-red {
-  background: conic-gradient(var(--progress-red-color) calc(var(--p, 0)*1%), var(--border-color) 0);
-}
-
-.review-collapsible-header {
-  background: none;
-  margin: 0;
-  border: none;
-  border-radius: 10px;
-  flex-grow: 1;
-  min-width: 200px;
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.review-collapsible-header h4 {
-  margin: 0;
-  font-size: 16px;
-  color: var(--text-color-primary);
-  font-weight: 600;
-}
-
-.review-collapsible-header .expand-arrow {
-  font-size: 20px;
-  color: var(--text-color-secondary);
-  transition: transform .3s ease;
-  padding: 5px;
-  border-radius: 50%;
-}
-
-.collapsible-content {
-  background: none;
-  border: none;
-  padding: 0 5px;
-  transition: max-height .4s ease, opacity .4s ease, padding .4s ease;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px;
-}
-
-.collapsible-content.hidden {
-  max-height: 0;
-  opacity: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  overflow: hidden;
-}
-
-.schedule-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--review-schedule-item-bg-pending);
-  border: 1px solid var(--review-schedule-item-border-color);
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-.schedule-item:last-child {
-  margin-bottom: 0;
-}
-
-.schedule-item.completed-schedule {
-  background: var(--review-schedule-item-bg-completed);
-  border-color: var(--schedule-tick-color);
-}
-
-.schedule-item .schedule-label {
-  color: var(--schedule-label-color-pending);
-}
-
-.schedule-item.completed-schedule .schedule-label {
-  color: var(--schedule-label-color-completed);
-  text-decoration: line-through;
-}
-
-.schedule-item .schedule-date {
-  color: var(--schedule-date-color-pending);
-  font-size: 13px;
-  opacity: .9;
-}
-
-.schedule-item.completed-schedule .schedule-date {
-  color: var(--schedule-date-color-completed);
-}
-
-.item-actions-bottom {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  justify-content: center;
-}
-
-.reset-btn {
-  padding: 12px 25px;
-  background: #FFF8E1;
-  color: #FFAB00;
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: var(--element-transition);
-  width: 100%;
-  box-shadow: 0 4px 10px rgba(var(--warning-rgb), .2);
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .6);
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .3s ease, visibility .3s ease;
-}
-
-.modal-overlay:not(.hidden) {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.modal-content {
-  background: var(--modal-bg-color);
-  padding: 25px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transform: translateY(20px) scale(.95);
-  opacity: 0;
-  transition: var(--element-transition);
-}
-
-.modal-overlay:not(.hidden) .modal-content {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
-.modal-content h3 {
-  margin-top: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.modal-content input[type="text"] {
-    margin-bottom: 15px;
-}
-.modern-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.modern-input:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), .15);
-}
-
-.modal-content textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 15px;
-  border: 1px solid var(--input-border-color);
-  font-size: 16px;
-  min-height: 150px;
-  resize: vertical;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-}
-
-.modal-content select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--input-border-color);
-  border-radius: 15px;
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  font-size: 16px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23757575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-  background-repeat: no-repeat;
-  background-position: left 10px center;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.overall-progress-bar-container {
-  margin-bottom: 20px;
-  background: var(--card-background);
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .05);
-}
-
-.overall-progress-bar-text {
-  display: block;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-color-primary);
-  margin-bottom: 10px;
-  text-align: right;
-}
-
-.overall-progress-bar {
-  width: 100%;
-  height: 10px;
-  background: var(--light-grey);
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-.overall-progress-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: var(--primary-color);
-  border-radius: 5px;
-  transition: width .5s ease;
-}
-
-/* RTL جزئی */
-[dir="rtl"] #login-btn {
-  right: auto;
-  left: 55px;
-}
-
-[dir="rtl"] #theme-toggle-btn {
-  left: auto;
-  right: 15px;
-}
-
-[dir="rtl"] #settings-btn {
-  right: auto;
-  left: 15px;
-}
-
-.today-list-item .completion-time {
-  font-size: 13px;
-  color: var(--text-color-secondary);
-  opacity: .8;
-  margin-inline-start: 10px;
-  text-align: left;
-}
-
-/* === استایل‌های اصلاح‌شده برای "افزودن عنوان جدید" === */
-#new-item-panel .form-layout {
-  max-width: 760px;
-  margin: 12px auto 24px auto;
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-}
-
-#newTitleInput {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 12px 15px;
-  border: 1px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--text-color-primary);
-  border-radius: 15px;
-  outline: none;
-  transition: box-shadow .2s, border-color .2s, background-color .2s;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 15px; /* فاصله از نوار پیوست‌ها */
-}
-
-#newTitleInput::placeholder {
-    color: var(--text-color-light);
-    font-weight: 400;
-}
-
-
-#newTitleInput:focus {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 33, 150, 243), .15);
-}
-
-/* استایل جدید برای نوار ابزار پیوست‌ها */
-#new-item-panel .attachment-options {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  background: var(--app-background);
-  transition: background-color .2s, border-color .2s;
-}
-
-
-#new-item-panel .option-box {
-  flex: 1;
-  /* تقسیم مساوی فضا */
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border-color);
-  background: var(--card-background);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: transform .12s, box-shadow .2s, background-color .2s, border-color .2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
-}
-
-#new-item-panel .option-box:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent-color);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, .10);
-}
-
-#new-item-panel .option-box .material-icons-outlined {
-  font-size: 24px;
-  color: var(--text-color-secondary);
-}
-
-#attachments-preview, #edit-attachments-preview {
-  margin-top: 15px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
-}
-
-#attachments-preview .preview-item, #edit-attachments-preview .preview-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--app-background);
-  border: 1px solid var(--border-color);
-  border-radius: 15px;
-  padding: 8px 10px;
-  font-size: 13px;
-}
-
-#new-item-panel #saveItemBtn {
-  margin-top: 20px;
-  height: 48px;
-  font-size: 16px;
-  border-radius: 15px;
-  box-shadow: 0 6px 16px rgba(var(--primary-rgb, 76, 175, 80), .22);
-}
-
-#new-item-panel #saveItemBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-#review-panel .placeholder p {
-  color: var(--text-color-secondary);
-}
-
-/* Custom Modal Styles */
-.modal-content p {
-  font-size: 16px;
-  color: var(--text-color-secondary);
-  line-height: 1.6;
-  margin: 15px 0 25px;
-}
-
-.modal-content.settings-content {
-  max-width: 600px;
-}
-
-.modal-content.algorithm-content {
-  max-width: 600px;
-}
-
-.modal-content.settings-content .modal-header-with-separator {
-  margin-bottom: 25px;
-}
-
-
-.modal-content.settings-content .modal-actions {
-  margin-top: 25px;
-}
-
-
-.modal-content.settings-content .settings-section {
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-}
-.modal-content.settings-content .settings-section:last-of-type {
-  border-bottom: none;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.main-btn {
-  padding: 12px;
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 15px;
-  transition: var(--element-transition);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 2; /* 2/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.main-btn:hover {
-  transform: translateY(-2px);
-}
-
-.main-btn:disabled {
-    background-color: var(--light-grey);
-    color: var(--text-color-light);
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
-
-.secondary-btn {
-  padding: 12px 15px;
-  background: transparent;
-  color: var(--danger-color);
-  border: 1px solid var(--danger-color);
-  border-radius: 15px;
-  cursor: pointer;
-  transition: var(--element-transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  flex-grow: 1; /* 1/3 از فضا را می‌گیرد */
-  width: auto;
-}
-
-.secondary-btn:hover {
-  transform: translateY(-2px); /* اضافه کردن افکت هاور */
-}
-.secondary-btn.primary-btn {
-  background: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-}
-.secondary-btn.primary-btn:hover {
-  transform: translateY(-2px);
-}
-
-
-.warning-btn {
-  padding: 10px 15px;
-  background: var(--danger-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: var(--element-transition);
-}
-
-.tab-container {
-  display: flex;
-  border-top: 1px solid var(--border-color);
-  background: var(--app-background);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 10px 5px;
-  background: none;
-  border
+// ===== State =====
+let items = [];
+let tempAttachments = [];
+let editingItemId = null;
+const defaultIntervals = [0, 1, 3, 7, 14, 30, 60, 120, 180, 365]; // 0 => 20min
+const defaultAlgorithms = [{
+  id: 'default',
+  name: 'پیش‌فرض',
+  intervals: defaultIntervals
+}];
+let algorithms = [...defaultAlgorithms];
+let selectedAlgorithmId = 'default';
+let multiSelectMode = false;
+let selectedItems = [];
+let currentLanguage = 'fa';
+let currentSortOrder = 'desc';
+
+// ===== Translations =====
+const translations = {
+  fa: {
+    'header-title': 'مرور امروز',
+    'review-placeholder-text': 'امروز موردی برای مرور وجود ندارد.\nعالیه!',
+    'remaining-section-title': 'باقی‌مانده',
+    'completed-section-title': 'انجام‌شده در این بازدید',
+    'new-item-title': 'افزودن عنوان جدید',
+    'new-title-placeholder': 'عنوان خود را اینجا بنویسید...',
+    'attachment-label': 'پیوست‌ها (اختیاری)',
+    'add-image-tooltip': 'اضافه کردن عکس',
+    'add-video-tooltip': 'اضافه کردن فیلم',
+    'add-audio-tooltip': 'اضافه کردن صوت',
+    'add-text-tooltip': 'اضافه کردن یادداشت متنی',
+    'save-item-btn': 'ذخیره عنوان',
+    'header-stats-total': 'کل عناوین: ',
+    'header-stats-mastered': 'پایان یافته: ',
+    'select-all-btn': 'انتخاب همه',
+    'delete-selected-btn': 'حذف انتخاب‌شده‌ها',
+    'edit-modal-title': 'ویرایش عنوان',
+    'edit-title-placeholder': 'عنوان جدید',
+    'save-edit-btn': 'ذخیره تغییرات',
+    'cancel-edit-btn': 'انصراف',
+    'settings-modal-title': 'تنظیمات',
+    'language-label': 'زبان:',
+    'theme-label': 'تم:',
+    'font-label': 'فونت:',
+    'review-algorithm-select-label': 'انتخاب الگوریتم مرور:',
+    'review-algorithm-modal-title': 'الگوریتم‌های مرور',
+    'add-algorithm-btn': 'اضافه کردن الگوریتم جدید',
+    'edit-algorithm-modal-title': 'ویرایش الگوریتم',
+    'algorithm-name-input-label': 'نام الگوریتم:',
+    'algorithm-intervals-list-label': 'فاصله‌های مرور:',
+    'add-interval-btn': 'اضافه کردن مرور جدید',
+    'save-algorithm-btn': 'ذخیره الگوریتم',
+    'cancel-algorithm-btn': 'انصراف',
+    'done-btn': 'انجام شد',
+    'delete-btn': 'حذف',
+    'edit-btn': 'ویرایش',
+    'reset-btn': 'ریست پیشرفت',
+    'text-modal-title': 'افزودن یادداشت متنی',
+    'modal-textarea-placeholder': 'یادداشت خود را اینجا بنویسید...',
+    'save-text-btn': 'ذخیره متن',
+    'cancel-text-btn': 'انصراف',
+    'attachments-title': 'پیوست‌ها:',
+    'review-schedule-title': 'برنامه‌ریزی مرور:',
+    'error-empty-title': 'عنوان نمی‌تواند خالی باشد!',
+    'error-file-size': 'فایل خیلی بزرگ است!\nحداکثر اندازه ۵۰ مگابایت است.',
+    'error-save': 'خطا در ذخیره‌سازی داده‌ها.\nلطفاً دوباره تلاش کنید.',
+    'error-load': 'خطا در بارگذاری داده‌ها.\nلطفاً دوباره تلاش کنید.',
+    'error-login': 'ورود در حالت تست غیرفعال است.',
+    'confirm-delete': 'آیا مطمئن هستید که می‌خواهید این عنوان را حذف کنید؟',
+    'confirm-delete-selected': 'آیا مطمئن هستید که می‌خواهید عناوین انتخاب‌شده را حذف کنید؟',
+    'confirm-reset': 'آیا مطمئن هستید که می‌خواهید پیشرفت این عنوان را ریست کنید؟',
+    'select-item': 'انتخاب آیتم',
+    'remove-attachment': 'حذف پیوست',
+    'completed': 'انجام‌شده',
+    'text-note': 'یادداشت متنی',
+    'image-alt': 'پیوست تصویر',
+    'video-alt': 'پیوست ویدیو',
+    'audio-alt': 'پیوست صوت',
+    'sort-by': 'مرتب‌سازی بر اساس:',
+    'sort-date': 'تاریخ',
+    'sort-title': 'عنوان',
+    'sort-progress': 'پیشرفت',
+    'sort-order': 'ترتیب:',
+    'sort-order-asc': 'صعودی',
+    'sort-order-desc': 'نزولی',
+    'all-items-title': 'همه کارها',
+    'today-tab': 'امروز',
+    'new-tab': 'جدید',
+    'all-tab': 'همه',
+    'overall-progress': 'پیشرفت کلی امروز:',
+    'completed-at': 'تکمیل در: ',
+    'settings-save-success': 'تنظیمات شما با موفقیت ذخیره شد!',
+    'settings-save-error': 'خطا در ذخیره تنظیمات. دوباره تلاش کنید.',
+    'algorithm-save-success': 'الگوریتم با موفقیت ذخیره شد!',
+    'algorithm-save-error': 'خطا در ذخیره الگوریتم. دوباره تلاش کنید.',
+    'confirm-delete-algorithm': 'آیا مطمئن هستید که می‌خواهید این الگوریتم را حذف کنید؟ این عمل غیرقابل بازگشت است.',
+    'algorithm-delete-success': 'الگوریتم با موفقیت حذف شد.',
+    'algorithm-delete-error': 'خطا در حذف الگوریتم. دوباره تلاش کنید.',
+    'algorithm-name-empty': 'نام الگوریتم نمی‌تواند خالی باشد.',
+    'new-algorithm-option': '➕ ساخت الگوریتم جدید',
+    'confirm-change-algorithm': '⚠️ با تغییر الگوریتم، مرورهای این عنوان بر اساس الگوریتم جدید تنظیم می‌شوند. آیا مطمئن هستید؟',
+    'previous-algorithm': 'قبلی:',
+    'new-algorithm': 'جدید:',
+    'cannot-delete-last-algorithm': 'زمانی که تنها یک الگوریتم موجود است، امکان حذف آن وجود ندارد.'
+  },
+  en: {
+    "header-title": "Today's Review", "review-placeholder-text": "No items to review today.\nGreat job!", "remaining-section-title": "Remaining", "completed-section-title": "Completed in This Session", "new-item-title": "Add New Item", "new-title-placeholder": "Write your title here...", "attachment-label": "Attachments (Optional)", "add-image-tooltip": "Add Image", "add-video-tooltip": "Add Video", "add-audio-tooltip": "Add Audio", "add-text-tooltip": "Add Text Note", "save-item-btn": "Save Item", "header-stats-total": "Total Items: ", "header-stats-mastered": "Mastered: ", "select-all-btn": "Select All", "delete-selected-btn": "Delete Selected", "edit-modal-title": "Edit Item", "edit-title-placeholder": "New Title", "save-edit-btn": "Save Changes", "cancel-edit-btn": "Cancel", "settings-modal-title": "Settings", "language-label": "Language:", "theme-label": "Theme:", "font-label": "Font:", "review-algorithm-select-label": "Review Algorithm:", "review-algorithm-modal-title": "Review Algorithms", "add-algorithm-btn": "Add New Algorithm", "edit-algorithm-modal-title": "Edit Algorithm", "algorithm-name-input-label": "Algorithm Name:", "algorithm-intervals-list-label": "Review Intervals:", "add-interval-btn": "Add New Interval", "save-algorithm-btn": "Save Algorithm", "cancel-algorithm-btn": "Cancel", "done-btn": "Done", "delete-btn": "Delete", "edit-btn": "Edit", "reset-btn": "Reset Progress", "text-modal-title": "Add Text Note", "modal-textarea-placeholder": "Write your note here...", "save-text-btn": "Save Text", "cancel-text-btn": "Cancel", "attachments-title": "Attachments:", "review-schedule-title": "Review Schedule:", "error-empty-title": "Title cannot be empty!", "error-file-size": "File is too large!\nMaximum size is 50MB.", "error-save": "Error saving data.\nPlease try again.", "error-load": "Error loading data.\nPlease try again.", "error-login": "Login disabled in demo mode.", "confirm-delete": "Are you sure you want to delete this item?", "confirm-delete-selected": "Are you sure you want to delete the selected items?", "confirm-reset": "Are you sure you want to reset the progress of this item?", "select-item": "Select item", "remove-attachment": "Remove attachment", "completed": "Completed", "text-note": "Text note", "image-alt": "Image attachment", "video-alt": "Video attachment", "audio-alt": "Audio attachment", "sort-by": "Sort by:", "sort-date": "Date", "sort-title": "Title", "sort-progress": "Progress", "sort-order": "Order:", "sort-order-asc": "Ascending", "sort-order-desc": "Descending", "all-items-title": "All Tasks", "today-tab": "Today", "new-tab": "New", "all-tab": "All", "overall-progress": "Overall Progress Today:", "completed-at": "Completed at: ", "settings-save-success": "Settings saved successfully!", "settings-save-error": "Error saving settings. Please try again.", "algorithm-save-success": "Algorithm saved successfully!", "algorithm-save-error": "Error saving algorithm. Please try again.", "confirm-delete-algorithm": "Are you sure you want to delete this algorithm? This action is irreversible.", "algorithm-delete-success": "Algorithm deleted successfully.", "algorithm-delete-error": "Error deleting algorithm. Please try again.", "algorithm-name-empty": "Algorithm name cannot be empty.", "new-algorithm-option": "➕ Create New Algorithm", "confirm-change-algorithm": "⚠️ Changing the algorithm will reset this item's review schedule. Are you sure?", "previous-algorithm": "Previous:", "new-algorithm": "New:", "cannot-delete-last-algorithm": "You cannot delete the last remaining algorithm."
+  },
+  ar: {
+    "header-title": "مراجعة اليوم", "review-placeholder-text": "لا توجد عناصر للمراجعة اليوم.\nعمل رائع!", "remaining-section-title": "المتبقي", "completed-section-title": "تم الانتهاء في هذه الجلسة", "new-item-title": "إضافة عنصر جديد", "new-title-placeholder": "اكتب عنوانك هنا...", "attachment-label": "المرفقات (اختياري)", "add-image-tooltip": "إضافة صورة", "add-video-tooltip": "إضافة فيديو", "add-audio-tooltip": "إضافة صوت", "add-text-tooltip": "إضافة ملاحظة نصية", "save-item-btn": "حفظ العنصر", "header-stats-total": "إجمالي العناصر: ", "header-stats-mastered": "المكتمل: ", "select-all-btn": "تحديد الكل", "delete-selected-btn": "حذف المحدد", "edit-modal-title": "تعديل العنصر", "edit-title-placeholder": "عنوان جديد", "save-edit-btn": "حفظ التغييرات", "cancel-edit-btn": "إلغاء", "settings-modal-title": "الإعدادات", "language-label": "اللغة:", "theme-label": "الثيم:", "font-label": "الخط:", "review-algorithm-select-label": "اختيار الخوارزمية:", "review-algorithm-modal-title": "خوارزميات المراجعة", "add-algorithm-btn": "إضافة خوارزمية جديدة", "edit-algorithm-modal-title": "تعديل الخوارزمية", "algorithm-name-input-label": "اسم الخوارزمية:", "algorithm-intervals-list-label": "فترات المراجعة:", "add-interval-btn": "إضافة فترة جديدة", "save-algorithm-btn": "حفظ الخوارزمية", "cancel-algorithm-btn": "إلغاء", "done-btn": "تم", "delete-btn": "حذف", "edit-btn": "تعديل", "reset-btn": "إعادة تعيين التقدم", "text-modal-title": "إضافة ملاحظة نصية", "modal-textarea-placeholder": "اكتب ملاحظتك هنا...", "save-text-btn": "حفظ النص", "cancel-text-btn": "إلغاء", "attachments-title": "المرفقات:", "review-schedule-title": "جدول المراجعة:", "error-empty-title": "العنوان لا يمكن أن يكون فارغًا!", "error-file-size": "الملف كبير جدًا!\nالحد الأقصى للحجم 50 ميجابايت.", "error-save": "خطأ في حفظ البيانات.\nحاول مرة أخرى.", "error-load": "خطأ في تحميل البيانات.\nحاول مرة أخرى.", "error-login": "تسجيل الدخول معطل في وضع العرض.", "confirm-delete": "هل أنت متأكد أنك تريد حذف هذا العنصر؟", "confirm-delete-selected": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟", "confirm-reset": "هل أنت متأكد أنك تريد إعادة تعيين تقدم هذا العنصر؟", "select-item": "تحديد العنصر", "remove-attachment": "إزالة المرفق", "completed": "مكتمل", "text-note": "ملاحظة نصية", "image-alt": "مرفق صورة", "video-alt": "مرفق فيديو", "audio-alt": "مرفق صوتي", "sort-by": "ترتيب حسب:", "sort-date": "التاريخ", "sort-title": "العنوان", "sort-progress": "التقدم", "sort-order": "الترتيب:", "sort-order-asc": "تصاعدي", "sort-order-desc": "تنازلي", "all-items-title": "كل المهام", "today-tab": "اليوم", "new-tab": "جديد", "all-tab": "الكل", "overall-progress": "التقدم الكلي اليوم:", "completed-at": "اكتمل في: ", "settings-save-success": "تم حفظ الإعدادات بنجاح!", "settings-save-error": "خطأ في حفظ الإعدادات. حاول مرة أخرى.", "algorithm-save-success": "تم حفظ الخوارزمية بنجاح!", "algorithm-save-error": "خطأ في حذف الخوارزمية. حاول مرة أخرى.", "confirm-delete-algorithm": "هل أنت متأكد أنك تريد حذف هذه الخوارزمية؟ هذا الإجراء لا يمكن التراجع عنه.", "algorithm-delete-success": "تم حذف الخوارزمية بنجاح.", "algorithm-delete-error": "خطأ في حذف الخوارزمية. حاول مرة أخرى.", "algorithm-name-empty": "اسم الخوارزمية لا يمكن أن يكون فارغًا.", "new-algorithm-option": "➕ إنشاء خوارزمية جديدة", "confirm-change-algorithm": "⚠️ سيؤدي تغيير الخوارزمية إلى إعادة ضبط جدول المراجعة لهذا العنصر. هل أنت متأكد؟", "previous-algorithm": "السابقة:", "new-algorithm": "الجديدة:", "cannot-delete-last-algorithm": "لا يمكنك حذف الخوارزمية الأخيرة."
+  }
+};
+
+// ===== DOM =====
+const htmlEl = document.documentElement;
+const headerTitle = document.getElementById('header-title');
+const tabs = document.querySelectorAll('.tab-btn');
+const contentPanels = document.querySelectorAll('.content-panel');
+const themeToggleBtn = document.getElementById('theme-toggle-btn');
+const reviewPanel = document.getElementById('review-panel');
+const reviewPlaceholder = document.getElementById('review-placeholder');
+const todayRemainingList = document.getElementById('today-remaining-list');
+const todayCompletedList = document.getElementById('today-completed-list');
+const remainingSection = document.getElementById('remaining-section');
+const completedSection = document.getElementById('completed-section');
+const newTitleInput = document.getElementById('newTitleInput');
+const saveItemBtn = document.getElementById('saveItemBtn');
+const fileUploadInput = document.getElementById('file-upload-input');
+const attachmentsPreview = document.getElementById('attachments-preview');
+const addImageBox = document.getElementById('add-image-box');
+const addVideoBox = document.getElementById('add-video-box');
+const addAudioBox = document.getElementById('add-audio-box');
+const addTextBox = document.getElementById('add-text-box');
+const textModal = document.getElementById('text-modal');
+const modalTextarea = document.getElementById('modal-textarea');
+const saveTextBtn = document.getElementById('save-text-btn');
+const cancelTextBtn = document.getElementById('cancel-text-btn');
+const editModal = document.getElementById('edit-modal');
+const editTitleInput = document.getElementById('edit-title-input');
+const editAttachmentsPreview = document.getElementById('edit-attachments-preview');
+const saveEditBtn = document.getElementById('save-edit-btn');
+const cancelEditBtn = document.getElementById('cancel-edit-btn');
+const settingsBtn = document.getElementById('settings-btn');
+const settingsModal = document.getElementById('settings-modal');
+const languageSelect = document.getElementById('language-select');
+const themeSelect = document.getElementById('theme-select');
+const fontSelect = document.getElementById('font-select');
+const saveSettingsBtn = document.getElementById('save-settings-btn');
+const cancelSettingsBtn = document.getElementById('cancel-settings-btn');
+const loginBtn = document.getElementById('login-btn');
+const multiSelectActions = document.getElementById('multi-select-actions');
+const selectAllBtn = document.getElementById('select-all-btn');
+const deleteSelectedBtn = document.getElementById('delete-selected-btn');
+const sortSelect = document.getElementById('sort-select');
+const sortOrderSelect = document.getElementById('sort-order-select');
+const totalCountEl = document.getElementById('total-count');
+const masteredCountEl = document.getElementById('mastered-count');
+const overallProgressBarContainer = document.getElementById('overall-progress-bar-container');
+const overallProgressBarFill = document.getElementById('overall-progress-bar-fill');
+const overallProgressBarText = document.getElementById('overall-progress-bar-text');
+const customModal = document.getElementById('custom-modal');
+const customModalTitle = document.getElementById('custom-modal-title');
+const customModalText = document.getElementById('custom-modal-text');
+const customModalConfirmBtn = document.getElementById('custom-modal-confirm-btn');
+const customModalCancelBtn = document.getElementById('custom-modal-cancel-btn');
+const toastContainer = document.getElementById('toast-message-container');
+
+// New DOM elements for algorithm management
+const reviewAlgorithmSelect = document.getElementById('review-algorithm-select');
+const reviewAlgorithmPreview = document.getElementById('review-algorithm-preview');
+const editReviewAlgorithmSelect = document.getElementById('edit-review-algorithm-select');
+const editReviewAlgorithmPreview = document.getElementById('edit-review-algorithm-preview');
+const openAlgorithmModalBtn = document.getElementById('open-algorithm-modal-btn');
+const reviewAlgorithmModal = document.getElementById('review-algorithm-modal');
+const algorithmList = document.getElementById('algorithm-list');
+const addAlgorithmBtn = document.getElementById('add-algorithm-btn');
+const editAlgorithmModal = document.getElementById('edit-algorithm-modal');
+const editAlgorithmModalTitle = document.getElementById('edit-algorithm-modal-title');
+const algorithmNameInput = document.getElementById('algorithm-name-input');
+const algorithmIntervalsList = document.getElementById('algorithm-intervals-list');
+const addIntervalBtn = document.getElementById('add-interval-btn');
+const saveAlgorithmBtn = document.getElementById('save-algorithm-btn');
+const cancelAlgorithmBtn = document.getElementById('cancel-algorithm-btn');
+
+let editingAlgorithmId = null;
+
+// ===== Helpers =====
+const applyTheme = (theme) => {
+  if (theme === 'auto') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  htmlEl.setAttribute('data-theme', theme);
+  themeToggleBtn.querySelector('.material-icons-outlined').textContent = theme === 'light' ? 'dark_mode' : 'light_mode';
+  localStorage.setItem('themePreference', theme);
+};
+const toggleTheme = () => {
+  const t = htmlEl.getAttribute('data-theme');
+  applyTheme(t === 'light' ? 'dark' : 'light');
+};
+const formatDate = (date) => new Intl.DateTimeFormat(currentLanguage === 'fa' ? 'fa-IR' : currentLanguage === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
+const formatTime = (date) => new Intl.DateTimeFormat(currentLanguage === 'fa' ? 'fa-IR' : currentLanguage === 'ar' ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit', hour12: false }).format(date);
+
+const getReviewScheduleHtml = (schedule, createdAt, intervals) => {
+  const baseDate = new Date(createdAt);
+  const title = translations[currentLanguage]['review-schedule-title'];
+  const word = currentLanguage === 'fa' ? 'مرور' : currentLanguage === 'ar' ? 'مراجعة' : 'Review';
+  const inner = schedule.map((r, i) => {
+    const d = new Date(baseDate);
+    const intervalInDays = intervals[i];
+    if (intervalInDays === 0) d.setMinutes(d.getMinutes() + 20);
+    else d.setDate(d.getDate() + intervalInDays);
+    const statusClass = r.completed ? 'completed-schedule' : 'pending-schedule';
+    const icon = r.completed ? '<span class="material-icons-outlined schedule-tick">check_circle</span>' : '';
+    return `<div class="schedule-item ${statusClass}"><span class="schedule-label">${word} ${i+1}: ${intervalInDays} Days</span><span class="schedule-date">${formatDate(d)}</span>${icon}</div>`;
+  }).join('');
+  return `<div class="review-schedule-box"><h4>${title}</h4>${inner}</div>`;
+};
+
+const getAttachmentsHtml = (attachments) => {
+  if (!attachments || !Array.isArray(attachments) || attachments.length === 0) return '';
+  return `<div class="attachments-display"><h4>${translations[currentLanguage]['attachments-title']}</h4>${
+    attachments.map(att => {
+        switch (att.type) {
+            case 'image': return `<div class="attachment-content"><img src="${att.data}" alt="${translations[currentLanguage]['image-alt']}: ${att.name}" aria-label="${att.name}"></div>`;
+            case 'video': return `<div class="attachment-content"><video src="${att.data}" controls aria-label="${translations[currentLanguage]['video-alt']}: ${att.name}"></video></div>`;
+            case 'audio': return `<div class="attachment-content"><audio src="${att.data}" controls aria-label="${translations[currentLanguage]['audio-alt']}: ${att.name}"></audio></div>`;
+            case 'text': return `<div class="attachment-content"><div class="attachment-text-note">${att.data}</div></div>`;
+            default: return '';
+        }
+    }).join('')
+}</div>`;
+};
+
+const getProgressColorClass = (p) => p < 30 ? 'progress-red' : (p < 70 ? 'progress-yellow' : 'progress-green');
+const showConfirm = (text, title = 'تایید') => {
+  return new Promise((resolve) => {
+    customModalTitle.textContent = title;
+    customModalText.textContent = text;
+    customModal.classList.remove('hidden', 'alert-mode');
+    const confirmHandler = () => { customModal.classList.add('hidden'); resolve(true); cleanup(); };
+    const cancelHandler = () => { customModal.classList.add('hidden'); resolve(false); cleanup(); };
+    const cleanup = () => {
+      customModalConfirmBtn.removeEventListener('click', confirmHandler);
+      customModalCancelBtn.removeEventListener('click', cancelHandler);
+    };
+    customModalConfirmBtn.addEventListener('click', confirmHandler);
+    customModalCancelBtn.addEventListener('click', cancelHandler);
+  });
+};
+
+const showAlert = (text, title = 'خطا') => {
+  customModalTitle.textContent = title;
+  customModalText.textContent = text;
+  customModal.classList.remove('hidden');
+  customModal.classList.add('alert-mode');
+  const confirmHandler = () => {
+    customModal.classList.add('hidden');
+    customModalConfirmBtn.removeEventListener('click', confirmHandler);
+  };
+  customModalConfirmBtn.addEventListener('click', confirmHandler);
+};
+
+const showToast = (message, type = 'success') => {
+    const toast = document.createElement('div');
+    toast.className = `toast-message ${type}`;
+    toast.innerHTML = `<span class="material-icons-outlined">${type === 'success' ? 'check_circle_outline' : 'error_outline'}</span><span>${message}</span>`;
+    toastContainer.prepend(toast);
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    }, 3000);
+};
+
+// ===== Storage (Local) =====
+const saveToStorage = () => { 
+    try { 
+        localStorage.setItem('studyItems_v5', JSON.stringify(items)); 
+        localStorage.setItem('reviewAlgorithms', JSON.stringify(algorithms));
+        localStorage.setItem('selectedAlgorithmId', selectedAlgorithmId);
+    } catch (e) { 
+        showToast(translations[currentLanguage]['error-save'], 'error'); 
+    } 
+};
+const loadFromLocalStorage = () => { 
+    try { 
+        items = JSON.parse(localStorage.getItem('studyItems_v5') || '[]'); 
+        const storedAlgorithms = JSON.parse(localStorage.getItem('reviewAlgorithms') || 'null');
+        algorithms = storedAlgorithms || defaultAlgorithms;
+        selectedAlgorithmId = localStorage.getItem('selectedAlgorithmId') || 'default';
+    } catch { 
+        items = []; 
+        algorithms = defaultAlgorithms;
+        selectedAlgorithmId = 'default';
+    } 
+};
+
+// ===== Render =====
+const renderAll = () => { 
+  renderTodayList(); 
+  renderAllItemsList(); 
+  renderAlgorithmSelects();
+};
+
+const renderTodayList = () => {
+  const now = new Date();
+  const todayItemsTotal = items.filter(item => !item.isMastered && item.nextReview && new Date(item.nextReview) <= now);
+  const todayRemaining = todayItemsTotal.filter(item => !item.completedInSession);
+  const todayCompletedInSession = items.filter(item => item.completedInSession);
+  todayRemainingList.innerHTML = '';
+  todayCompletedList.innerHTML = '';
+  let overall = 0;
+  if (todayItemsTotal.length > 0) overall = (todayCompletedInSession.length / todayItemsTotal.length) * 100;
+  overallProgressBarFill.style.width = `${overall}%`;
+  overallProgressBarText.textContent = `${translations[currentLanguage]['overall-progress']} ${Math.round(overall)}%`;
+  overallProgressBarContainer.classList.toggle('hidden', todayItemsTotal.length === 0 && todayCompletedInSession.length === 0);
+
+  if (todayRemaining.length === 0 && todayCompletedInSession.length === 0) {
+    reviewPlaceholder.classList.remove('hidden');
+    remainingSection.classList.add('hidden');
+    completedSection.classList.add('hidden');
+  } else {
+    reviewPlaceholder.classList.add('hidden');
+    if (todayRemaining.length > 0) {
+      remainingSection.classList.remove('hidden');
+      todayRemaining.forEach((item, idx) => {
+        const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+        todayRemainingList.appendChild(createTodayListItem(item, idx, false, itemAlgorithm.intervals));
+      });
+    } else remainingSection.classList.add('hidden');
+    if (todayCompletedInSession.length > 0) {
+      completedSection.classList.remove('hidden');
+      completedSection.querySelector('.today-list').classList.remove('hidden');
+      todayCompletedInSession.forEach((item, idx) => {
+        const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+        todayCompletedList.appendChild(createTodayListItem(item, idx, true, itemAlgorithm.intervals));
+      });
+    } else {
+      completedSection.classList.add('hidden');
+      completedSection.querySelector('.today-list').classList.add('hidden');
+    }
+  }
+  document.querySelector('.tab-btn[data-tab="review-panel"]').classList.toggle('status-pending', todayRemaining.length > 0);
+};
+
+const createTodayListItem = (item, index, isCompleted = false, intervals) => {
+  const li = document.createElement('li');
+  li.className = `today-list-item ${isCompleted?'completed':''}`;
+  li.dataset.itemId = item.id;
+  const attachmentsHtml = getAttachmentsHtml(item.attachments);
+  const completionTimeHtml = isCompleted && item.completionTime ?
+`<span class="completion-time">${translations[currentLanguage]['completed-at']} ${formatTime(new Date(item.completionTime))}</span>` : '';
+  const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+  const itemIntervals = intervals || itemAlgorithm.intervals;
+  const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt, itemIntervals);
+  li.innerHTML = `<div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span>${completionTimeHtml}<span class="expand-arrow material-icons-outlined">expand_more</span></div><div class="item-details">${attachmentsHtml}${!isCompleted?`<button class="done-btn main-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['done-btn']}">${translations[currentLanguage]['done-btn']}</button>`:''}${reviewHtml}</div>`;
+  return li;
+};
+
+const renderAllItemsList = () => {
+  const container = document.getElementById('all-items-list');
+  let filtered = [...items];
+  const sortBy = sortSelect.value;
+  const sortOrder = sortOrderSelect.value;
+  filtered.sort((a, b) => {
+    let cmp = 0;
+    if (sortBy === 'date') cmp = new Date(a.createdAt) - new Date(b.createdAt);
+    else if (sortBy === 'title') cmp = a.title.localeCompare(b.title, currentLanguage === 'fa' ? 'fa' : 'en');
+    else if (sortBy === 'progress') {
+      const pa = a.reviewSchedule.length ? a.reviewSchedule.filter(r => r.completed).length / a.reviewSchedule.length : 0;
+      const pb = b.reviewSchedule.length ? b.reviewSchedule.filter(r => r.completed).length / b.reviewSchedule.length : 0;
+      cmp = pa - pb;
+    }
+    return sortOrder === 'asc' ? cmp : -cmp;
+  });
+  container.innerHTML = '';
+  filtered.forEach((item, idx) => container.appendChild(createAllItemsListItem(item, idx)));
+  totalCountEl.textContent = items.length;
+  masteredCountEl.textContent = items.filter(i => i.isMastered).length;
+  multiSelectActions.classList.toggle('hidden', !multiSelectMode && selectedItems.length === 0);
+};
+
+const createAllItemsListItem = (item, index) => {
+  const li = document.createElement('li');
+  li.className = 'all-items-item';
+  const completed = item.reviewSchedule.filter(r => r.completed).length;
+  const progress = item.reviewSchedule.length ? (completed / item.reviewSchedule.length) * 100 : 0;
+  const attachmentsHtml = getAttachmentsHtml(item.attachments);
+  const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+  const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt, itemAlgorithm.intervals);
+  const created = formatDate(new Date(item.createdAt));
+  const isChecked = selectedItems.includes(item.id) ? 'checked' : '';
+  const color = getProgressColorClass(progress);
+  li.innerHTML = `<input type="checkbox" class="checkbox" data-id="${item.id}" aria-label="${translations[currentLanguage]['select-item']}" ${isChecked}><div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span><span class="creation-date">${created}</span><div class="item-inline-actions"><button class="edit-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['edit-btn']}"><span class="material-icons-outlined">edit</span></button><button class="delete-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['delete-btn']}"><span class="material-icons-outlined">delete</span></button></div></div><div class="item-details">${attachmentsHtml}<div class="review-progress-section"><div class="progress-circle ${color}" style="--p:${progress}">${Math.round(progress)}%</div><button class="review-collapsible-header collapsed"><h4>${translations[currentLanguage]['review-schedule-title']}</h4><span class="expand-arrow material-icons-outlined">expand_more</span></button><div class="collapsible-content hidden">${reviewHtml}</div></div><div class="item-actions-bottom"><button class="reset-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['reset-btn']}">${translations[currentLanguage]['reset-btn']}</button></div></div>`;
+  return li;
+};
+
+const renderAlgorithmSelects = () => {
+    [reviewAlgorithmSelect, editReviewAlgorithmSelect].forEach(select => {
+        if (!select) return;
+        select.innerHTML = '';
+        algorithms.forEach(algo => {
+            const option = document.createElement('option');
+            option.value = algo.id;
+            option.textContent = algo.name;
+            select.appendChild(option);
+        });
+        const newAlgoOption = document.createElement('option');
+        newAlgoOption.value = 'new';
+        newAlgoOption.textContent = translations[currentLanguage]['new-algorithm-option'];
+        select.appendChild(newAlgoOption);
+        select.value = selectedAlgorithmId;
+        
+        const previewEl = select.closest('.review-algorithm-select-container').querySelector('.preview-text');
+        if (previewEl) {
+            const algo = algorithms.find(a => a.id === select.value) || defaultAlgorithms[0];
+            previewEl.textContent = algo.intervals.join(', ');
+        }
+    });
+};
+
+const updateAlgorithmPreview = (selectId, previewId) => {
+  const select = document.getElementById(selectId);
+  const previewEl = document.getElementById(previewId);
+  if (select && previewEl) {
+    const selectedAlgo = algorithms.find(a => a.id === select.value);
+    if (selectedAlgo) {
+        previewEl.textContent = selectedAlgo.intervals.join(', ');
+    } else {
+        previewEl.textContent = '';
+    }
+  }
+};
+
+// ===== CRUD & Attachments =====
+const resetNewItemForm = () => { 
+    newTitleInput.value = '';
+    tempAttachments = [];
+    attachmentsPreview.innerHTML = ''; 
+    saveItemBtn.disabled = true;
+    selectedAlgorithmId = localStorage.getItem('selectedAlgorithmId') || 'default';
+    renderAlgorithmSelects();
+};
+const saveItem = () => {
+  const title = newTitleInput.value.trim();
+  if (!title) { showAlert(translations[currentLanguage]['error-empty-title']); return; }
+  const now = new Date();
+  const selectedAlgo = algorithms.find(a => a.id === reviewAlgorithmSelect.value) || defaultAlgorithms[0];
+  const intervals = selectedAlgo.intervals;
+  const schedule = intervals.map((it) => {
+    const d = new Date(now);
+    if (it === 0) d.setMinutes(d.getMinutes() + 20);
+    else d.setDate(d.getDate() + it);
+    return { scheduledFor: d.toISOString(), completed: false };
+  });
+  const newItem = { 
+    id: Date.now(), 
+    title, 
+    attachments: [...tempAttachments], 
+    level: 0, 
+    createdAt: now.toISOString(), 
+    nextReview: schedule[0].scheduledFor, 
+    isMastered: false, 
+    reviewSchedule: schedule, 
+    completedInSession: false, 
+    completionTime: null,
+    algorithmId: selectedAlgo.id
+  };
+  items.unshift(newItem);
+  saveToStorage();
+  resetNewItemForm();
+  renderAll();
+};
+
+const openEditModal = (item) => { 
+  editingItemId = item.id; 
+  editTitleInput.value = item.title; 
+  tempAttachments = [...item.attachments];
+  renderAttachmentsPreview(editAttachmentsPreview); 
+  editReviewAlgorithmSelect.value = item.algorithmId;
+  updateAlgorithmPreview('edit-review-algorithm-select', 'edit-review-algorithm-preview');
+  editModal.classList.remove('hidden'); 
+  editModal.focus(); 
+};
+const saveEdit = () => {
+  const item = items.find(i => i.id === editingItemId);
+  if (!item) return;
+  const t = editTitleInput.value.trim();
+  if (!t) { showAlert(translations[currentLanguage]['error-empty-title']); return; }
+  item.title = t;
+  item.attachments = [...tempAttachments];
+  
+  const newAlgorithmId = editReviewAlgorithmSelect.value;
+  if (item.algorithmId !== newAlgorithmId) {
+      const oldAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+      const newAlgorithm = algorithms.find(a => a.id === newAlgorithmId) || defaultAlgorithms[0];
+      const previousIntervals = oldAlgorithm.intervals.join(', ');
+      const newIntervals = newAlgorithm.intervals.join(', ');
+      const confirmationText = `${translations[currentLanguage]['confirm-change-algorithm']}\n\n${translations[currentLanguage]['previous-algorithm']} ${previousIntervals}\n${translations[currentLanguage]['new-algorithm']} ${newIntervals}`;
+      
+      showConfirm(confirmationText).then(result => {
+          if (result) {
+              item.algorithmId = newAlgorithmId;
+              item.level = 0;
+              item.isMastered = false;
+              item.completedInSession = false;
+              item.completionTime = null;
+              const now = new Date();
+              const newSchedule = newAlgorithm.intervals.map(it => {
+                  const d = new Date(now);
+                  if (it === 0) d.setMinutes(d.getMinutes() + 20);
+                  else d.setDate(d.getDate() + it);
+                  return { scheduledFor: d.toISOString(), completed: false };
+              });
+              item.reviewSchedule = newSchedule;
+              item.nextReview = newSchedule[0].scheduledFor;
+              saveToStorage();
+              closeEditModal();
+              renderAll();
+          }
+      });
+  } else {
+    saveToStorage();
+    closeEditModal();
+    renderAll();
+  }
+};
+const closeEditModal = () => { editModal.classList.add('hidden'); editingItemId = null; tempAttachments = []; editTitleInput.value = '';
+editAttachmentsPreview.innerHTML = ''; };
+const deleteItem = async (id) => { if (!await showConfirm(translations[currentLanguage]['confirm-delete'])) return;
+items = items.filter(i => i.id !== id); saveToStorage(); renderAll(); };
+const deleteSelected = async () => { if (!await showConfirm(translations[currentLanguage]['confirm-delete-selected'])) return; items = items.filter(i => !selectedItems.includes(i.id)); selectedItems = []; toggleMultiSelect(false);
+saveToStorage(); renderAll(); };
+const resetProgress = async (id) => {
+  if (!await showConfirm(translations[currentLanguage]['confirm-reset'])) return;
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  item.level = 0;
+  item.isMastered = false;
+  item.completedInSession = false;
+  item.completionTime = null;
+  const now = new Date();
+  const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+  item.reviewSchedule = itemAlgorithm.intervals.map((it) => {
+    const d = new Date(now);
+    if (it === 0) d.setMinutes(d.getMinutes() + 20);
+    else d.setDate(d.getDate() + it);
+    return { scheduledFor: d.toISOString(), completed: false };
+  });
+  item.nextReview = item.reviewSchedule[0].scheduledFor;
+  saveToStorage();
+  renderAll();
+};
+
+const triggerFileUpload = (accept) => { fileUploadInput.accept = accept; fileUploadInput.click(); };
+const handleFileUpload = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 50 * 1024 * 1024) { showAlert(translations[currentLanguage]['error-file-size']); return; }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const type = file.type.split('/')[0];
+    tempAttachments.push({ type, data: ev.target.result, name: file.name });
+    renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+};
+const openTextModal = () => { modalTextarea.value = '';
+textModal.classList.remove('hidden'); modalTextarea.focus(); };
+const closeTextModal = () => { textModal.classList.add('hidden'); modalTextarea.value = ''; };
+const saveTextAttachment = () => { const txt = modalTextarea.value.trim();
+if (txt) { tempAttachments.push({ type: 'text', data: txt, name: translations[currentLanguage]['text-note'] }); renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview); } closeTextModal(); };
+const renderAttachmentsPreview = (container) => { container.innerHTML = tempAttachments.map((att, i) => `<div class="preview-item"><span>${att.name}</span><button type="button" class="icon-btn" data-index="${i}" aria-label="${translations[currentLanguage]['remove-attachment']}"><span class="material-icons-outlined">close</span></button></div>`).join(''); };
+const handleAttachmentRemove = (e, container) => { const removeBtn = e.target.closest('button[data-index]'); if (removeBtn) { const i = parseInt(removeBtn.dataset.index, 10);
+if (!isNaN(i)) { tempAttachments.splice(i, 1); renderAttachmentsPreview(container); } } };
+
+// ===== Language/Theme/Font =====
+const applyFont = (font) => { if (font === 'system') font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+document.documentElement.style.setProperty('--font-family', font); localStorage.setItem('fontPreference', font); };
+
+const applyLanguage = (lang) => {
+  currentLanguage = lang;
+  htmlEl.lang = lang;
+  htmlEl.dir = (lang === 'fa' || lang === 'ar') ? 'rtl' : 'ltr';
+
+  // Update all elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+  });
+
+  // Handle placeholders and tooltips
+  newTitleInput.placeholder = translations[lang]['new-title-placeholder'];
+  modalTextarea.placeholder = translations[lang]['modal-textarea-placeholder'];
+  addImageBox.dataset.tooltip = translations[lang]['add-image-tooltip'];
+  addVideoBox.dataset.tooltip = translations[lang]['add-video-tooltip'];
+  addAudioBox.dataset.tooltip = translations[lang]['add-audio-tooltip'];
+  addTextBox.dataset.tooltip = translations[lang]['add-text-tooltip'];
+
+  // Handle specific elements
+  if (sortSelect) {
+    sortSelect.querySelector('option[value="date"]').textContent = translations[lang]['sort-date'];
+    sortSelect.querySelector('option[value="title"]').textContent = translations[lang]['sort-title'];
+    sortSelect.querySelector('option[value="progress"]').textContent = translations[lang]['sort-progress'];
+  }
+  if (sortOrderSelect) {
+    sortOrderSelect.querySelector('option[value="asc"]').textContent = translations[lang]['sort-order-asc'];
+    sortOrderSelect.querySelector('option[value="desc"]').textContent = translations[lang]['sort-order-desc'];
+  }
+
+  localStorage.setItem('languagePreference', lang);
+  renderAll();
+};
+
+// ===== Algorithm Management =====
+const renderAlgorithmList = () => {
+    algorithmList.innerHTML = '';
+    algorithms.forEach(algo => {
+        const li = document.createElement('li');
+        li.className = 'algorithm-item';
+        li.innerHTML = `
+            <div class="algorithm-item-info">
+                <h4 class="algorithm-item-name">${algo.name}</h4>
+                <p class="algorithm-item-intervals">${algo.intervals.join(', ')}</p>
+            </div>
+            <div class="algorithm-item-actions">
+                <button class="icon-btn edit-icon-btn" data-id="${algo.id}" aria-label="ویرایش">
+                    <span class="material-icons-outlined">edit</span>
+                </button>
+                <button class="icon-btn delete-icon-btn" data-id="${algo.id}" aria-label="حذف">
+                    <span class="material-icons-outlined">delete</span>
+                </button>
+            </div>
+        `;
+        if (algo.id === 'default') {
+            li.querySelector('.delete-icon-btn').disabled = true;
+            li.querySelector('.delete-icon-btn').style.opacity = 0.5;
+            li.querySelector('.edit-icon-btn').disabled = true;
+            li.querySelector('.edit-icon-btn').style.opacity = 0.5;
+        }
+        algorithmList.appendChild(li);
+    });
+};
+
+const openAlgorithmModal = () => {
+    renderAlgorithmList();
+    reviewAlgorithmModal.classList.remove('hidden');
+};
+
+const closeAlgorithmModal = () => {
+    reviewAlgorithmModal.classList.add('hidden');
+};
+
+const openEditAlgorithmModal = (id = null) => {
+    let algo;
+    if (id) {
+        algo = algorithms.find(a => a.id === id);
+        editingAlgorithmId = id;
+        algorithmNameInput.value = algo.name;
+        renderIntervalsList(algo.intervals);
+        document.getElementById('edit-algorithm-modal-title').textContent = translations[currentLanguage]['edit-algorithm-modal-title'];
+    } else {
+        algo = { name: '', intervals: [...defaultIntervals] };
+        editingAlgorithmId = Date.now().toString();
+        algorithmNameInput.value = '';
+        renderIntervalsList(algo.intervals);
+        document.getElementById('edit-algorithm-modal-title').textContent = translations[currentLanguage]['add-algorithm-btn'];
+    }
+    editAlgorithmModal.classList.remove('hidden');
+    editAlgorithmModal.focus();
+};
+
+const closeEditAlgorithmModal = () => {
+    editAlgorithmModal.classList.add('hidden');
+    editingAlgorithmId = null;
+    algorithmNameInput.value = '';
+    algorithmIntervalsList.innerHTML = '';
+};
+
+const renderIntervalsList = (intervals) => {
+    algorithmIntervalsList.innerHTML = '';
+    intervals.forEach((interval, index) => {
+        const li = document.createElement('li');
+        li.className = 'interval-item';
+        li.draggable = true;
+        li.dataset.index = index;
+        li.innerHTML = `
+            <span class="material-icons-outlined drag-handle">drag_indicator</span>
+            <input type="number" class="interval-input" value="${interval}">
+            <button type="button" class="icon-btn delete-interval-btn"><span class="material-icons-outlined">delete</span></button>
+        `;
+        algorithmIntervalsList.appendChild(li);
+    });
+};
+
+const saveAlgorithm = () => {
+    const name = algorithmNameInput.value.trim();
+    if (!name) {
+        showToast(translations[currentLanguage]['algorithm-name-empty'], 'error');
+        return;
+    }
+    const intervalInputs = Array.from(algorithmIntervalsList.querySelectorAll('.interval-input'));
+    const newIntervals = intervalInputs.map(input => parseInt(input.value, 10)).filter(n => !isNaN(n) && n >= 0);
+    if (newIntervals.length === 0) {
+        showToast("فاصله‌ها نمی‌توانند خالی باشند.", 'error');
+        return;
+    }
+
+    const newAlgo = {
+        id: editingAlgorithmId,
+        name: name,
+        intervals: newIntervals
+    };
+
+    const existingIndex = algorithms.findIndex(a => a.id === editingAlgorithmId);
+    if (existingIndex > -1) {
+        algorithms[existingIndex] = newAlgo;
+    } else {
+        algorithms.push(newAlgo);
+    }
+    saveToStorage();
+    showToast(translations[currentLanguage]['algorithm-save-success'], 'success');
+    closeEditAlgorithmModal();
+    renderAlgorithmList();
+    renderAlgorithmSelects();
+};
+
+const deleteAlgorithm = async (id) => {
+    if (algorithms.length <= 1) {
+        showToast(translations[currentLanguage]['cannot-delete-last-algorithm'], 'error');
+        return;
+    }
+
+    if (!await showConfirm(translations[currentLanguage]['confirm-delete-algorithm'])) return;
+    algorithms = algorithms.filter(a => a.id !== id);
+    if (selectedAlgorithmId === id) {
+        selectedAlgorithmId = 'default';
+    }
+    saveToStorage();
+    renderAlgorithmList();
+    renderAll();
+    showToast(translations[currentLanguage]['algorithm-delete-success'], 'success');
+};
+
+
+// ===== Events =====
+document.addEventListener('DOMContentLoaded', () => {
+  loadFromLocalStorage();
+  applyTheme(localStorage.getItem('themePreference') || 'light');
+  applyLanguage(localStorage.getItem('languagePreference') || 'fa');
+  applyFont(localStorage.getItem('fontPreference') || 'system');
+  renderAll();
+
+  // Tooltip event listeners
+  document.querySelectorAll('[data-tooltip]').forEach(el => {
+    el.addEventListener('mouseover', (e) => {
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tooltip';
+      tooltip.textContent = e.target.dataset.tooltip;
+      document.body.appendChild(tooltip);
+    });
+    el.addEventListener('mouseout', () => {
+      const tooltip = document.querySelector('.tooltip');
+      if (tooltip) tooltip.remove();
+    });
+  });
+
+  loginBtn.addEventListener('click', () => showAlert(translations[currentLanguage]['error-login']));
+
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    headerTitle.textContent = translations[currentLanguage][tab.dataset.tab.replace('-panel', '-title')] || translations[currentLanguage][`${tab.dataset.tab.split('-')[0]}-tab`] || tab.dataset.title;
+    contentPanels.forEach(p => p.classList.remove('active'));
+    document.getElementById(tab.dataset.tab).classList.add('active');
+    if (tab.dataset.tab === 'review-panel') renderTodayList();
+    if (tab.dataset.tab === 'all-items-panel') renderAllItemsList();
+    if (tab.dataset.tab === 'new-item-panel') resetNewItemForm();
+  }));
+
+  themeToggleBtn.addEventListener('click', toggleTheme);
+  saveItemBtn.addEventListener('click', saveItem);
+  // رویداد برای فعال/غیرفعال کردن دکمه ذخیره
+  newTitleInput.addEventListener('input', () => {
+      saveItemBtn.disabled = newTitleInput.value.trim() === '';
+  });
+  newTitleInput.addEventListener('keydown', e => { 
+      if (e.key === 'Enter' && !saveItemBtn.disabled) {
+          saveItem();
+      }
+  });
+  addImageBox.addEventListener('click', () => triggerFileUpload('image/*'));
+  addVideoBox.addEventListener('click', () => triggerFileUpload('video/*'));
+  addAudioBox.addEventListener('click', () => triggerFileUpload('audio/*'));
+  addTextBox.addEventListener('click', openTextModal);
+  fileUploadInput.addEventListener('change', handleFileUpload);
+  saveTextBtn.addEventListener('click', saveTextAttachment);
+  cancelTextBtn.addEventListener('click', closeTextModal);
+  attachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, attachmentsPreview));
+
+  saveEditBtn.addEventListener('click', saveEdit);
+  cancelEditBtn.addEventListener('click', closeEditModal);
+  editAttachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, editAttachmentsPreview));
+  settingsBtn.addEventListener('click', () => {
+    languageSelect.value = localStorage.getItem('languagePreference') || 'fa';
+    themeSelect.value = localStorage.getItem('themePreference') || 'light';
+    fontSelect.value = localStorage.getItem('fontPreference') || 'system';
+    settingsModal.classList.remove('hidden');
+  });
+  
+  // New item dropdown logic
+  if(reviewAlgorithmSelect) {
+    reviewAlgorithmSelect.addEventListener('change', (e) => {
+      const selectedId = e.target.value;
+      if (selectedId === 'new') {
+        openEditAlgorithmModal();
+      } else {
+        selectedAlgorithmId = selectedId;
+        updateAlgorithmPreview('review-algorithm-select', 'review-algorithm-preview');
+      }
+    });
+  }
+
+  // Edit item dropdown logic
+  if(editReviewAlgorithmSelect) {
+    editReviewAlgorithmSelect.addEventListener('change', (e) => {
+        const selectedId = e.target.value;
+        if (selectedId === 'new') {
+            openEditAlgorithmModal();
+        }
+        updateAlgorithmPreview('edit-review-algorithm-select', 'edit-review-algorithm-preview');
+    });
+  }
+
+  if(openAlgorithmModalBtn){
+    openAlgorithmModalBtn.addEventListener('click', () => {
+        settingsModal.classList.add('hidden');
+        openAlgorithmModal();
+    });
+  }
+  
+  // Algorithm Modal Events
+  if(addAlgorithmBtn) {
+    addAlgorithmBtn.addEventListener('click', () => openEditAlgorithmModal());
+  }
+
+  if(algorithmList) {
+    algorithmList.addEventListener('click', (e) => {
+        const editBtn = e.target.closest('.edit-icon-btn');
+        const deleteBtn = e.target.closest('.delete-icon-btn');
+        if (editBtn) {
+            openEditAlgorithmModal(editBtn.dataset.id);
+        } else if (deleteBtn) {
+            deleteAlgorithm(deleteBtn.dataset.id);
+        }
+    });
+  }
+
+  if(addIntervalBtn) {
+    addIntervalBtn.addEventListener('click', () => {
+        const li = document.createElement('li');
+        li.className = 'interval-item';
+        li.draggable = true;
+        li.innerHTML = `
+            <span class="material-icons-outlined drag-handle">drag_indicator</span>
+            <input type="number" class="interval-input" value="0">
+            <button type="button" class="icon-btn delete-interval-btn"><span class="material-icons-outlined">delete</span></button>
+        `;
+        algorithmIntervalsList.appendChild(li);
+    });
+  }
+
+  if(algorithmIntervalsList) {
+    // Add event listener for deleting interval items
+    algorithmIntervalsList.addEventListener('click', (e) => {
+      if (e.target.closest('.delete-interval-btn')) {
+          e.target.closest('.interval-item').remove();
+      }
+    });
+
+    // Drag and Drop Logic
+    let dragSrcEl;
+    algorithmIntervalsList.addEventListener('dragstart', function (e) {
+      dragSrcEl = e.target;
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', e.target.innerHTML);
+      e.target.classList.add('drag-active');
+    });
+
+    algorithmIntervalsList.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const target = e.target.closest('.interval-item');
+      if (target && dragSrcEl !== target) {
+        target.classList.add('drag-over');
+      }
+    });
+
+    algorithmIntervalsList.addEventListener('dragleave', function (e) {
+      e.target.classList.remove('drag-over');
+    });
+
+    algorithmIntervalsList.addEventListener('drop', function (e) {
+      e.stopPropagation();
+      const target = e.target.closest('.interval-item');
+      if (dragSrcEl !== target) {
+        const srcIndex = [...algorithmIntervalsList.children].indexOf(dragSrcEl);
+        const targetIndex = [...algorithmIntervalsList.children].indexOf(target);
+        if (srcIndex > targetIndex) {
+          algorithmIntervalsList.insertBefore(dragSrcEl, target);
+        } else {
+          algorithmIntervalsList.insertBefore(dragSrcEl, target.nextSibling);
+        }
+      }
+      e.target.classList.remove('drag-over');
+    });
+
+    algorithmIntervalsList.addEventListener('dragend', function (e) {
+      e.target.classList.remove('drag-active');
+      const items = this.querySelectorAll('.interval-item');
+      items.forEach((item, index) => item.dataset.index = index);
+    });
+  }
+
+  if(saveAlgorithmBtn) {
+    saveAlgorithmBtn.addEventListener('click', saveAlgorithm);
+  }
+
+  if(cancelAlgorithmBtn) {
+    cancelAlgorithmBtn.addEventListener('click', closeEditAlgorithmModal);
+  }
+
+  saveSettingsBtn.addEventListener('click', () => {
+    applyLanguage(languageSelect.value);
+    applyTheme(themeSelect.value);
+    applyFont(fontSelect.value);
+    saveToStorage();
+    settingsModal.classList.add('hidden');
+    showToast(translations[currentLanguage]['settings-save-success'], 'success');
+  });
+  cancelSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
+
+  const allList = document.getElementById('all-items-list');
+  allList.addEventListener('click', (e) => {
+    const target = e.target;
+    const btn = target.closest('button');
+    const checkbox = target.closest('input[type="checkbox"]');
+    const revHeader = target.closest('.review-collapsible-header');
+    if (revHeader) { const parent = revHeader.closest('.review-progress-section'); const content = parent.querySelector('.collapsible-content'); revHeader.classList.toggle('collapsed'); content.classList.toggle('hidden'); return; }
+    if (btn || checkbox) {
+      if (btn && btn.classList.contains('edit-icon-btn')) { const it = items.find(i => i.id === Number(btn.dataset.id)); if (it) openEditModal(it); }
+      else if (btn && btn.classList.contains('delete-icon-btn')) { deleteItem(Number(btn.dataset.id)); }
+      else if (btn && btn.classList.contains('reset-btn')) { resetProgress(Number(btn.dataset.id)); }
+      return;
+    }
+    const mainRow = e.target.closest('.item-main-row');
+    if (mainRow) { mainRow.closest('.all-items-item').classList.toggle('expanded'); }
+  });
+
+  let touchStartTime;
+  allList.addEventListener('touchstart', (e) => { if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) touchStartTime = Date.now(); });
+  allList.addEventListener('touchend', (e) => {
+    if (Date.now() - touchStartTime > 500) {
+      if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) {
+        const li = e.target.closest('.all-items-item');
+        if (li) { const cb = li.querySelector('.checkbox'); if (cb) { if (!multiSelectMode) toggleMultiSelect(true); cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
+      }
+    }
+  });
+  allList.addEventListener('change', (e) => { if (e.target.classList.contains('checkbox')) { const id = Number(e.target.dataset.id); if (e.target.checked) selectedItems.push(id); else selectedItems = selectedItems.filter(x => x !== id); } multiSelectActions.classList.toggle('hidden', selectedItems.length === 0 && !multiSelectMode); });
+  selectAllBtn.addEventListener('click', () => { selectedItems = []; document.querySelectorAll('#all-items-list .checkbox').forEach(cb => { cb.checked = true; selectedItems.push(Number(cb.dataset.id)); }); multiSelectActions.classList.remove('hidden'); });
+  deleteSelectedBtn.addEventListener('click', deleteSelected);
+  sortSelect.addEventListener('change', renderAllItemsList);
+  sortOrderSelect.addEventListener('change', e => { currentSortOrder = e.target.value; renderAllItemsList(); });
+  reviewPanel.addEventListener('click', (e) => {
+    const header = e.target.closest('.collapsible-header');
+    if (header) { header.classList.toggle('collapsed'); header.nextElementSibling.classList.toggle('hidden'); }
+    const mainRow = e.target.closest('.item-main-row');
+    const doneBtn = e.target.closest('.done-btn');
+    if (mainRow && !doneBtn) { mainRow.closest('.today-list-item').classList.toggle('expanded'); }
+    if (doneBtn) {
+      const id = Number(doneBtn.dataset.id);
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+      item.completedInSession = true;
+      item.completionTime = new Date().toISOString();
+      const parentLi = doneBtn.closest('.today-list-item');
+      if (parentLi) { parentLi.style.opacity = '0'; }
+      setTimeout(() => {
+        item.reviewSchedule[item.level].completed = true;
+        item.level++;
+        if (item.level >= item.reviewSchedule.length) { item.isMastered = true; item.nextReview = null; } else { item.nextReview = item.reviewSchedule[item.level].scheduledFor; }
+        saveToStorage();
+        renderAll();
+      }, 300);
+    }
+  });
+});
+
+const toggleMultiSelect = (enable) => {
+  multiSelectMode = enable;
+  selectedItems = [];
+  document.querySelectorAll('.all-items-item .checkbox').forEach(cb => { cb.checked = false; cb.parentElement.classList.toggle('multi-select-mode', enable); });
+  multiSelectActions.classList.toggle('hidden', !enable);
+  renderAllItemsList();
+};
