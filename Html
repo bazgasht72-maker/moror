@@ -1,0 +1,187 @@
+<!-- 
+  توجه: برای نمایش صحیح فونت‌ها و آیکن‌ها، این دو خط را باید
+  در بخش تنظیمات مربوط به <head> در ویرایشگر کد خود (مانند CodePen) قرار دهید.
+-->
+<!-- <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet"> -->
+<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"> -->
+
+
+<div class="app-container" dir="rtl" data-theme="light">
+  <header>
+    <h1 id="header-title">مرور امروز</h1>
+    <button id="settings-btn" class="icon-btn" aria-label="تنظیمات">
+      <span class="material-icons-outlined">settings</span>
+    </button>
+    <button id="login-btn" class="icon-btn" aria-label="ورود">
+      <span class="material-icons-outlined">account_circle</span> ورود
+    </button>
+    <button id="theme-toggle-btn" class="theme-btn" aria-label="تغییر تم">
+      <span class="material-icons-outlined">dark_mode</span>
+    </button>
+  </header>
+
+  <main class="content-container">
+
+    <!-- ======================== پنل مرور امروز ======================== -->
+    <div id="review-panel" class="content-panel active">
+      <div id="overall-progress-bar-container" class="overall-progress-bar-container hidden">
+        <span id="overall-progress-bar-text" class="overall-progress-bar-text"></span>
+        <div class="overall-progress-bar">
+          <div id="overall-progress-bar-fill" class="overall-progress-bar-fill"></div>
+        </div>
+      </div>
+      <div id="review-placeholder" class="placeholder">
+        <p id="review-placeholder-text">امروز موردی برای مرور وجود ندارد. عالیه!</p>
+      </div>
+      <div id="remaining-section">
+        <div class="collapsible-header">
+          <h3 id="remaining-section-title">باقی‌مانده</h3>
+          <span class="material-icons-outlined section-icon">watch_later</span>
+          <span class="expand-arrow material-icons-outlined">expand_more</span>
+        </div>
+        <ul id="today-remaining-list" class="today-list"></ul>
+      </div>
+      <div id="completed-section">
+        <div class="collapsible-header collapsed">
+          <h3 id="completed-section-title">انجام‌شده در این بازدید</h3>
+          <span class="material-icons-outlined section-icon">check_circle_outline</span>
+          <span class="expand-arrow material-icons-outlined">expand_more</span>
+        </div>
+        <ul id="today-completed-list" class="today-list hidden"></ul>
+      </div>
+    </div>
+
+    <!-- ======================== پنل آیتم جدید (اصلاح شده) ======================== -->
+    <div id="new-item-panel" class="content-panel">
+      <div id="newItemForm" class="form-layout">
+        <h3 id="new-item-title">افزودن عنوان جدید</h3>
+        <div class="title-input-wrapper">
+          <input type="text" id="newTitleInput" placeholder="عنوان را وارد کنید...">
+          <button type="button" id="add-attachment-btn" class="add-attachment-btn" aria-label="افزودن پیوست">
+            <span class="material-icons-outlined">add</span>
+          </button>
+          <div id="attachment-popup-menu" class="attachment-popup hidden">
+            <div class="attachment-options">
+              <div class="option-box" id="add-image-box" data-tooltip="اضافه کردن عکس"><span class="material-icons-outlined">image</span></div>
+              <div class="option-box" id="add-video-box" data-tooltip="اضافه کردن فیلم"><span class="material-icons-outlined">videocam</span></div>
+              <div class="option-box" id="add-audio-box" data-tooltip="اضافه کردن صوت"><span class="material-icons-outlined">audiotrack</span></div>
+              <div class="option-box" id="add-text-box" data-tooltip="اضافه کردن یادداشت متنی"><span class="material-icons-outlined">notes</span></div>
+            </div>
+          </div>
+        </div>
+        <input type="file" id="file-upload-input" class="hidden" aria-hidden="true">
+        <div id="attachments-preview"></div>
+        <button id="saveItemBtn" class="main-btn" type="button" aria-label="ذخیره عنوان">ذخیره عنوان</button>
+      </div>
+    </div>
+
+    <!-- ======================== پنل همه آیتم‌ها ======================== -->
+    <div id="all-items-panel" class="content-panel">
+      <div class="panel-controls">
+        <label for="sort-select" id="sort-by" class="form-label">مرتب‌سازی بر اساس:</label>
+        <select id="sort-select">
+          <option value="date" id="sort-date">تاریخ</option>
+          <option value="title" id="sort-title">عنوان</option>
+          <option value="progress" id="sort-progress">پیشرفت</option>
+        </select>
+        <label for="sort-order-select" id="sort-order" class="form-label">ترتیب:</label>
+        <select id="sort-order-select">
+          <option value="desc" id="sort-order-desc">نزولی</option>
+          <option value="asc" id="sort-order-asc">صعودی</option>
+        </select>
+      </div>
+      <div class="all-items-header">
+        <div id="header-stats-total">کل عناوین: <span id="total-count">0</span></div>
+        <div id="header-stats-mastered">پایان یافته: <span id="mastered-count">0</span></div>
+      </div>
+      <ul id="all-items-list" class="all-items-list"></ul>
+      <div id="multi-select-actions" class="hidden">
+        <button id="select-all-btn" class="secondary-btn" aria-label="انتخاب همه">انتخاب همه</button>
+        <button id="delete-selected-btn" class="warning-btn" aria-label="حذف انتخاب‌شده‌ها">حذف انتخاب‌شده‌ها</button>
+      </div>
+    </div>
+
+    <!-- ======================== مدال ویرایش ======================== -->
+    <div id="edit-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title">
+      <div class="modal-content">
+        <h3 id="edit-modal-title">ویرایش عنوان</h3>
+        <input type="text" id="edit-title-input" placeholder="عنوان جدید">
+        <div id="edit-attachments-preview"></div>
+        <div class="modal-actions">
+          <button id="save-edit-btn" class="main-btn" aria-label="ذخیره تغییرات">ذخیره تغییرات</button>
+          <button id="cancel-edit-btn" class="secondary-btn" aria-label="انصراف">انصراف</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <nav class="tab-container">
+    <button class="tab-btn active" data-tab="review-panel" data-title="مرور امروز" aria-label="مرور امروز">
+      <span class="tab-icon material-icons-outlined">today</span><span class="tab-label" id="today-tab">امروز</span>
+    </button>
+    <button class="tab-btn" data-tab="new-item-panel" data-title="عنوان جدید" aria-label="عنوان جدید">
+      <span class="tab-icon material-icons-outlined">add_circle_outline</span><span class="tab-label" id="new-tab">جدید</span>
+    </button>
+    <button class="tab-btn" data-tab="all-items-panel" data-title="همه کارها" aria-label="همه کارها">
+      <span class="tab-icon material-icons-outlined">list_alt</span><span class="tab-label" id="all-tab">همه</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ======================== سایر مدال‌ها ======================== -->
+<div id="text-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="text-modal-title">
+  <div class="modal-content">
+    <h3 id="text-modal-title">افزودن یادداشت متنی</h3>
+    <textarea id="modal-textarea" placeholder="یادداشت خود را اینجا بنویسید..."></textarea>
+    <div class="modal-actions">
+      <button id="save-text-btn" class="main-btn" aria-label="ذخیره متن">ذخیره متن</button>
+      <button id="cancel-text-btn" class="secondary-btn" aria-label="انصراف">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<div id="settings-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+  <div class="modal-content">
+    <h3 id="settings-modal-title">تنظیمات</h3>
+    <div class="settings-section">
+      <label id="language-label" for="language-select">زبان:</label>
+      <select id="language-select">
+        <option value="fa">فارسی</option>
+        <option value="en">English</option>
+        <option value="ar">عربي</option>
+      </select>
+    </div>
+    <div class="settings-section">
+      <label id="theme-label" for="theme-select">تم:</label>
+      <select id="theme-select">
+        <option value="light">روشن</option>
+        <option value="dark">تاریک</option>
+        <option value="auto">مطابق دستگاه</option>
+      </select>
+    </div>
+    <div class="settings-section">
+      <label id="font-label" for="font-select">فونت:</label>
+      <select id="font-select">
+        <option value="system">پیش‌فرض سیستم</option>
+        <option value="Vazirmatn">Vazirmatn</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button id="save-settings-btn" class="main-btn" aria-label="ذخیره">ذخیره</button>
+      <button id="cancel-settings-btn" class="secondary-btn" aria-label="انصراف">انصراف</button>
+    </div>
+  </div>
+</div>
+
+<div id="custom-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="custom-modal-title">
+  <div class="modal-content">
+    <h3 id="custom-modal-title">پیام</h3>
+    <p id="custom-modal-text">آیا از انجام این کار مطمئن هستید؟</p>
+    <div class="modal-actions" id="custom-modal-actions">
+      <button id="custom-modal-confirm-btn" class="main-btn">تایید</button>
+      <button id="custom-modal-cancel-btn" class="secondary-btn">انصراف</button>
+    </div>
+  </div>
+</div>
+
