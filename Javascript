@@ -1,866 +1,968 @@
-// ===== State =====
-let items = [];
-let tempAttachments = [];
-let editingItemId = null;
-const defaultIntervals = [0, 1, 3, 7, 14, 30, 60, 120, 180, 365]; // 0 => 20min
-const defaultAlgorithms = [{
-  id: 'default',
-  name: 'پیش‌فرض',
-  intervals: defaultIntervals
-}];
-let algorithms = [...defaultAlgorithms];
-let selectedAlgorithmId = 'default';
-let multiSelectMode = false;
-let selectedItems = [];
-let currentLanguage = 'fa';
-let currentSortOrder = 'desc';
+(function() {
+  // ===== State =====
+  let items = [];
+  let tempAttachments = [];
+  let editingItemId = null;
+  const defaultIntervals = [0, 1, 3, 7, 14, 30, 60, 120, 180, 365];
+  const defaultAlgorithms = [{
+    id: 'default',
+    name: 'پیش‌فرض',
+    intervals: defaultIntervals
+  }];
+  let algorithms = [...defaultAlgorithms];
+  let selectedAlgorithmId = 'default';
+  let multiSelectMode = false;
+  let selectedItems = [];
+  let currentLanguage = 'fa';
+  let currentSortOrder = 'desc';
 
-// ===== Translations =====
-const translations = {
-  fa: {
-    'header-title': 'مرور امروز',
-    'review-placeholder-text': 'امروز موردی برای مرور وجود ندارد.\nعالیه!',
-    'remaining-section-title': 'باقی‌مانده',
-    'completed-section-title': 'انجام‌شده در این بازدید',
-    'new-item-title': 'افزودن عنوان جدید',
-    'new-title-placeholder': 'عنوان خود را اینجا بنویسید...',
-    'attachment-label': 'پیوست‌ها (اختیاری)',
-    'add-image-tooltip': 'اضافه کردن عکس',
-    'add-video-tooltip': 'اضافه کردن فیلم',
-    'add-audio-tooltip': 'اضافه کردن صوت',
-    'add-text-tooltip': 'اضافه کردن یادداشت متنی',
-    'save-item-btn': 'ذخیره عنوان',
-    'header-stats-total': 'کل عناوین: ',
-    'header-stats-mastered': 'پایان یافته: ',
-    'select-all-btn': 'انتخاب همه',
-    'delete-selected-btn': 'حذف انتخاب‌شده‌ها',
-    'edit-modal-title': 'ویرایش عنوان',
-    'edit-title-placeholder': 'عنوان جدید',
-    'save-edit-btn': 'ذخیره تغییرات',
-    'cancel-edit-btn': 'انصراف',
-    'settings-modal-title': 'تنظیمات',
-    'language-label': 'زبان:',
-    'theme-label': 'تم:',
-    'font-label': 'فونت:',
-    'review-algorithm-select-label': 'انتخاب الگوریتم مرور:',
-    'review-algorithm-modal-title': 'الگوریتم‌های مرور',
-    'add-algorithm-btn': 'اضافه کردن الگوریتم جدید',
-    'edit-algorithm-modal-title': 'ویرایش الگوریتم',
-    'algorithm-name-input-label': 'نام الگوریتم:',
-    'algorithm-intervals-list-label': 'فاصله‌های مرور:',
-    'add-interval-btn': 'اضافه کردن مرور جدید',
-    'save-algorithm-btn': 'ذخیره الگوریتم',
-    'cancel-algorithm-btn': 'انصراف',
-    'done-btn': 'انجام شد',
-    'delete-btn': 'حذف',
-    'edit-btn': 'ویرایش',
-    'reset-btn': 'ریست پیشرفت',
-    'text-modal-title': 'افزودن یادداشت متنی',
-    'modal-textarea-placeholder': 'یادداشت خود را اینجا بنویسید...',
-    'save-text-btn': 'ذخیره متن',
-    'cancel-text-btn': 'انصراف',
-    'attachments-title': 'پیوست‌ها:',
-    'review-schedule-title': 'برنامه‌ریزی مرور:',
-    'error-empty-title': 'عنوان نمی‌تواند خالی باشد!',
-    'error-file-size': 'فایل خیلی بزرگ است!\nحداکثر اندازه ۵۰ مگابایت است.',
-    'error-save': 'خطا در ذخیره‌سازی داده‌ها.\nلطفاً دوباره تلاش کنید.',
-    'error-load': 'خطا در بارگذاری داده‌ها.\nلطفاً دوباره تلاش کنید.',
-    'error-login': 'ورود در حالت تست غیرفعال است.',
-    'confirm-delete': 'آیا مطمئن هستید که می‌خواهید این عنوان را حذف کنید؟',
-    'confirm-delete-selected': 'آیا مطمئن هستید که می‌خواهید عناوین انتخاب‌شده را حذف کنید؟',
-    'confirm-reset': 'آیا مطمئن هستید که می‌خواهید پیشرفت این عنوان را ریست کنید؟',
-    'select-item': 'انتخاب آیتم',
-    'remove-attachment': 'حذف پیوست',
-    'completed': 'انجام‌شده',
-    'text-note': 'یادداشت متنی',
-    'image-alt': 'پیوست تصویر',
-    'video-alt': 'پیوست ویدیو',
-    'audio-alt': 'پیوست صوت',
-    'sort-by': 'مرتب‌سازی بر اساس:',
-    'sort-date': 'تاریخ',
-    'sort-title': 'عنوان',
-    'sort-progress': 'پیشرفت',
-    'sort-order': 'ترتیب:',
-    'sort-order-asc': 'صعودی',
-    'sort-order-desc': 'نزولی',
-    'all-items-title': 'همه کارها',
-    'today-tab': 'امروز',
-    'new-tab': 'جدید',
-    'all-tab': 'همه',
-    'overall-progress': 'پیشرفت کلی امروز:',
-    'completed-at': 'تکمیل در: ',
-    'settings-save-success': 'تنظیمات شما با موفقیت ذخیره شد!',
-    'settings-save-error': 'خطا در ذخیره تنظیمات. دوباره تلاش کنید.',
-    'algorithm-save-success': 'الگوریتم با موفقیت ذخیره شد!',
-    'algorithm-save-error': 'خطا در ذخیره الگوریتم. دوباره تلاش کنید.',
-    'confirm-delete-algorithm': 'آیا مطمئن هستید که می‌خواهید این الگوریتم را حذف کنید؟ این عمل غیرقابل بازگشت است.',
-    'algorithm-delete-success': 'الگوریتم با موفقیت حذف شد.',
-    'algorithm-delete-error': 'خطا در حذف الگوریتم. دوباره تلاش کنید.',
-    'algorithm-name-empty': 'نام الگوریتم نمی‌تواند خالی باشد.',
-    'new-algorithm-option': '➕ ساخت الگوریتم جدید',
-    'confirm-change-algorithm': '⚠️ با تغییر الگوریتم، مرورهای این عنوان بر اساس الگوریتم جدید تنظیم می‌شوند. آیا مطمئن هستید؟',
-    'previous-algorithm': 'قبلی:',
-    'new-algorithm': 'جدید:',
-    'cannot-delete-last-algorithm': 'زمانی که تنها یک الگوریتم موجود است، امکان حذف آن وجود ندارد.'
-  },
-  en: {
-    "header-title": "Today's Review", "review-placeholder-text": "No items to review today.\nGreat job!", "remaining-section-title": "Remaining", "completed-section-title": "Completed in This Session", "new-item-title": "Add New Item", "new-title-placeholder": "Write your title here...", "attachment-label": "Attachments (Optional)", "add-image-tooltip": "Add Image", "add-video-tooltip": "Add Video", "add-audio-tooltip": "Add Audio", "add-text-tooltip": "Add Text Note", "save-item-btn": "Save Item", "header-stats-total": "Total Items: ", "header-stats-mastered": "Mastered: ", "select-all-btn": "Select All", "delete-selected-btn": "Delete Selected", "edit-modal-title": "Edit Item", "edit-title-placeholder": "New Title", "save-edit-btn": "Save Changes", "cancel-edit-btn": "Cancel", "settings-modal-title": "Settings", "language-label": "Language:", "theme-label": "Theme:", "font-label": "Font:", "review-algorithm-select-label": "Review Algorithm:", "review-algorithm-modal-title": "Review Algorithms", "add-algorithm-btn": "Add New Algorithm", "edit-algorithm-modal-title": "Edit Algorithm", "algorithm-name-input-label": "Algorithm Name:", "algorithm-intervals-list-label": "Review Intervals:", "add-interval-btn": "Add New Interval", "save-algorithm-btn": "Save Algorithm", "cancel-algorithm-btn": "Cancel", "done-btn": "Done", "delete-btn": "Delete", "edit-btn": "Edit", "reset-btn": "Reset Progress", "text-modal-title": "Add Text Note", "modal-textarea-placeholder": "Write your note here...", "save-text-btn": "Save Text", "cancel-text-btn": "Cancel", "attachments-title": "Attachments:", "review-schedule-title": "Review Schedule:", "error-empty-title": "Title cannot be empty!", "error-file-size": "File is too large!\nMaximum size is 50MB.", "error-save": "Error saving data.\nPlease try again.", "error-load": "Error loading data.\nPlease try again.", "error-login": "Login disabled in demo mode.", "confirm-delete": "Are you sure you want to delete this item?", "confirm-delete-selected": "Are you sure you want to delete the selected items?", "confirm-reset": "Are you sure you want to reset the progress of this item?", "select-item": "Select item", "remove-attachment": "Remove attachment", "completed": "Completed", "text-note": "Text note", "image-alt": "Image attachment", "video-alt": "Video attachment", "audio-alt": "Audio attachment", "sort-by": "Sort by:", "sort-date": "Date", "sort-title": "Title", "sort-progress": "Progress", "sort-order": "Order:", "sort-order-asc": "Ascending", "sort-order-desc": "Descending", "all-items-title": "All Tasks", "today-tab": "Today", "new-tab": "New", "all-tab": "All", "overall-progress": "Overall Progress Today:", "completed-at": "Completed at: ", "settings-save-success": "Settings saved successfully!", "settings-save-error": "Error saving settings. Please try again.", "algorithm-save-success": "Algorithm saved successfully!", "algorithm-save-error": "Error saving algorithm. Please try again.", "confirm-delete-algorithm": "Are you sure you want to delete this algorithm? This action is irreversible.", "algorithm-delete-success": "Algorithm deleted successfully.", "algorithm-delete-error": "Error deleting algorithm. Please try again.", "algorithm-name-empty": "Algorithm name cannot be empty.", "new-algorithm-option": "➕ Create New Algorithm", "confirm-change-algorithm": "⚠️ Changing the algorithm will reset this item's review schedule. Are you sure?", "previous-algorithm": "Previous:", "new-algorithm": "New:", "cannot-delete-last-algorithm": "You cannot delete the last remaining algorithm."
-  },
-  ar: {
-    "header-title": "مراجعة اليوم", "review-placeholder-text": "لا توجد عناصر للمراجعة اليوم.\nعمل رائع!", "remaining-section-title": "المتبقي", "completed-section-title": "تم الانتهاء في هذه الجلسة", "new-item-title": "إضافة عنصر جديد", "new-title-placeholder": "اكتب عنوانك هنا...", "attachment-label": "المرفقات (اختياري)", "add-image-tooltip": "إضافة صورة", "add-video-tooltip": "إضافة فيديو", "add-audio-tooltip": "إضافة صوت", "add-text-tooltip": "إضافة ملاحظة نصية", "save-item-btn": "حفظ العنصر", "header-stats-total": "إجمالي العناصر: ", "header-stats-mastered": "المكتمل: ", "select-all-btn": "تحديد الكل", "delete-selected-btn": "حذف المحدد", "edit-modal-title": "تعديل العنصر", "edit-title-placeholder": "عنوان جديد", "save-edit-btn": "حفظ التغييرات", "cancel-edit-btn": "إلغاء", "settings-modal-title": "الإعدادات", "language-label": "اللغة:", "theme-label": "الثيم:", "font-label": "الخط:", "review-algorithm-select-label": "اختيار الخوارزمية:", "review-algorithm-modal-title": "خوارزميات المراجعة", "add-algorithm-btn": "إضافة خوارزمية جديدة", "edit-algorithm-modal-title": "تعديل الخوارزمية", "algorithm-name-input-label": "اسم الخوارزمية:", "algorithm-intervals-list-label": "فترات المراجعة:", "add-interval-btn": "إضافة فترة جديدة", "save-algorithm-btn": "حفظ الخوارزمية", "cancel-algorithm-btn": "إلغاء", "done-btn": "تم", "delete-btn": "حذف", "edit-btn": "تعديل", "reset-btn": "إعادة تعيين التقدم", "text-modal-title": "إضافة ملاحظة نصية", "modal-textarea-placeholder": "اكتب ملاحظتك هنا...", "save-text-btn": "حفظ النص", "cancel-text-btn": "إلغاء", "attachments-title": "المرفقات:", "review-schedule-title": "جدول المراجعة:", "error-empty-title": "العنوان لا يمكن أن يكون فارغًا!", "error-file-size": "الملف كبير جدًا!\nالحد الأقصى للحجم 50 ميجابايت.", "error-save": "خطأ في حفظ البيانات.\nحاول مرة أخرى.", "error-load": "خطأ في تحميل البيانات.\nحاول مرة أخرى.", "error-login": "تسجيل الدخول معطل في وضع العرض.", "confirm-delete": "هل أنت متأكد أنك تريد حذف هذا العنصر؟", "confirm-delete-selected": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟", "confirm-reset": "هل أنت متأكد أنك تريد إعادة تعيين تقدم هذا العنصر؟", "select-item": "تحديد العنصر", "remove-attachment": "إزالة المرفق", "completed": "مكتمل", "text-note": "ملاحظة نصية", "image-alt": "مرفق صورة", "video-alt": "مرفق فيديو", "audio-alt": "مرفق صوتي", "sort-by": "ترتيب حسب:", "sort-date": "التاريخ", "sort-title": "العنوان", "sort-progress": "التقدم", "sort-order": "الترتيب:", "sort-order-asc": "تصاعدي", "sort-order-desc": "تنازلي", "all-items-title": "كل المهام", "today-tab": "اليوم", "new-tab": "جديد", "all-tab": "الكل", "overall-progress": "التقدم الكلي اليوم:", "completed-at": "اكتمل في: ", "settings-save-success": "تم حفظ الإعدادات بنجاح!", "settings-save-error": "خطأ في حفظ الإعدادات. حاول مرة أخرى.", "algorithm-save-success": "تم حفظ الخوارزمية بنجاح!", "algorithm-save-error": "خطأ في حذف الخوارزمية. حاول مرة أخرى.", "confirm-delete-algorithm": "هل أنت متأكد أنك تريد حذف هذه الخوارزمية؟ هذا الإجراء لا يمكن التراجع عنه.", "algorithm-delete-success": "تم حذف الخوارزمية بنجاح.", "algorithm-delete-error": "خطأ في حذف الخوارزمية. حاول مرة أخرى.", "algorithm-name-empty": "اسم الخوارزمية لا يمكن أن يكون فارغًا.", "new-algorithm-option": "➕ إنشاء خوارزمية جديدة", "confirm-change-algorithm": "⚠️ سيؤدي تغيير الخوارزمية إلى إعادة ضبط جدول المراجعة لهذا العنصر. هل أنت متأكد؟", "previous-algorithm": "السابقة:", "new-algorithm": "الجديدة:", "cannot-delete-last-algorithm": "لا يمكنك حذف الخوارزمية الأخيرة."
-  }
-};
+  // ===== Translations =====
+  const translations = {
+    fa: {
+      'header-title': 'مرور امروز',
+      'review-placeholder-text': 'امروز موردی برای مرور وجود ندارد.\nعالیه!',
+      'remaining-section-title': 'باقی‌مانده',
+      'completed-section-title': 'انجام‌شده در این بازدید',
+      'new-item-title': 'افزودن عنوان جدید',
+      'new-title-placeholder': 'عنوان خود را اینجا بنویسید...',
+      'attachment-label': 'پیوست‌ها (اختیاری)',
+      'add-image-tooltip': 'اضافه کردن عکس',
+      'add-video-tooltip': 'اضافه کردن فیلم',
+      'add-audio-tooltip': 'اضافه کردن صوت',
+      'add-text-tooltip': 'اضافه کردن یادداشت متنی',
+      'save-item-btn': 'ذخیره عنوان',
+      'header-stats-total': 'کل عناوین: ',
+      'header-stats-mastered': 'پایان یافته: ',
+      'select-all-btn': 'انتخاب همه',
+      'delete-selected-btn': 'حذف انتخاب‌شده‌ها',
+      'edit-modal-title': 'ویرایش عنوان',
+      'edit-title-placeholder': 'عنوان جدید',
+      'save-edit-btn': 'ذخیره تغییرات',
+      'cancel-edit-btn': 'انصراف',
+      'settings-modal-title': 'تنظیمات',
+      'language-label': 'زبان:',
+      'theme-label': 'تم:',
+      'font-label': 'فونت:',
+      'review-algorithm-select-label': 'انتخاب الگوریتم مرور:',
+      'review-algorithm-modal-title': 'الگوریتم‌های مرور',
+      'add-algorithm-btn': 'اضافه کردن الگوریتم جدید',
+      'edit-algorithm-modal-title': 'ویرایش الگوریتم',
+      'algorithm-name-input-label': 'نام الگوریتم:',
+      'algorithm-intervals-list-label': 'فاصله‌های مرور:',
+      'add-interval-btn': 'اضافه کردن مرور جدید',
+      'save-algorithm-btn': 'ذخیره الگوریتم',
+      'cancel-algorithm-btn': 'انصراف',
+      'done-btn': 'انجام شد',
+      'delete-btn': 'حذف',
+      'edit-btn': 'ویرایش',
+      'reset-btn': 'ریست پیشرفت',
+      'text-modal-title': 'افزودن یادداشت متنی',
+      'modal-textarea-placeholder': 'یادداشت خود را اینجا بنویسید...',
+      'save-text-btn': 'ذخیره متن',
+      'cancel-text-btn': 'انصراف',
+      'attachments-title': 'پیوست‌ها:',
+      'review-schedule-title': 'برنامه‌ریزی مرور:',
+      'error-empty-title': 'عنوان نمی‌تواند خالی باشد!',
+      'error-file-size': 'فایل خیلی بزرگ است!\nحداکثر اندازه ۵۰ مگابایت است.',
+      'error-save': 'خطا در ذخیره‌سازی داده‌ها.\nلطفاً دوباره تلاش کنید.',
+      'error-load': 'خطا در بارگذاری داده‌ها.\nلطفاً دوباره تلاش کنید.',
+      'error-login': 'ورود در حالت تست غیرفعال است.',
+      'confirm-delete': 'آیا مطمئن هستید که می‌خواهید این عنوان را حذف کنید؟',
+      'confirm-delete-selected': 'آیا مطمئن هستید که می‌خواهید عناوین انتخاب‌شده را حذف کنید؟',
+      'confirm-reset': 'آیا مطمئن هستید که می‌خواهید پیشرفت این عنوان را ریست کنید؟',
+      'select-item': 'انتخاب آیتم',
+      'remove-attachment': 'حذف پیوست',
+      'completed': 'انجام‌شده',
+      'text-note': 'یادداشت متنی',
+      'image-alt': 'پیوست تصویر',
+      'video-alt': 'پیوست ویدیو',
+      'audio-alt': 'پیوست صوت',
+      'sort-by': 'مرتب‌سازی بر اساس:',
+      'sort-date': 'تاریخ',
+      'sort-title': 'عنوان',
+      'sort-progress': 'پیشرفت',
+      'sort-order': 'ترتیب:',
+      'sort-order-asc': 'صعودی',
+      'sort-order-desc': 'نزولی',
+      'all-items-title': 'همه کارها',
+      'today-tab': 'امروز',
+      'new-tab': 'جدید',
+      'all-tab': 'همه',
+      'overall-progress': 'پیشرفت کلی امروز:',
+      'completed-at': 'تکمیل در: ',
+      'settings-save-success': 'تنظیمات شما با موفقیت ذخیره شد!',
+      'settings-save-error': 'خطا در ذخیره تنظیمات. دوباره تلاش کنید.',
+      'algorithm-save-success': 'الگوریتم با موفقیت ذخیره شد!',
+      'algorithm-save-error': 'خطا در ذخیره الگوریتم. دوباره تلاش کنید.',
+      'confirm-delete-algorithm': 'آیا مطمئن هستید که می‌خواهید این الگوریتم را حذف کنید؟\nاین عمل غیرقابل بازگشت است.',
+      'algorithm-delete-success': 'الگوریتم با موفقیت حذف شد.',
+      'algorithm-delete-error': 'خطا در حذف الگوریتم. دوباره تلاش کنید.',
+      'algorithm-name-empty': 'نام الگوریتم نمی‌تواند خالی باشد.',
+      'new-algorithm-option': '➕ ساخت الگوریتم جدید',
+      'confirm-change-algorithm': '⚠️ با تغییر الگوریتم، مرورهای این عنوان بر اساس الگوریتم جدید تنظیم می‌شوند.\nآیا مطمئن هستید؟',
+      'previous-algorithm': 'قبلی:',
+      'new-algorithm': 'جدید:',
+      'cannot-delete-last-algorithm': 'زمانی که تنها یک الگوریتم موجود است، امکان حذف آن وجود ندارد.'
+    }
+  };
 
-// ===== DOM =====
-const htmlEl = document.documentElement;
-const headerTitle = document.getElementById('header-title');
-const tabs = document.querySelectorAll('.tab-btn');
-const contentPanels = document.querySelectorAll('.content-panel');
-const themeToggleBtn = document.getElementById('theme-toggle-btn');
-const reviewPanel = document.getElementById('review-panel');
-const reviewPlaceholder = document.getElementById('review-placeholder');
-const todayRemainingList = document.getElementById('today-remaining-list');
-const todayCompletedList = document.getElementById('today-completed-list');
-const remainingSection = document.getElementById('remaining-section');
-const completedSection = document.getElementById('completed-section');
-const newTitleInput = document.getElementById('newTitleInput');
-const saveItemBtn = document.getElementById('saveItemBtn');
-const fileUploadInput = document.getElementById('file-upload-input');
-const attachmentsPreview = document.getElementById('attachments-preview');
-const addImageBox = document.getElementById('add-image-box');
-const addVideoBox = document.getElementById('add-video-box');
-const addAudioBox = document.getElementById('add-audio-box');
-const addTextBox = document.getElementById('add-text-box');
-const textModal = document.getElementById('text-modal');
-const modalTextarea = document.getElementById('modal-textarea');
-const saveTextBtn = document.getElementById('save-text-btn');
-const cancelTextBtn = document.getElementById('cancel-text-btn');
-const editModal = document.getElementById('edit-modal');
-const editTitleInput = document.getElementById('edit-title-input');
-const editAttachmentsPreview = document.getElementById('edit-attachments-preview');
-const saveEditBtn = document.getElementById('save-edit-btn');
-const cancelEditBtn = document.getElementById('cancel-edit-btn');
-const settingsBtn = document.getElementById('settings-btn');
-const settingsModal = document.getElementById('settings-modal');
-const languageSelect = document.getElementById('language-select');
-const themeSelect = document.getElementById('theme-select');
-const fontSelect = document.getElementById('font-select');
-const saveSettingsBtn = document.getElementById('save-settings-btn');
-const cancelSettingsBtn = document.getElementById('cancel-settings-btn');
-const loginBtn = document.getElementById('login-btn');
-const multiSelectActions = document.getElementById('multi-select-actions');
-const selectAllBtn = document.getElementById('select-all-btn');
-const deleteSelectedBtn = document.getElementById('delete-selected-btn');
-const sortSelect = document.getElementById('sort-select');
-const sortOrderSelect = document.getElementById('sort-order-select');
-const totalCountEl = document.getElementById('total-count');
-const masteredCountEl = document.getElementById('mastered-count');
-const overallProgressBarContainer = document.getElementById('overall-progress-bar-container');
-const overallProgressBarFill = document.getElementById('overall-progress-bar-fill');
-const overallProgressBarText = document.getElementById('overall-progress-bar-text');
-const customModal = document.getElementById('custom-modal');
-const customModalTitle = document.getElementById('custom-modal-title');
-const customModalText = document.getElementById('custom-modal-text');
-const customModalConfirmBtn = document.getElementById('custom-modal-confirm-btn');
-const customModalCancelBtn = document.getElementById('custom-modal-cancel-btn');
-const toastContainer = document.getElementById('toast-message-container');
+  // ===== DOM =====
+  const htmlEl = document.documentElement;
+  const headerTitle = document.getElementById('header-title');
+  const tabs = document.querySelectorAll('.tab-btn');
+  const contentPanels = document.querySelectorAll('.content-panel');
+  const themeToggleBtn = document.getElementById('theme-toggle-btn');
+  const reviewPanel = document.getElementById('review-panel');
+  const reviewPlaceholder = document.getElementById('review-placeholder');
+  const todayRemainingList = document.getElementById('today-remaining-list');
+  const todayCompletedList = document.getElementById('today-completed-list');
+  const remainingSection = document.getElementById('remaining-section');
+  const completedSection = document.getElementById('completed-section');
+  const newTitleInput = document.getElementById('newTitleInput');
+  const saveItemBtn = document.getElementById('saveItemBtn');
+  const fileUploadInput = document.getElementById('file-upload-input');
+  const attachmentsPreview = document.getElementById('attachments-preview');
+  const addImageBox = document.getElementById('add-image-box');
+  const addVideoBox = document.getElementById('add-video-box');
+  const addAudioBox = document.getElementById('add-audio-box');
+  const addTextBox = document.getElementById('add-text-box');
+  const textModal = document.getElementById('text-modal');
+  const modalTextarea = document.getElementById('modal-textarea');
+  const saveTextBtn = document.getElementById('save-text-btn');
+  const cancelTextBtn = document.getElementById('cancel-text-btn');
+  const editModal = document.getElementById('edit-modal');
+  const editTitleInput = document.getElementById('edit-title-input');
+  const editAttachmentsPreview = document.getElementById('edit-attachments-preview');
+  const saveEditBtn = document.getElementById('save-edit-btn');
+  const cancelEditBtn = document.getElementById('cancel-edit-btn');
+  const settingsBtn = document.getElementById('settings-btn');
+  const settingsModal = document.getElementById('settings-modal');
+  const languageSelect = document.getElementById('language-select');
+  const themeSelect = document.getElementById('theme-select');
+  const fontSelect = document.getElementById('font-select');
+  const saveSettingsBtn = document.getElementById('save-settings-btn');
+  const cancelSettingsBtn = document.getElementById('cancel-settings-btn');
+  const loginBtn = document.getElementById('login-btn');
+  const multiSelectActions = document.getElementById('multi-select-actions');
+  const selectAllBtn = document.getElementById('select-all-btn');
+  const deleteSelectedBtn = document.getElementById('delete-selected-btn');
+  const sortSelect = document.getElementById('sort-select');
+  const sortOrderSelect = document.getElementById('sort-order-select');
+  const totalCountEl = document.getElementById('total-count');
+  const masteredCountEl = document.getElementById('mastered-count');
+  const overallProgressBarContainer = document.getElementById('overall-progress-bar-container');
+  const overallProgressBarFill = document.getElementById('overall-progress-bar-fill');
+  const overallProgressBarText = document.getElementById('overall-progress-bar-text');
+  const customModal = document.getElementById('custom-modal');
+  const customModalTitle = document.getElementById('custom-modal-title');
+  const customModalText = document.getElementById('custom-modal-text');
+  const customModalConfirmBtn = document.getElementById('custom-modal-confirm-btn');
+  const customModalCancelBtn = document.getElementById('custom-modal-cancel-btn');
+  const toastContainer = document.getElementById('toast-message-container');
+  const reviewAlgorithmSelect = document.getElementById('review-algorithm-select');
+  const reviewAlgorithmPreview = document.getElementById('review-algorithm-preview');
+  const editReviewAlgorithmSelect = document.getElementById('edit-review-algorithm-select');
+  const editReviewAlgorithmPreview = document.getElementById('edit-review-algorithm-preview');
+  const openAlgorithmModalBtn = document.getElementById('open-algorithm-modal-btn');
+  const reviewAlgorithmModal = document.getElementById('review-algorithm-modal');
+  const algorithmList = document.getElementById('algorithm-list');
+  const addAlgorithmBtn = document.getElementById('add-algorithm-btn');
+  const editAlgorithmModal = document.getElementById('edit-algorithm-modal');
+  const editAlgorithmModalTitle = document.getElementById('edit-algorithm-modal-title');
+  const algorithmNameInput = document.getElementById('algorithm-name-input');
+  const algorithmIntervalsList = document.getElementById('algorithm-intervals-list');
+  const addIntervalBtn = document.getElementById('add-interval-btn');
+  const saveAlgorithmBtn = document.getElementById('save-algorithm-btn');
+  const cancelAlgorithmBtn = document.getElementById('cancel-algorithm-btn');
+  const backToSettingsBtn = document.getElementById('back-to-settings-btn');
 
-// New DOM elements for algorithm management
-const reviewAlgorithmSelect = document.getElementById('review-algorithm-select');
-const reviewAlgorithmPreview = document.getElementById('review-algorithm-preview');
-const editReviewAlgorithmSelect = document.getElementById('edit-review-algorithm-select');
-const editReviewAlgorithmPreview = document.getElementById('edit-review-algorithm-preview');
-const openAlgorithmModalBtn = document.getElementById('open-algorithm-modal-btn');
-const reviewAlgorithmModal = document.getElementById('review-algorithm-modal');
-const algorithmList = document.getElementById('algorithm-list');
-const addAlgorithmBtn = document.getElementById('add-algorithm-btn');
-const editAlgorithmModal = document.getElementById('edit-algorithm-modal');
-const editAlgorithmModalTitle = document.getElementById('edit-algorithm-modal-title');
-const algorithmNameInput = document.getElementById('algorithm-name-input');
-const algorithmIntervalsList = document.getElementById('algorithm-intervals-list');
-const addIntervalBtn = document.getElementById('add-interval-btn');
-const saveAlgorithmBtn = document.getElementById('save-algorithm-btn');
-const cancelAlgorithmBtn = document.getElementById('cancel-algorithm-btn');
+  let editingAlgorithmId = null;
 
-let editingAlgorithmId = null;
+  // ===== Helpers =====
+  const applyTheme = (theme) => {
+    if (theme === 'auto') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    htmlEl.setAttribute('data-theme', theme);
+    themeToggleBtn.querySelector('.material-icons-outlined').textContent = theme === 'light' ? 'dark_mode' : 'light_mode';
+    localStorage.setItem('themePreference', theme);
+  };
+  const toggleTheme = () => {
+    const t = htmlEl.getAttribute('data-theme');
+    applyTheme(t === 'light' ? 'dark' : 'light');
+  };
+  const formatDate = (date) => {
+    if (!date || isNaN(new Date(date).getTime())) {
+      return '';
+    }
+    return new Intl.DateTimeFormat('fa-IR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).format(new Date(date));
+  };
+  const formatTime = (date) => {
+    if (!date || isNaN(new Date(date).getTime())) {
+      return '';
+    }
+    return new Intl.DateTimeFormat('fa-IR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(new Date(date));
+  };
+  const getReviewScheduleHtml = (schedule, createdAt, intervals) => {
+    const baseDate = new Date(createdAt);
+    const title = translations['fa']['review-schedule-title'];
+    const word = 'مرور';
+    const inner = schedule.map((r, i) => {
+      const d = new Date(baseDate);
+      const intervalInDays = intervals[i];
+      if (intervalInDays === 0) d.setMinutes(d.getMinutes() + 20);
+      else d.setDate(d.getDate() + intervalInDays);
+      const statusClass = r.completed ? 'completed-schedule' : 'pending-schedule';
+      const icon = r.completed ? '<span class="material-icons-outlined schedule-tick">check_circle</span>' : '';
+      return `<div class="schedule-item ${statusClass}"><span class="schedule-label">${word} ${i + 1}: ${intervalInDays} Days</span><span class="schedule-date">${formatDate(d)}</span>${icon}</div>`;
+    }).join('');
+    return `<div class="review-schedule-box"><h4>${title}</h4>${inner}</div>`;
+  };
 
-// ===== Helpers =====
-const applyTheme = (theme) => {
-  if (theme === 'auto') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  htmlEl.setAttribute('data-theme', theme);
-  themeToggleBtn.querySelector('.material-icons-outlined').textContent = theme === 'light' ? 'dark_mode' : 'light_mode';
-  localStorage.setItem('themePreference', theme);
-};
-const toggleTheme = () => {
-  const t = htmlEl.getAttribute('data-theme');
-  applyTheme(t === 'light' ? 'dark' : 'light');
-};
-const formatDate = (date) => new Intl.DateTimeFormat(currentLanguage === 'fa' ? 'fa-IR' : currentLanguage === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
-const formatTime = (date) => new Intl.DateTimeFormat(currentLanguage === 'fa' ? 'fa-IR' : currentLanguage === 'ar' ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit', hour12: false }).format(date);
-
-const getReviewScheduleHtml = (schedule, createdAt, intervals) => {
-  const baseDate = new Date(createdAt);
-  const title = translations[currentLanguage]['review-schedule-title'];
-  const word = currentLanguage === 'fa' ? 'مرور' : currentLanguage === 'ar' ? 'مراجعة' : 'Review';
-  const inner = schedule.map((r, i) => {
-    const d = new Date(baseDate);
-    const intervalInDays = intervals[i];
-    if (intervalInDays === 0) d.setMinutes(d.getMinutes() + 20);
-    else d.setDate(d.getDate() + intervalInDays);
-    const statusClass = r.completed ? 'completed-schedule' : 'pending-schedule';
-    const icon = r.completed ? '<span class="material-icons-outlined schedule-tick">check_circle</span>' : '';
-    return `<div class="schedule-item ${statusClass}"><span class="schedule-label">${word} ${i+1}: ${intervalInDays} Days</span><span class="schedule-date">${formatDate(d)}</span>${icon}</div>`;
-  }).join('');
-  return `<div class="review-schedule-box"><h4>${title}</h4>${inner}</div>`;
-};
-
-const getAttachmentsHtml = (attachments) => {
-  if (!attachments || !Array.isArray(attachments) || attachments.length === 0) return '';
-  return `<div class="attachments-display"><h4>${translations[currentLanguage]['attachments-title']}</h4>${
+  const getAttachmentsHtml = (attachments) => {
+    if (!attachments || !Array.isArray(attachments) || attachments.length === 0) return '';
+    return `<div class="attachments-display"><h4>${translations['fa']['attachments-title']}</h4>${
     attachments.map(att => {
-        switch (att.type) {
-            case 'image': return `<div class="attachment-content"><img src="${att.data}" alt="${translations[currentLanguage]['image-alt']}: ${att.name}" aria-label="${att.name}"></div>`;
-            case 'video': return `<div class="attachment-content"><video src="${att.data}" controls aria-label="${translations[currentLanguage]['video-alt']}: ${att.name}"></video></div>`;
-            case 'audio': return `<div class="attachment-content"><audio src="${att.data}" controls aria-label="${translations[currentLanguage]['audio-alt']}: ${att.name}"></audio></div>`;
-            case 'text': return `<div class="attachment-content"><div class="attachment-text-note">${att.data}</div></div>`;
-            default: return '';
-        }
+      switch (att.type) {
+        case 'image':
+          return `<div class="attachment-content"><img src="${att.data}" alt="${translations['fa']['image-alt']}: ${att.name}" aria-label="${att.name}"></div>`;
+        case 'video':
+          return `<div class="attachment-content"><video src="${att.data}" controls aria-label="${translations['fa']['video-alt']}: ${att.name}"></video></div>`;
+        case 'audio':
+          return `<div class="attachment-content"><audio src="${att.data}" controls aria-label="${translations['fa']['audio-alt']}: ${att.name}"></audio></div>`;
+        case 'text':
+          return `<div class="attachment-content"><div class="attachment-text-note">${att.data}</div></div>`;
+        default:
+          return '';
+      }
     }).join('')
 }</div>`;
-};
+  };
 
-const getProgressColorClass = (p) => p < 30 ? 'progress-red' : (p < 70 ? 'progress-yellow' : 'progress-green');
-const showConfirm = (text, title = 'تایید') => {
-  return new Promise((resolve) => {
+  const getProgressColorClass = (p) => p < 30 ? 'progress-red' : (p < 70 ? 'progress-yellow' : 'progress-green');
+  const showConfirm = (text, title = 'تایید') => {
+    return new Promise((resolve) => {
+      customModalTitle.textContent = title;
+      customModalText.textContent = text;
+      customModal.classList.remove('hidden', 'alert-mode');
+      const confirmHandler = () => {
+        customModal.classList.add('hidden');
+        resolve(true);
+        cleanup();
+      };
+      const cancelHandler = () => {
+        customModal.classList.add('hidden');
+        resolve(false);
+        cleanup();
+      };
+      const cleanup = () => {
+        customModalConfirmBtn.removeEventListener('click', confirmHandler);
+        customModalCancelBtn.removeEventListener('click', cancelHandler);
+      };
+      customModalConfirmBtn.addEventListener('click', confirmHandler);
+      customModalCancelBtn.addEventListener('click', cancelHandler);
+    });
+  };
+
+  const showAlert = (text, title = 'خطا') => {
     customModalTitle.textContent = title;
     customModalText.textContent = text;
-    customModal.classList.remove('hidden', 'alert-mode');
-    const confirmHandler = () => { customModal.classList.add('hidden'); resolve(true); cleanup(); };
-    const cancelHandler = () => { customModal.classList.add('hidden'); resolve(false); cleanup(); };
-    const cleanup = () => {
+    customModal.classList.remove('hidden');
+    customModal.classList.add('alert-mode');
+    const confirmHandler = () => {
+      customModal.classList.add('hidden');
       customModalConfirmBtn.removeEventListener('click', confirmHandler);
-      customModalCancelBtn.removeEventListener('click', cancelHandler);
     };
     customModalConfirmBtn.addEventListener('click', confirmHandler);
-    customModalCancelBtn.addEventListener('click', cancelHandler);
-  });
-};
-
-const showAlert = (text, title = 'خطا') => {
-  customModalTitle.textContent = title;
-  customModalText.textContent = text;
-  customModal.classList.remove('hidden');
-  customModal.classList.add('alert-mode');
-  const confirmHandler = () => {
-    customModal.classList.add('hidden');
-    customModalConfirmBtn.removeEventListener('click', confirmHandler);
   };
-  customModalConfirmBtn.addEventListener('click', confirmHandler);
-};
-
-const showToast = (message, type = 'success') => {
+  const showToast = (message, type = 'success') => {
     const toast = document.createElement('div');
     toast.className = `toast-message ${type}`;
     toast.innerHTML = `<span class="material-icons-outlined">${type === 'success' ? 'check_circle_outline' : 'error_outline'}</span><span>${message}</span>`;
     toastContainer.prepend(toast);
     setTimeout(() => {
-        toast.classList.add('show');
+      toast.classList.add('show');
     }, 10);
     setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 400);
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 400);
     }, 3000);
-};
+  };
 
-// ===== Storage (Local) =====
-const saveToStorage = () => { 
-    try { 
-        localStorage.setItem('studyItems_v5', JSON.stringify(items)); 
-        localStorage.setItem('reviewAlgorithms', JSON.stringify(algorithms));
-        localStorage.setItem('selectedAlgorithmId', selectedAlgorithmId);
-    } catch (e) { 
-        showToast(translations[currentLanguage]['error-save'], 'error'); 
-    } 
-};
-const loadFromLocalStorage = () => { 
-    try { 
-        items = JSON.parse(localStorage.getItem('studyItems_v5') || '[]'); 
-        const storedAlgorithms = JSON.parse(localStorage.getItem('reviewAlgorithms') || 'null');
-        algorithms = storedAlgorithms || defaultAlgorithms;
-        selectedAlgorithmId = localStorage.getItem('selectedAlgorithmId') || 'default';
-    } catch { 
-        items = []; 
-        algorithms = defaultAlgorithms;
-        selectedAlgorithmId = 'default';
-    } 
-};
+  // ===== Storage (Local) =====
+  const saveToStorage = () => {
+    try {
+      localStorage.setItem('studyItems_v5', JSON.stringify(items));
+      localStorage.setItem('reviewAlgorithms', JSON.stringify(algorithms));
+      localStorage.setItem('selectedAlgorithmId', selectedAlgorithmId);
+    } catch (e) {
+      console.error("Error saving to local storage:", e);
+      showToast(translations['fa']['error-save'], 'error');
+    }
+  };
+  const loadFromLocalStorage = () => {
+    try {
+      items = JSON.parse(localStorage.getItem('studyItems_v5') || '[]');
+      const storedAlgorithms = JSON.parse(localStorage.getItem('reviewAlgorithms') || 'null');
+      algorithms = storedAlgorithms || defaultAlgorithms;
+      selectedAlgorithmId = localStorage.getItem('selectedAlgorithmId') || 'default';
+    } catch (e) {
+      console.error("Error loading from local storage:", e);
+      items = [];
+      algorithms = defaultAlgorithms;
+      selectedAlgorithmId = 'default';
+    }
+  };
 
-// ===== Render =====
-const renderAll = () => { 
-  renderTodayList(); 
-  renderAllItemsList(); 
-  renderAlgorithmSelects();
-};
+  // ===== Render =====
+  const renderAll = () => {
+    renderTodayList();
+    renderAllItemsList();
+    renderAlgorithmSelects();
+  };
+  const renderTodayList = () => {
+    const now = new Date();
+    const todayItemsTotal = items.filter(item => !item.isMastered && item.nextReview && new Date(item.nextReview) <= now);
+    const todayRemaining = todayItemsTotal.filter(item => !item.completedInSession);
+    const todayCompletedInSession = items.filter(item => item.completedInSession);
+    todayRemainingList.innerHTML = '';
+    todayCompletedList.innerHTML = '';
+    let overall = 0;
+    if (todayItemsTotal.length > 0) overall = (todayCompletedInSession.length / todayItemsTotal.length) * 100;
+    overallProgressBarFill.style.width = `${overall}%`;
+    overallProgressBarText.textContent = `${translations['fa']['overall-progress']} ${Math.round(overall)}%`;
+    overallProgressBarContainer.classList.toggle('hidden', todayItemsTotal.length === 0 && todayCompletedInSession.length === 0);
 
-const renderTodayList = () => {
-  const now = new Date();
-  const todayItemsTotal = items.filter(item => !item.isMastered && item.nextReview && new Date(item.nextReview) <= now);
-  const todayRemaining = todayItemsTotal.filter(item => !item.completedInSession);
-  const todayCompletedInSession = items.filter(item => item.completedInSession);
-  todayRemainingList.innerHTML = '';
-  todayCompletedList.innerHTML = '';
-  let overall = 0;
-  if (todayItemsTotal.length > 0) overall = (todayCompletedInSession.length / todayItemsTotal.length) * 100;
-  overallProgressBarFill.style.width = `${overall}%`;
-  overallProgressBarText.textContent = `${translations[currentLanguage]['overall-progress']} ${Math.round(overall)}%`;
-  overallProgressBarContainer.classList.toggle('hidden', todayItemsTotal.length === 0 && todayCompletedInSession.length === 0);
-
-  if (todayRemaining.length === 0 && todayCompletedInSession.length === 0) {
-    reviewPlaceholder.classList.remove('hidden');
-    remainingSection.classList.add('hidden');
-    completedSection.classList.add('hidden');
-  } else {
-    reviewPlaceholder.classList.add('hidden');
-    if (todayRemaining.length > 0) {
-      remainingSection.classList.remove('hidden');
-      todayRemaining.forEach((item, idx) => {
-        const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
-        todayRemainingList.appendChild(createTodayListItem(item, idx, false, itemAlgorithm.intervals));
-      });
-    } else remainingSection.classList.add('hidden');
-    if (todayCompletedInSession.length > 0) {
-      completedSection.classList.remove('hidden');
-      completedSection.querySelector('.today-list').classList.remove('hidden');
-      todayCompletedInSession.forEach((item, idx) => {
-        const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
-        todayCompletedList.appendChild(createTodayListItem(item, idx, true, itemAlgorithm.intervals));
-      });
-    } else {
+    if (todayRemaining.length === 0 && todayCompletedInSession.length === 0) {
+      reviewPlaceholder.classList.remove('hidden');
+      remainingSection.classList.add('hidden');
       completedSection.classList.add('hidden');
-      completedSection.querySelector('.today-list').classList.add('hidden');
-    }
-  }
-  document.querySelector('.tab-btn[data-tab="review-panel"]').classList.toggle('status-pending', todayRemaining.length > 0);
-};
-
-const createTodayListItem = (item, index, isCompleted = false, intervals) => {
-  const li = document.createElement('li');
-  li.className = `today-list-item ${isCompleted?'completed':''}`;
-  li.dataset.itemId = item.id;
-  const attachmentsHtml = getAttachmentsHtml(item.attachments);
-  const completionTimeHtml = isCompleted && item.completionTime ?
-`<span class="completion-time">${translations[currentLanguage]['completed-at']} ${formatTime(new Date(item.completionTime))}</span>` : '';
-  const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
-  const itemIntervals = intervals || itemAlgorithm.intervals;
-  const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt, itemIntervals);
-  li.innerHTML = `<div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span>${completionTimeHtml}<span class="expand-arrow material-icons-outlined">expand_more</span></div><div class="item-details">${attachmentsHtml}${!isCompleted?`<button class="done-btn main-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['done-btn']}">${translations[currentLanguage]['done-btn']}</button>`:''}${reviewHtml}</div>`;
-  return li;
-};
-
-const renderAllItemsList = () => {
-  const container = document.getElementById('all-items-list');
-  let filtered = [...items];
-  const sortBy = sortSelect.value;
-  const sortOrder = sortOrderSelect.value;
-  filtered.sort((a, b) => {
-    let cmp = 0;
-    if (sortBy === 'date') cmp = new Date(a.createdAt) - new Date(b.createdAt);
-    else if (sortBy === 'title') cmp = a.title.localeCompare(b.title, currentLanguage === 'fa' ? 'fa' : 'en');
-    else if (sortBy === 'progress') {
-      const pa = a.reviewSchedule.length ? a.reviewSchedule.filter(r => r.completed).length / a.reviewSchedule.length : 0;
-      const pb = b.reviewSchedule.length ? b.reviewSchedule.filter(r => r.completed).length / b.reviewSchedule.length : 0;
-      cmp = pa - pb;
-    }
-    return sortOrder === 'asc' ? cmp : -cmp;
-  });
-  container.innerHTML = '';
-  filtered.forEach((item, idx) => container.appendChild(createAllItemsListItem(item, idx)));
-  totalCountEl.textContent = items.length;
-  masteredCountEl.textContent = items.filter(i => i.isMastered).length;
-  multiSelectActions.classList.toggle('hidden', !multiSelectMode && selectedItems.length === 0);
-};
-
-const createAllItemsListItem = (item, index) => {
-  const li = document.createElement('li');
-  li.className = 'all-items-item';
-  const completed = item.reviewSchedule.filter(r => r.completed).length;
-  const progress = item.reviewSchedule.length ? (completed / item.reviewSchedule.length) * 100 : 0;
-  const attachmentsHtml = getAttachmentsHtml(item.attachments);
-  const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
-  const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt, itemAlgorithm.intervals);
-  const created = formatDate(new Date(item.createdAt));
-  const isChecked = selectedItems.includes(item.id) ? 'checked' : '';
-  const color = getProgressColorClass(progress);
-  li.innerHTML = `<input type="checkbox" class="checkbox" data-id="${item.id}" aria-label="${translations[currentLanguage]['select-item']}" ${isChecked}><div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span><span class="creation-date">${created}</span><div class="item-inline-actions"><button class="edit-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['edit-btn']}"><span class="material-icons-outlined">edit</span></button><button class="delete-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['delete-btn']}"><span class="material-icons-outlined">delete</span></button></div></div><div class="item-details">${attachmentsHtml}<div class="review-progress-section"><div class="progress-circle ${color}" style="--p:${progress}">${Math.round(progress)}%</div><button class="review-collapsible-header collapsed"><h4>${translations[currentLanguage]['review-schedule-title']}</h4><span class="expand-arrow material-icons-outlined">expand_more</span></button><div class="collapsible-content hidden">${reviewHtml}</div></div><div class="item-actions-bottom"><button class="reset-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['reset-btn']}">${translations[currentLanguage]['reset-btn']}</button></div></div>`;
-  return li;
-};
-
-const renderAlgorithmSelects = () => {
-    [reviewAlgorithmSelect, editReviewAlgorithmSelect].forEach(select => {
-        if (!select) return;
-        select.innerHTML = '';
-        algorithms.forEach(algo => {
-            const option = document.createElement('option');
-            option.value = algo.id;
-            option.textContent = algo.name;
-            select.appendChild(option);
-        });
-        const newAlgoOption = document.createElement('option');
-        newAlgoOption.value = 'new';
-        newAlgoOption.textContent = translations[currentLanguage]['new-algorithm-option'];
-        select.appendChild(newAlgoOption);
-        select.value = selectedAlgorithmId;
-        
-        const previewEl = select.closest('.review-algorithm-select-container').querySelector('.preview-text');
-        if (previewEl) {
-            const algo = algorithms.find(a => a.id === select.value) || defaultAlgorithms[0];
-            previewEl.textContent = algo.intervals.join(', ');
-        }
-    });
-};
-
-const updateAlgorithmPreview = (selectId, previewId) => {
-  const select = document.getElementById(selectId);
-  const previewEl = document.getElementById(previewId);
-  if (select && previewEl) {
-    const selectedAlgo = algorithms.find(a => a.id === select.value);
-    if (selectedAlgo) {
-        previewEl.textContent = selectedAlgo.intervals.join(', ');
     } else {
-        previewEl.textContent = '';
+      reviewPlaceholder.classList.add('hidden');
+      if (todayRemaining.length > 0) {
+        remainingSection.classList.remove('hidden');
+        todayRemaining.forEach((item, idx) => {
+          const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+          todayRemainingList.appendChild(createTodayListItem(item, idx, false, itemAlgorithm.intervals));
+        });
+      } else remainingSection.classList.add('hidden');
+      if (todayCompletedInSession.length > 0) {
+        completedSection.classList.remove('hidden');
+        completedSection.querySelector('.today-list').classList.remove('hidden');
+        todayCompletedInSession.forEach((item, idx) => {
+          const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+          todayCompletedList.appendChild(createTodayListItem(item, idx, true, itemAlgorithm.intervals));
+        });
+      } else {
+        completedSection.classList.add('hidden');
+        completedSection.querySelector('.today-list').classList.add('hidden');
+      }
     }
-  }
-};
+    document.querySelector('.tab-btn[data-tab="review-panel"]').classList.toggle('status-pending', todayRemaining.length > 0);
+  };
+  const createTodayListItem = (item, index, isCompleted = false, intervals) => {
+    const li = document.createElement('li');
+    li.className = `today-list-item ${isCompleted?'completed':''}`;
+    li.dataset.itemId = item.id;
+    const attachmentsHtml = getAttachmentsHtml(item.attachments);
+    
+    let completionTimeHtml = '';
+    if (isCompleted && item.completionTime) {
+      const completionDate = new Date(item.completionTime);
+      if (!isNaN(completionDate.getTime())) {
+        completionTimeHtml = `<span class="completion-time">${translations['fa']['completed-at']} ${formatTime(completionDate)}</span>`;
+      }
+    }
 
-// ===== CRUD & Attachments =====
-const resetNewItemForm = () => { 
+    const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+    const itemIntervals = intervals || itemAlgorithm.intervals;
+    const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt, itemIntervals);
+    li.innerHTML = `<div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span>${completionTimeHtml}<span class="expand-arrow material-icons-outlined">expand_more</span></div><div class="item-details">${attachmentsHtml}${!isCompleted?`<button class="done-btn main-btn" data-id="${item.id}" aria-label="${translations['fa']['done-btn']}">${translations['fa']['done-btn']}</button>`:''}${reviewHtml}</div>`;
+    return li;
+  };
+
+  const renderAllItemsList = () => {
+    const container = document.getElementById('all-items-list');
+    let filtered = [...items];
+    const sortBy = sortSelect.value;
+    const sortOrder = sortOrderSelect.value;
+    filtered.sort((a, b) => {
+      let cmp = 0;
+      if (sortBy === 'date') cmp = new Date(a.createdAt) - new Date(b.createdAt);
+      else if (sortBy === 'title') cmp = a.title.localeCompare(b.title, 'fa');
+      else if (sortBy === 'progress') {
+        const pa = a.reviewSchedule.length ? a.reviewSchedule.filter(r => r.completed).length / a.reviewSchedule.length : 0;
+        const pb = b.reviewSchedule.length ? b.reviewSchedule.filter(r => r.completed).length / b.reviewSchedule.length : 0;
+        cmp = pa - pb;
+      }
+      return sortOrder === 'asc' ? cmp : -cmp;
+    });
+    container.innerHTML = '';
+    filtered.forEach((item, idx) => container.appendChild(createAllItemsListItem(item, idx)));
+    totalCountEl.textContent = items.length;
+    masteredCountEl.textContent = items.filter(i => i.isMastered).length;
+    multiSelectActions.classList.toggle('hidden', !multiSelectMode && selectedItems.length === 0);
+  };
+
+  const createAllItemsListItem = (item, index) => {
+    const li = document.createElement('li');
+    li.className = 'all-items-item';
+    const completed = item.reviewSchedule.filter(r => r.completed).length;
+    const progress = item.reviewSchedule.length ? (completed / item.reviewSchedule.length) * 100 : 0;
+    const attachmentsHtml = getAttachmentsHtml(item.attachments);
+    const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+    const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt, itemAlgorithm.intervals);
+    const created = formatDate(new Date(item.createdAt));
+    const isChecked = selectedItems.includes(item.id) ? 'checked' : '';
+    const color = getProgressColorClass(progress);
+    li.innerHTML = `<input type="checkbox" class="checkbox" data-id="${item.id}" aria-label="${translations['fa']['select-item']}" ${isChecked}><div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span><span class="creation-date">${created}</span><div class="item-inline-actions"><button class="edit-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations['fa']['edit-btn']}"><span class="material-icons-outlined">edit</span></button><button class="delete-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations['fa']['delete-btn']}"><span class="material-icons-outlined">delete</span></button></div></div><div class="item-details">${attachmentsHtml}<div class="review-progress-section"><div class="progress-circle ${color}" style="--p:${progress}">${Math.round(progress)}%</div><button class="review-collapsible-header collapsed"><h4>${translations['fa']['review-schedule-title']}</h4><span class="expand-arrow material-icons-outlined">expand_more</span></button><div class="collapsible-content hidden">${reviewHtml}</div></div><div class="item-actions-bottom"><button class="reset-btn" data-id="${item.id}" aria-label="${translations['fa']['reset-btn']}">${translations['fa']['reset-btn']}</button></div></div>`;
+    return li;
+  };
+
+  const renderAlgorithmSelects = () => {
+    [reviewAlgorithmSelect, editReviewAlgorithmSelect].forEach(select => {
+      if (!select) return;
+      select.innerHTML = '';
+      algorithms.forEach(algo => {
+        const option = document.createElement('option');
+        option.value = algo.id;
+        option.textContent = algo.name;
+
+        select.appendChild(option);
+      });
+      const newAlgoOption = document.createElement('option');
+      newAlgoOption.value = 'new';
+      newAlgoOption.textContent = translations['fa']['new-algorithm-option'];
+      select.appendChild(newAlgoOption);
+      select.value = selectedAlgorithmId;
+
+      const previewEl = select.closest('.review-algorithm-select-container').querySelector('.preview-text');
+      if (previewEl) {
+        const algo = algorithms.find(a => a.id === select.value) || defaultAlgorithms[0];
+        previewEl.textContent = algo.intervals.join(', ');
+      }
+    });
+  };
+
+  const updateAlgorithmPreview = (selectId, previewId) => {
+    const select = document.getElementById(selectId);
+    const previewEl = document.getElementById(previewId);
+    if (select && previewEl) {
+      const selectedAlgo = algorithms.find(a => a.id === select.value);
+      if (selectedAlgo) {
+        previewEl.textContent = selectedAlgo.intervals.join(', ');
+      } else {
+        previewEl.textContent = '';
+      }
+    }
+  };
+  // ===== CRUD & Attachments =====
+  const resetNewItemForm = () => {
     newTitleInput.value = '';
     tempAttachments = [];
-    attachmentsPreview.innerHTML = ''; 
+    attachmentsPreview.innerHTML = '';
     saveItemBtn.disabled = true;
     selectedAlgorithmId = localStorage.getItem('selectedAlgorithmId') || 'default';
     renderAlgorithmSelects();
-};
-const saveItem = () => {
-  const title = newTitleInput.value.trim();
-  if (!title) { showAlert(translations[currentLanguage]['error-empty-title']); return; }
-  const now = new Date();
-  const selectedAlgo = algorithms.find(a => a.id === reviewAlgorithmSelect.value) || defaultAlgorithms[0];
-  const intervals = selectedAlgo.intervals;
-  const schedule = intervals.map((it) => {
-    const d = new Date(now);
-    if (it === 0) d.setMinutes(d.getMinutes() + 20);
-    else d.setDate(d.getDate() + it);
-    return { scheduledFor: d.toISOString(), completed: false };
-  });
-  const newItem = { 
-    id: Date.now(), 
-    title, 
-    attachments: [...tempAttachments], 
-    level: 0, 
-    createdAt: now.toISOString(), 
-    nextReview: schedule[0].scheduledFor, 
-    isMastered: false, 
-    reviewSchedule: schedule, 
-    completedInSession: false, 
-    completionTime: null,
-    algorithmId: selectedAlgo.id
   };
-  items.unshift(newItem);
-  saveToStorage();
-  resetNewItemForm();
-  renderAll();
-};
+  const saveItem = () => {
+    const title = newTitleInput.value.trim();
+    if (!title) {
+      showAlert(translations['fa']['error-empty-title']);
+      return;
+    }
+    const now = new Date();
+    const selectedAlgo = algorithms.find(a => a.id === reviewAlgorithmSelect.value) || defaultAlgorithms[0];
+    const intervals = selectedAlgo.intervals;
+    const schedule = intervals.map((it) => {
+      const d = new Date(now);
+      if (it === 0) d.setMinutes(d.getMinutes() + 20);
+      else d.setDate(d.getDate() + it);
+      return {
+        scheduledFor: d.toISOString(),
+        completed: false
+      };
+    });
+    const newItem = {
+      id: Date.now(),
+      title,
+      attachments: [...tempAttachments],
+      level: 0,
+      createdAt: now.toISOString(),
+      nextReview: schedule[0].scheduledFor,
+      isMastered: false,
+      reviewSchedule: schedule,
+      completedInSession: false,
+      completionTime: null,
+      algorithmId: selectedAlgo.id
+    };
+    items.unshift(newItem);
+    saveToStorage();
+    resetNewItemForm();
+    renderAll();
+  };
 
-const openEditModal = (item) => { 
-  editingItemId = item.id; 
-  editTitleInput.value = item.title; 
-  tempAttachments = [...item.attachments];
-  renderAttachmentsPreview(editAttachmentsPreview); 
-  editReviewAlgorithmSelect.value = item.algorithmId;
-  updateAlgorithmPreview('edit-review-algorithm-select', 'edit-review-algorithm-preview');
-  editModal.classList.remove('hidden'); 
-  editModal.focus(); 
-};
-const saveEdit = () => {
-  const item = items.find(i => i.id === editingItemId);
-  if (!item) return;
-  const t = editTitleInput.value.trim();
-  if (!t) { showAlert(translations[currentLanguage]['error-empty-title']); return; }
-  item.title = t;
-  item.attachments = [...tempAttachments];
-  
-  const newAlgorithmId = editReviewAlgorithmSelect.value;
-  if (item.algorithmId !== newAlgorithmId) {
+  const openEditModal = (item) => {
+    editingItemId = item.id;
+    editTitleInput.value = item.title;
+    tempAttachments = [...item.attachments];
+    renderAttachmentsPreview(editAttachmentsPreview);
+    editReviewAlgorithmSelect.value = item.algorithmId;
+    updateAlgorithmPreview('edit-review-algorithm-select', 'edit-review-algorithm-preview');
+    editModal.classList.remove('hidden');
+    editModal.focus();
+  };
+  const saveEdit = () => {
+    const item = items.find(i => i.id === editingItemId);
+    if (!item) return;
+    const t = editTitleInput.value.trim();
+    if (!t) {
+      showAlert(translations['fa']['error-empty-title']);
+      return;
+    }
+    item.title = t;
+    item.attachments = [...tempAttachments];
+    const newAlgorithmId = editReviewAlgorithmSelect.value;
+    if (item.algorithmId !== newAlgorithmId) {
       const oldAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
       const newAlgorithm = algorithms.find(a => a.id === newAlgorithmId) || defaultAlgorithms[0];
       const previousIntervals = oldAlgorithm.intervals.join(', ');
       const newIntervals = newAlgorithm.intervals.join(', ');
-      const confirmationText = `${translations[currentLanguage]['confirm-change-algorithm']}\n\n${translations[currentLanguage]['previous-algorithm']} ${previousIntervals}\n${translations[currentLanguage]['new-algorithm']} ${newIntervals}`;
-      
+      const confirmationText = `${translations['fa']['confirm-change-algorithm']}\n\n${translations['fa']['previous-algorithm']} ${previousIntervals}\n${translations['fa']['new-algorithm']} ${newIntervals}`;
       showConfirm(confirmationText).then(result => {
-          if (result) {
-              item.algorithmId = newAlgorithmId;
-              item.level = 0;
-              item.isMastered = false;
-              item.completedInSession = false;
-              item.completionTime = null;
-              const now = new Date();
-              const newSchedule = newAlgorithm.intervals.map(it => {
-                  const d = new Date(now);
-                  if (it === 0) d.setMinutes(d.getMinutes() + 20);
-                  else d.setDate(d.getDate() + it);
-                  return { scheduledFor: d.toISOString(), completed: false };
-              });
-              item.reviewSchedule = newSchedule;
-              item.nextReview = newSchedule[0].scheduledFor;
-              saveToStorage();
-              closeEditModal();
-              renderAll();
-          }
+        if (result) {
+          item.algorithmId = newAlgorithmId;
+          item.level = 0;
+          item.isMastered = false;
+          item.completedInSession = false;
+          item.completionTime = null;
+
+          const now = new Date();
+          const newSchedule = newAlgorithm.intervals.map(it => {
+            const d = new Date(now);
+            if (it === 0) d.setMinutes(d.getMinutes() + 20);
+            else d.setDate(d.getDate() + it);
+
+            return {
+              scheduledFor: d.toISOString(),
+              completed: false
+            };
+          });
+          item.reviewSchedule = newSchedule;
+          item.nextReview = newSchedule[0].scheduledFor;
+          saveToStorage();
+          closeEditModal();
+
+          renderAll();
+        }
       });
-  } else {
-    saveToStorage();
-    closeEditModal();
-    renderAll();
-  }
-};
-const closeEditModal = () => { editModal.classList.add('hidden'); editingItemId = null; tempAttachments = []; editTitleInput.value = '';
-editAttachmentsPreview.innerHTML = ''; };
-const deleteItem = async (id) => { if (!await showConfirm(translations[currentLanguage]['confirm-delete'])) return;
-items = items.filter(i => i.id !== id); saveToStorage(); renderAll(); };
-const deleteSelected = async () => { if (!await showConfirm(translations[currentLanguage]['confirm-delete-selected'])) return; items = items.filter(i => !selectedItems.includes(i.id)); selectedItems = []; toggleMultiSelect(false);
-saveToStorage(); renderAll(); };
-const resetProgress = async (id) => {
-  if (!await showConfirm(translations[currentLanguage]['confirm-reset'])) return;
-  const item = items.find(i => i.id === id);
-  if (!item) return;
-  item.level = 0;
-  item.isMastered = false;
-  item.completedInSession = false;
-  item.completionTime = null;
-  const now = new Date();
-  const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
-  item.reviewSchedule = itemAlgorithm.intervals.map((it) => {
-    const d = new Date(now);
-    if (it === 0) d.setMinutes(d.getMinutes() + 20);
-    else d.setDate(d.getDate() + it);
-    return { scheduledFor: d.toISOString(), completed: false };
-  });
-  item.nextReview = item.reviewSchedule[0].scheduledFor;
-  saveToStorage();
-  renderAll();
-};
-
-const triggerFileUpload = (accept) => { fileUploadInput.accept = accept; fileUploadInput.click(); };
-const handleFileUpload = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 50 * 1024 * 1024) { showAlert(translations[currentLanguage]['error-file-size']); return; }
-  const reader = new FileReader();
-  reader.onload = (ev) => {
-    const type = file.type.split('/')[0];
-    tempAttachments.push({ type, data: ev.target.result, name: file.name });
-    renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
-  };
-  reader.readAsDataURL(file);
-  e.target.value = '';
-};
-const openTextModal = () => { modalTextarea.value = '';
-textModal.classList.remove('hidden'); modalTextarea.focus(); };
-const closeTextModal = () => { textModal.classList.add('hidden'); modalTextarea.value = ''; };
-const saveTextAttachment = () => { const txt = modalTextarea.value.trim();
-if (txt) { tempAttachments.push({ type: 'text', data: txt, name: translations[currentLanguage]['text-note'] }); renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview); } closeTextModal(); };
-const renderAttachmentsPreview = (container) => { container.innerHTML = tempAttachments.map((att, i) => `<div class="preview-item"><span>${att.name}</span><button type="button" class="icon-btn" data-index="${i}" aria-label="${translations[currentLanguage]['remove-attachment']}"><span class="material-icons-outlined">close</span></button></div>`).join(''); };
-const handleAttachmentRemove = (e, container) => { const removeBtn = e.target.closest('button[data-index]'); if (removeBtn) { const i = parseInt(removeBtn.dataset.index, 10);
-if (!isNaN(i)) { tempAttachments.splice(i, 1); renderAttachmentsPreview(container); } } };
-
-// ===== Language/Theme/Font =====
-const applyFont = (font) => { if (font === 'system') font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-document.documentElement.style.setProperty('--font-family', font); localStorage.setItem('fontPreference', font); };
-
-const applyLanguage = (lang) => {
-  currentLanguage = lang;
-  htmlEl.lang = lang;
-  htmlEl.dir = (lang === 'fa' || lang === 'ar') ? 'rtl' : 'ltr';
-
-  // Update all elements with data-i18n attribute
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    if (translations[lang][key]) {
-      el.textContent = translations[lang][key];
+    } else {
+      saveToStorage();
+      closeEditModal();
+      renderAll();
     }
-  });
+  };
+  const closeEditModal = () => {
+    editModal.classList.add('hidden');
+    editingItemId = null;
+    tempAttachments = [];
+    editTitleInput.value = '';
+    editAttachmentsPreview.innerHTML = '';
+  };
+  const deleteItem = async (id) => {
+    if (!await showConfirm(translations['fa']['confirm-delete'])) return;
+    items = items.filter(i => i.id !== id);
+    saveToStorage();
+    renderAll();
+  };
+  const deleteSelected = async () => {
+    if (!await showConfirm(translations['fa']['confirm-delete-selected'])) return;
+    items = items.filter(i => !selectedItems.includes(i.id));
+    selectedItems = [];
+    toggleMultiSelect(false);
+    saveToStorage();
+    renderAll();
+  };
+  const resetProgress = async (id) => {
+    if (!await showConfirm(translations['fa']['confirm-reset'])) return;
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+    item.level = 0;
+    item.isMastered = false;
+    item.completedInSession = false;
+    item.completionTime = null;
+    const now = new Date();
+    const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
+    item.reviewSchedule = itemAlgorithm.intervals.map((it) => {
+      const d = new Date(now);
+      if (it === 0) d.setMinutes(d.getMinutes() + 20);
+      else d.setDate(d.getDate() + it);
+      return {
+        scheduledFor: d.toISOString(),
+        completed: false
+      };
+    });
+    item.nextReview = item.reviewSchedule[0].scheduledFor;
+    saveToStorage();
+    renderAll();
+  };
 
-  // Handle placeholders and tooltips
-  newTitleInput.placeholder = translations[lang]['new-title-placeholder'];
-  modalTextarea.placeholder = translations[lang]['modal-textarea-placeholder'];
-  addImageBox.dataset.tooltip = translations[lang]['add-image-tooltip'];
-  addVideoBox.dataset.tooltip = translations[lang]['add-video-tooltip'];
-  addAudioBox.dataset.tooltip = translations[lang]['add-audio-tooltip'];
-  addTextBox.dataset.tooltip = translations[lang]['add-text-tooltip'];
+  const triggerFileUpload = (accept) => {
+    fileUploadInput.accept = accept;
+    fileUploadInput.click();
+  };
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 50 * 1024 * 1024) {
+      showAlert(translations['fa']['error-file-size']);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const type = file.type.split('/')[0];
+      tempAttachments.push({
+        type,
+        data: ev.target.result,
+        name: file.name
+      });
+      renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+  const openTextModal = () => {
+    modalTextarea.value = '';
+    textModal.classList.remove('hidden');
+    modalTextarea.focus();
+  };
+  const closeTextModal = () => {
+    textModal.classList.add('hidden');
+    modalTextarea.value = '';
+  };
+  const saveTextAttachment = () => {
+    const txt = modalTextarea.value.trim();
+    if (txt) {
+      tempAttachments.push({
+        type: 'text',
+        data: txt,
+        name: translations['fa']['text-note']
+      });
+      renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
+    }
+    closeTextModal();
+  };
+  const renderAttachmentsPreview = (container) => {
+    container.innerHTML = tempAttachments.map((att, i) => `<div class="preview-item"><span>${att.name}</span><button type="button" class="icon-btn" data-index="${i}" aria-label="${translations['fa']['remove-attachment']}"><span class="material-icons-outlined">close</span></button></div>`).join('');
+  };
+  const handleAttachmentRemove = (e, container) => {
+    const removeBtn = e.target.closest('button[data-index]');
+    if (removeBtn) {
+      const i = parseInt(removeBtn.dataset.index, 10);
+      if (!isNaN(i)) {
+        tempAttachments.splice(i, 1);
+        renderAttachmentsPreview(container);
+      }
+    }
+  };
 
-  // Handle specific elements
-  if (sortSelect) {
-    sortSelect.querySelector('option[value="date"]').textContent = translations[lang]['sort-date'];
-    sortSelect.querySelector('option[value="title"]').textContent = translations[lang]['sort-title'];
-    sortSelect.querySelector('option[value="progress"]').textContent = translations[lang]['sort-progress'];
-  }
-  if (sortOrderSelect) {
-    sortOrderSelect.querySelector('option[value="asc"]').textContent = translations[lang]['sort-order-asc'];
-    sortOrderSelect.querySelector('option[value="desc"]').textContent = translations[lang]['sort-order-desc'];
-  }
+  // ===== Language/Theme/Font =====
+  const applyFont = (font) => {
+    if (font === 'system') font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+    document.documentElement.style.setProperty('--font-family', font);
+    localStorage.setItem('fontPreference', font);
+  };
 
-  localStorage.setItem('languagePreference', lang);
-  renderAll();
-};
+  const applyLanguage = (lang) => {
+    currentLanguage = lang;
+    htmlEl.lang = lang;
+    htmlEl.dir = 'rtl';
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (translations['fa'][key]) {
+        el.textContent = translations['fa'][key];
+      }
+    });
+    // Handle placeholders and tooltips
+    newTitleInput.placeholder = translations['fa']['new-title-placeholder'];
+    modalTextarea.placeholder = translations['fa']['modal-textarea-placeholder'];
+    addImageBox.dataset.tooltip = translations['fa']['add-image-tooltip'];
+    addVideoBox.dataset.tooltip = translations['fa']['add-video-tooltip'];
+    addAudioBox.dataset.tooltip = translations['fa']['add-audio-tooltip'];
+    addTextBox.dataset.tooltip = translations['fa']['add-text-tooltip'];
 
-// ===== Algorithm Management =====
-const renderAlgorithmList = () => {
+    // Handle specific elements
+    if (sortSelect) {
+      sortSelect.querySelector('option[value="date"]').textContent = translations['fa']['sort-date'];
+      sortSelect.querySelector('option[value="title"]').textContent = translations['fa']['sort-title'];
+      sortSelect.querySelector('option[value="progress"]').textContent = translations['fa']['sort-progress'];
+    }
+    if (sortOrderSelect) {
+      sortOrderSelect.querySelector('option[value="asc"]').textContent = translations['fa']['sort-order-asc'];
+      sortOrderSelect.querySelector('option[value="desc"]').textContent = translations['fa']['sort-order-desc'];
+    }
+
+    localStorage.setItem('languagePreference', lang);
+    renderAll();
+  };
+
+  // ===== Algorithm Management =====
+  const renderAlgorithmList = () => {
     algorithmList.innerHTML = '';
     algorithms.forEach(algo => {
-        const li = document.createElement('li');
-        li.className = 'algorithm-item';
-        li.innerHTML = `
-            <div class="algorithm-item-info">
-                <h4 class="algorithm-item-name">${algo.name}</h4>
-                <p class="algorithm-item-intervals">${algo.intervals.join(', ')}</p>
-            </div>
-            <div class="algorithm-item-actions">
-                <button class="icon-btn edit-icon-btn" data-id="${algo.id}" aria-label="ویرایش">
-                    <span class="material-icons-outlined">edit</span>
-                </button>
-                <button class="icon-btn delete-icon-btn" data-id="${algo.id}" aria-label="حذف">
-                    <span class="material-icons-outlined">delete</span>
-                </button>
-            </div>
-        `;
-        if (algo.id === 'default') {
-            li.querySelector('.delete-icon-btn').disabled = true;
-            li.querySelector('.delete-icon-btn').style.opacity = 0.5;
-            li.querySelector('.edit-icon-btn').disabled = true;
-            li.querySelector('.edit-icon-btn').style.opacity = 0.5;
-        }
-        algorithmList.appendChild(li);
+      const li = document.createElement('li');
+      li.className = 'algorithm-item';
+      li.innerHTML = `
+          <div class="algorithm-item-info">
+              <h4 class="algorithm-item-name">${algo.name}</h4>
+              <p class="algorithm-item-intervals">${algo.intervals.join(', ')}</p>
+          </div>
+          <div class="algorithm-item-actions">
+              <button class="icon-btn edit-icon-btn" data-id="${algo.id}" aria-label="ویرایش">
+                  <span class="material-icons-outlined">edit</span>
+              </button>
+              <button class="icon-btn delete-icon-btn" data-id="${algo.id}" aria-label="حذف">
+                  <span class="material-icons-outlined">delete</span>
+              </button>
+          </div>
+      `;
+      if (algo.id === 'default') {
+        li.querySelector('.delete-icon-btn').disabled = true;
+        li.querySelector('.delete-icon-btn').style.opacity = 0.5;
+        li.querySelector('.edit-icon-btn').disabled = true;
+        li.querySelector('.edit-icon-btn').style.opacity = 0.5;
+      }
+      algorithmList.appendChild(li);
     });
-};
-
-const openAlgorithmModal = () => {
+  };
+  const openAlgorithmModal = () => {
     renderAlgorithmList();
     reviewAlgorithmModal.classList.remove('hidden');
-};
-
-const closeAlgorithmModal = () => {
+  };
+  const closeAlgorithmModal = () => {
     reviewAlgorithmModal.classList.add('hidden');
-};
-
-const openEditAlgorithmModal = (id = null) => {
+  };
+  const openEditAlgorithmModal = (id = null) => {
     let algo;
     if (id) {
-        algo = algorithms.find(a => a.id === id);
-        editingAlgorithmId = id;
-        algorithmNameInput.value = algo.name;
-        renderIntervalsList(algo.intervals);
-        document.getElementById('edit-algorithm-modal-title').textContent = translations[currentLanguage]['edit-algorithm-modal-title'];
+      algo = algorithms.find(a => a.id === id);
+      editingAlgorithmId = id;
+      algorithmNameInput.value = algo.name;
+      renderIntervalsList(algo.intervals);
+      document.getElementById('edit-algorithm-modal-title').textContent = translations['fa']['edit-algorithm-modal-title'];
     } else {
-        algo = { name: '', intervals: [...defaultIntervals] };
-        editingAlgorithmId = Date.now().toString();
-        algorithmNameInput.value = '';
-        renderIntervalsList(algo.intervals);
-        document.getElementById('edit-algorithm-modal-title').textContent = translations[currentLanguage]['add-algorithm-btn'];
+      algo = {
+        name: '',
+        intervals: [...defaultIntervals]
+      };
+      editingAlgorithmId = Date.now().toString();
+      algorithmNameInput.value = '';
+      renderIntervalsList(algo.intervals);
+      document.getElementById('edit-algorithm-modal-title').textContent = translations['fa']['add-algorithm-btn'];
     }
     editAlgorithmModal.classList.remove('hidden');
     editAlgorithmModal.focus();
-};
-
-const closeEditAlgorithmModal = () => {
+  };
+  const closeEditAlgorithmModal = () => {
     editAlgorithmModal.classList.add('hidden');
     editingAlgorithmId = null;
     algorithmNameInput.value = '';
     algorithmIntervalsList.innerHTML = '';
-};
-
-const renderIntervalsList = (intervals) => {
+  };
+  const renderIntervalsList = (intervals) => {
     algorithmIntervalsList.innerHTML = '';
     intervals.forEach((interval, index) => {
-        const li = document.createElement('li');
-        li.className = 'interval-item';
-        li.draggable = true;
-        li.dataset.index = index;
-        li.innerHTML = `
+      const li = document.createElement('li');
+      li.className = 'interval-item';
+      li.draggable = true;
+      li.dataset.index = index;
+      li.innerHTML = `
             <span class="material-icons-outlined drag-handle">drag_indicator</span>
             <input type="number" class="interval-input" value="${interval}">
             <button type="button" class="icon-btn delete-interval-btn"><span class="material-icons-outlined">delete</span></button>
         `;
-        algorithmIntervalsList.appendChild(li);
+      algorithmIntervalsList.appendChild(li);
     });
-};
+  };
 
-const saveAlgorithm = () => {
+  const saveAlgorithm = () => {
     const name = algorithmNameInput.value.trim();
     if (!name) {
-        showToast(translations[currentLanguage]['algorithm-name-empty'], 'error');
-        return;
+      showToast(translations['fa']['algorithm-name-empty'], 'error');
+      return;
     }
     const intervalInputs = Array.from(algorithmIntervalsList.querySelectorAll('.interval-input'));
     const newIntervals = intervalInputs.map(input => parseInt(input.value, 10)).filter(n => !isNaN(n) && n >= 0);
     if (newIntervals.length === 0) {
-        showToast("فاصله‌ها نمی‌توانند خالی باشند.", 'error');
-        return;
+      showToast("فاصله‌ها نمی‌توانند خالی باشند.", 'error');
+      return;
     }
 
     const newAlgo = {
-        id: editingAlgorithmId,
-        name: name,
-        intervals: newIntervals
+      id: editingAlgorithmId,
+      name: name,
+      intervals: newIntervals
     };
-
     const existingIndex = algorithms.findIndex(a => a.id === editingAlgorithmId);
     if (existingIndex > -1) {
-        algorithms[existingIndex] = newAlgo;
+      algorithms[existingIndex] = newAlgo;
     } else {
-        algorithms.push(newAlgo);
+      algorithms.push(newAlgo);
     }
     saveToStorage();
-    showToast(translations[currentLanguage]['algorithm-save-success'], 'success');
+    showToast(translations['fa']['algorithm-save-success'], 'success');
     closeEditAlgorithmModal();
     renderAlgorithmList();
     renderAlgorithmSelects();
-};
+  };
 
-const deleteAlgorithm = async (id) => {
+  const deleteAlgorithm = async (id) => {
     if (algorithms.length <= 1) {
-        showToast(translations[currentLanguage]['cannot-delete-last-algorithm'], 'error');
-        return;
+      showToast(translations['fa']['cannot-delete-last-algorithm'], 'error');
+      return;
     }
 
-    if (!await showConfirm(translations[currentLanguage]['confirm-delete-algorithm'])) return;
+    if (!await showConfirm(translations['fa']['confirm-delete-algorithm'])) return;
     algorithms = algorithms.filter(a => a.id !== id);
     if (selectedAlgorithmId === id) {
-        selectedAlgorithmId = 'default';
+      selectedAlgorithmId = 'default';
     }
     saveToStorage();
     renderAlgorithmList();
     renderAll();
-    showToast(translations[currentLanguage]['algorithm-delete-success'], 'success');
-};
+    showToast(translations['fa']['algorithm-delete-success'], 'success');
+  };
 
 
-// ===== Events =====
-document.addEventListener('DOMContentLoaded', () => {
-  loadFromLocalStorage();
-  applyTheme(localStorage.getItem('themePreference') || 'light');
-  applyLanguage(localStorage.getItem('languagePreference') || 'fa');
-  applyFont(localStorage.getItem('fontPreference') || 'system');
-  renderAll();
+  // ===== Events =====
+  document.addEventListener('DOMContentLoaded', () => {
+    loadFromLocalStorage();
+    applyTheme(localStorage.getItem('themePreference') || 'light');
+    applyLanguage(localStorage.getItem('languagePreference') || 'fa');
+    applyFont(localStorage.getItem('fontPreference') || 'system');
+    renderAll();
 
-  // Tooltip event listeners
-  document.querySelectorAll('[data-tooltip]').forEach(el => {
-    el.addEventListener('mouseover', (e) => {
-      const tooltip = document.createElement('div');
-      tooltip.className = 'tooltip';
-      tooltip.textContent = e.target.dataset.tooltip;
-      document.body.appendChild(tooltip);
+    // Tooltip event listeners
+    document.querySelectorAll('[data-tooltip]').forEach(el => {
+      el.addEventListener('mouseover', (e) => {
+        const tooltip = document.createElement('div');
+        tooltip.className = 'tooltip';
+        tooltip.textContent = e.target.dataset.tooltip;
+        document.body.appendChild(tooltip);
+      });
+      el.addEventListener('mouseout', () => {
+        const tooltip = document.querySelector('.tooltip');
+        if (tooltip) tooltip.remove();
+      });
     });
-    el.addEventListener('mouseout', () => {
-      const tooltip = document.querySelector('.tooltip');
-      if (tooltip) tooltip.remove();
-    });
-  });
 
-  loginBtn.addEventListener('click', () => showAlert(translations[currentLanguage]['error-login']));
+    loginBtn.addEventListener('click', () => showAlert(translations['fa']['error-login']));
 
-  tabs.forEach(tab => tab.addEventListener('click', () => {
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    headerTitle.textContent = translations[currentLanguage][tab.dataset.tab.replace('-panel', '-title')] || translations[currentLanguage][`${tab.dataset.tab.split('-')[0]}-tab`] || tab.dataset.title;
-    contentPanels.forEach(p => p.classList.remove('active'));
-    document.getElementById(tab.dataset.tab).classList.add('active');
-    if (tab.dataset.tab === 'review-panel') renderTodayList();
-    if (tab.dataset.tab === 'all-items-panel') renderAllItemsList();
-    if (tab.dataset.tab === 'new-item-panel') resetNewItemForm();
-  }));
+    tabs.forEach(tab => tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      headerTitle.textContent = translations['fa'][tab.dataset.tab.replace('-panel', '-title')] || translations['fa'][`${tab.dataset.tab.split('-')[0]}-tab`] || tab.dataset.title;
+      contentPanels.forEach(p => p.classList.remove('active'));
+      document.getElementById(tab.dataset.tab).classList.add('active');
+      if (tab.dataset.tab === 'review-panel') renderTodayList();
+      if (tab.dataset.tab === 'all-items-panel') renderAllItemsList();
+      if (tab.dataset.tab === 'new-item-panel') resetNewItemForm();
+    }));
 
-  themeToggleBtn.addEventListener('click', toggleTheme);
-  saveItemBtn.addEventListener('click', saveItem);
-  // رویداد برای فعال/غیرفعال کردن دکمه ذخیره
-  newTitleInput.addEventListener('input', () => {
+    themeToggleBtn.addEventListener('click', toggleTheme);
+    saveItemBtn.addEventListener('click', saveItem);
+    // رویداد برای فعال/غیرفعال کردن دکمه ذخیره
+    newTitleInput.addEventListener('input', () => {
       saveItemBtn.disabled = newTitleInput.value.trim() === '';
-  });
-  newTitleInput.addEventListener('keydown', e => { 
+    });
+    newTitleInput.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !saveItemBtn.disabled) {
-          saveItem();
-      }
-  });
-  addImageBox.addEventListener('click', () => triggerFileUpload('image/*'));
-  addVideoBox.addEventListener('click', () => triggerFileUpload('video/*'));
-  addAudioBox.addEventListener('click', () => triggerFileUpload('audio/*'));
-  addTextBox.addEventListener('click', openTextModal);
-  fileUploadInput.addEventListener('change', handleFileUpload);
-  saveTextBtn.addEventListener('click', saveTextAttachment);
-  cancelTextBtn.addEventListener('click', closeTextModal);
-  attachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, attachmentsPreview));
-
-  saveEditBtn.addEventListener('click', saveEdit);
-  cancelEditBtn.addEventListener('click', closeEditModal);
-  editAttachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, editAttachmentsPreview));
-  settingsBtn.addEventListener('click', () => {
-    languageSelect.value = localStorage.getItem('languagePreference') || 'fa';
-    themeSelect.value = localStorage.getItem('themePreference') || 'light';
-    fontSelect.value = localStorage.getItem('fontPreference') || 'system';
-    settingsModal.classList.remove('hidden');
-  });
-  
-  // New item dropdown logic
-  if(reviewAlgorithmSelect) {
-    reviewAlgorithmSelect.addEventListener('change', (e) => {
-      const selectedId = e.target.value;
-      if (selectedId === 'new') {
-        openEditAlgorithmModal();
-      } else {
-        selectedAlgorithmId = selectedId;
-        updateAlgorithmPreview('review-algorithm-select', 'review-algorithm-preview');
+        saveItem();
       }
     });
-  }
+    addImageBox.addEventListener('click', () => triggerFileUpload('image/*'));
+    addVideoBox.addEventListener('click', () => triggerFileUpload('video/*'));
+    addAudioBox.addEventListener('click', () => triggerFileUpload('audio/*'));
+    addTextBox.addEventListener('click', openTextModal);
+    fileUploadInput.addEventListener('change', handleFileUpload);
+    saveTextBtn.addEventListener('click', saveTextAttachment);
+    cancelTextBtn.addEventListener('click', closeTextModal);
+    attachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, attachmentsPreview));
 
-  // Edit item dropdown logic
-  if(editReviewAlgorithmSelect) {
-    editReviewAlgorithmSelect.addEventListener('change', (e) => {
+    saveEditBtn.addEventListener('click', saveEdit);
+    cancelEditBtn.addEventListener('click', closeEditModal);
+    editAttachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, editAttachmentsPreview));
+    settingsBtn.addEventListener('click', () => {
+      languageSelect.value = localStorage.getItem('languagePreference') || 'fa';
+      themeSelect.value = localStorage.getItem('themePreference') || 'light';
+      fontSelect.value = localStorage.getItem('fontPreference') || 'system';
+      settingsModal.classList.remove('hidden');
+    });
+    // New item dropdown logic
+    if (reviewAlgorithmSelect) {
+      reviewAlgorithmSelect.addEventListener('change', (e) => {
         const selectedId = e.target.value;
         if (selectedId === 'new') {
-            openEditAlgorithmModal();
+          openEditAlgorithmModal();
+        } else {
+          selectedAlgorithmId = selectedId;
+          updateAlgorithmPreview('review-algorithm-select', 'review-algorithm-preview');
+        }
+      });
+    }
+
+    // Edit item dropdown logic
+    if (editReviewAlgorithmSelect) {
+      editReviewAlgorithmSelect.addEventListener('change', (e) => {
+        const selectedId = e.target.value;
+        if (selectedId === 'new') {
+          openEditAlgorithmModal();
         }
         updateAlgorithmPreview('edit-review-algorithm-select', 'edit-review-algorithm-preview');
-    });
-  }
+      });
+    }
 
-  if(openAlgorithmModalBtn){
-    openAlgorithmModalBtn.addEventListener('click', () => {
+    if (openAlgorithmModalBtn) {
+      openAlgorithmModalBtn.addEventListener('click', () => {
         settingsModal.classList.add('hidden');
         openAlgorithmModal();
-    });
-  }
-  
-  // Algorithm Modal Events
-  if(addAlgorithmBtn) {
-    addAlgorithmBtn.addEventListener('click', () => openEditAlgorithmModal());
-  }
+      });
+    }
 
-  if(algorithmList) {
-    algorithmList.addEventListener('click', (e) => {
+    // Fix: Back button now correctly shows settings modal
+    if (backToSettingsBtn) {
+      backToSettingsBtn.addEventListener('click', () => {
+        reviewAlgorithmModal.classList.add('hidden');
+        settingsModal.classList.remove('hidden');
+      });
+    }
+
+    // Algorithm Modal Events
+    if (addAlgorithmBtn) {
+      addAlgorithmBtn.addEventListener('click', () => openEditAlgorithmModal());
+    }
+
+    if (algorithmList) {
+      algorithmList.addEventListener('click', (e) => {
         const editBtn = e.target.closest('.edit-icon-btn');
         const deleteBtn = e.target.closest('.delete-icon-btn');
         if (editBtn) {
-            openEditAlgorithmModal(editBtn.dataset.id);
+          openEditAlgorithmModal(editBtn.dataset.id);
         } else if (deleteBtn) {
-            deleteAlgorithm(deleteBtn.dataset.id);
+          deleteAlgorithm(deleteBtn.dataset.id);
         }
-    });
-  }
+      });
+    }
 
-  if(addIntervalBtn) {
-    addIntervalBtn.addEventListener('click', () => {
+    if (addIntervalBtn) {
+      addIntervalBtn.addEventListener('click', () => {
         const li = document.createElement('li');
         li.className = 'interval-item';
         li.draggable = true;
@@ -870,140 +972,190 @@ document.addEventListener('DOMContentLoaded', () => {
             <button type="button" class="icon-btn delete-interval-btn"><span class="material-icons-outlined">delete</span></button>
         `;
         algorithmIntervalsList.appendChild(li);
-    });
-  }
+      });
+    }
 
-  if(algorithmIntervalsList) {
-    // Add event listener for deleting interval items
-    algorithmIntervalsList.addEventListener('click', (e) => {
-      if (e.target.closest('.delete-interval-btn')) {
+    if (algorithmIntervalsList) {
+      // Add event listener for deleting interval items
+      algorithmIntervalsList.addEventListener('click', (e) => {
+        if (e.target.closest('.delete-interval-btn')) {
           e.target.closest('.interval-item').remove();
+        }
+      });
+      // Drag and Drop Logic
+      let dragSrcEl;
+      algorithmIntervalsList.addEventListener('dragstart', function(e) {
+        dragSrcEl = e.target;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', e.target.innerHTML);
+        e.target.classList.add('drag-active');
+      });
+      algorithmIntervalsList.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const target = e.target.closest('.interval-item');
+        if (target && dragSrcEl !== target) {
+          target.classList.add('drag-over');
+        }
+      });
+      algorithmIntervalsList.addEventListener('dragleave', function(e) {
+        e.target.classList.remove('drag-over');
+      });
+      algorithmIntervalsList.addEventListener('drop', function(e) {
+        e.stopPropagation();
+        const target = e.target.closest('.interval-item');
+        if (dragSrcEl !== target) {
+          const srcIndex = [...algorithmIntervalsList.children].indexOf(dragSrcEl);
+          const targetIndex = [...algorithmIntervalsList.children].indexOf(target);
+          if (srcIndex > targetIndex) {
+            algorithmIntervalsList.insertBefore(dragSrcEl, target);
+          } else {
+            algorithmIntervalsList.insertBefore(dragSrcEl, target.nextSibling);
+          }
+        }
+        e.target.classList.remove('drag-over');
+      });
+      algorithmIntervalsList.addEventListener('dragend', function(e) {
+        e.target.classList.remove('drag-active');
+        const items = this.querySelectorAll('.interval-item');
+        items.forEach((item, index) => item.dataset.index = index);
+      });
+    }
+
+    if (saveAlgorithmBtn) {
+      saveAlgorithmBtn.addEventListener('click', saveAlgorithm);
+    }
+
+    if (cancelAlgorithmBtn) {
+      cancelAlgorithmBtn.addEventListener('click', closeEditAlgorithmModal);
+    }
+
+    saveSettingsBtn.addEventListener('click', () => {
+      applyLanguage(languageSelect.value);
+      applyTheme(themeSelect.value);
+      applyFont(fontSelect.value);
+      saveToStorage();
+      settingsModal.classList.add('hidden');
+      showToast(translations['fa']['settings-save-success'], 'success');
+    });
+    cancelSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
+
+    const allList = document.getElementById('all-items-list');
+    allList.addEventListener('click', (e) => {
+      const target = e.target;
+      const btn = target.closest('button');
+      const checkbox = target.closest('input[type="checkbox"]');
+      const revHeader = target.closest('.review-collapsible-header');
+      if (revHeader) {
+        const parent = revHeader.closest('.review-progress-section');
+        const content = parent.querySelector('.collapsible-content');
+        revHeader.classList.toggle('collapsed');
+        content.classList.toggle('hidden');
+        return;
+      }
+      if (btn || checkbox) {
+        if (btn && btn.classList.contains('edit-icon-btn')) {
+          const it = items.find(i => i.id === Number(btn.dataset.id));
+          if (it) openEditModal(it);
+        } else if (btn && btn.classList.contains('delete-icon-btn')) {
+          deleteItem(Number(btn.dataset.id));
+        } else if (btn && btn.classList.contains('reset-btn')) {
+          resetProgress(Number(btn.dataset.id));
+        }
+        return;
+      }
+      const mainRow = e.target.closest('.item-main-row');
+      if (mainRow) {
+        mainRow.closest('.all-items-item').classList.toggle('expanded');
       }
     });
 
-    // Drag and Drop Logic
-    let dragSrcEl;
-    algorithmIntervalsList.addEventListener('dragstart', function (e) {
-      dragSrcEl = e.target;
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', e.target.innerHTML);
-      e.target.classList.add('drag-active');
+    let touchStartTime;
+    allList.addEventListener('touchstart', (e) => {
+      if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) touchStartTime = Date.now();
     });
-
-    algorithmIntervalsList.addEventListener('dragover', function (e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      const target = e.target.closest('.interval-item');
-      if (target && dragSrcEl !== target) {
-        target.classList.add('drag-over');
-      }
-    });
-
-    algorithmIntervalsList.addEventListener('dragleave', function (e) {
-      e.target.classList.remove('drag-over');
-    });
-
-    algorithmIntervalsList.addEventListener('drop', function (e) {
-      e.stopPropagation();
-      const target = e.target.closest('.interval-item');
-      if (dragSrcEl !== target) {
-        const srcIndex = [...algorithmIntervalsList.children].indexOf(dragSrcEl);
-        const targetIndex = [...algorithmIntervalsList.children].indexOf(target);
-        if (srcIndex > targetIndex) {
-          algorithmIntervalsList.insertBefore(dragSrcEl, target);
-        } else {
-          algorithmIntervalsList.insertBefore(dragSrcEl, target.nextSibling);
+    allList.addEventListener('touchend', (e) => {
+      if (Date.now() - touchStartTime > 500) {
+        if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) {
+          const li = e.target.closest('.all-items-item');
+          if (li) {
+            const cb = li.querySelector('.checkbox');
+            if (cb) {
+              if (!multiSelectMode) toggleMultiSelect(true);
+              cb.checked = !cb.checked;
+              cb.dispatchEvent(new Event('change'));
+            }
+          }
         }
       }
-      e.target.classList.remove('drag-over');
     });
-
-    algorithmIntervalsList.addEventListener('dragend', function (e) {
-      e.target.classList.remove('drag-active');
-      const items = this.querySelectorAll('.interval-item');
-      items.forEach((item, index) => item.dataset.index = index);
-    });
-  }
-
-  if(saveAlgorithmBtn) {
-    saveAlgorithmBtn.addEventListener('click', saveAlgorithm);
-  }
-
-  if(cancelAlgorithmBtn) {
-    cancelAlgorithmBtn.addEventListener('click', closeEditAlgorithmModal);
-  }
-
-  saveSettingsBtn.addEventListener('click', () => {
-    applyLanguage(languageSelect.value);
-    applyTheme(themeSelect.value);
-    applyFont(fontSelect.value);
-    saveToStorage();
-    settingsModal.classList.add('hidden');
-    showToast(translations[currentLanguage]['settings-save-success'], 'success');
-  });
-  cancelSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
-
-  const allList = document.getElementById('all-items-list');
-  allList.addEventListener('click', (e) => {
-    const target = e.target;
-    const btn = target.closest('button');
-    const checkbox = target.closest('input[type="checkbox"]');
-    const revHeader = target.closest('.review-collapsible-header');
-    if (revHeader) { const parent = revHeader.closest('.review-progress-section'); const content = parent.querySelector('.collapsible-content'); revHeader.classList.toggle('collapsed'); content.classList.toggle('hidden'); return; }
-    if (btn || checkbox) {
-      if (btn && btn.classList.contains('edit-icon-btn')) { const it = items.find(i => i.id === Number(btn.dataset.id)); if (it) openEditModal(it); }
-      else if (btn && btn.classList.contains('delete-icon-btn')) { deleteItem(Number(btn.dataset.id)); }
-      else if (btn && btn.classList.contains('reset-btn')) { resetProgress(Number(btn.dataset.id)); }
-      return;
-    }
-    const mainRow = e.target.closest('.item-main-row');
-    if (mainRow) { mainRow.closest('.all-items-item').classList.toggle('expanded'); }
-  });
-
-  let touchStartTime;
-  allList.addEventListener('touchstart', (e) => { if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) touchStartTime = Date.now(); });
-  allList.addEventListener('touchend', (e) => {
-    if (Date.now() - touchStartTime > 500) {
-      if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) {
-        const li = e.target.closest('.all-items-item');
-        if (li) { const cb = li.querySelector('.checkbox'); if (cb) { if (!multiSelectMode) toggleMultiSelect(true); cb.checked = !cb.checked; cb.dispatchEvent(new Event('change')); } }
+    allList.addEventListener('change', (e) => {
+      if (e.target.classList.contains('checkbox')) {
+        const id = Number(e.target.dataset.id);
+        if (e.target.checked) selectedItems.push(id);
+        else selectedItems = selectedItems.filter(x => x !== id);
       }
-    }
-  });
-  allList.addEventListener('change', (e) => { if (e.target.classList.contains('checkbox')) { const id = Number(e.target.dataset.id); if (e.target.checked) selectedItems.push(id); else selectedItems = selectedItems.filter(x => x !== id); } multiSelectActions.classList.toggle('hidden', selectedItems.length === 0 && !multiSelectMode); });
-  selectAllBtn.addEventListener('click', () => { selectedItems = []; document.querySelectorAll('#all-items-list .checkbox').forEach(cb => { cb.checked = true; selectedItems.push(Number(cb.dataset.id)); }); multiSelectActions.classList.remove('hidden'); });
-  deleteSelectedBtn.addEventListener('click', deleteSelected);
-  sortSelect.addEventListener('change', renderAllItemsList);
-  sortOrderSelect.addEventListener('change', e => { currentSortOrder = e.target.value; renderAllItemsList(); });
-  reviewPanel.addEventListener('click', (e) => {
-    const header = e.target.closest('.collapsible-header');
-    if (header) { header.classList.toggle('collapsed'); header.nextElementSibling.classList.toggle('hidden'); }
-    const mainRow = e.target.closest('.item-main-row');
-    const doneBtn = e.target.closest('.done-btn');
-    if (mainRow && !doneBtn) { mainRow.closest('.today-list-item').classList.toggle('expanded'); }
-    if (doneBtn) {
-      const id = Number(doneBtn.dataset.id);
-      const item = items.find(i => i.id === id);
-      if (!item) return;
-      item.completedInSession = true;
-      item.completionTime = new Date().toISOString();
-      const parentLi = doneBtn.closest('.today-list-item');
-      if (parentLi) { parentLi.style.opacity = '0'; }
-      setTimeout(() => {
-        item.reviewSchedule[item.level].completed = true;
-        item.level++;
-        if (item.level >= item.reviewSchedule.length) { item.isMastered = true; item.nextReview = null; } else { item.nextReview = item.reviewSchedule[item.level].scheduledFor; }
-        saveToStorage();
-        renderAll();
-      }, 300);
-    }
-  });
-});
+      multiSelectActions.classList.toggle('hidden', selectedItems.length === 0 && !multiSelectMode);
+    });
+    selectAllBtn.addEventListener('click', () => {
+      selectedItems = [];
+      document.querySelectorAll('#all-items-list .checkbox').forEach(cb => {
+        cb.checked = true;
+        selectedItems.push(Number(cb.dataset.id));
+      });
+      multiSelectActions.classList.remove('hidden');
+    });
+    deleteSelectedBtn.addEventListener('click', deleteSelected);
+    sortSelect.addEventListener('change', renderAllItemsList);
+    sortOrderSelect.addEventListener('change', e => {
+      currentSortOrder = e.target.value;
+      renderAllItemsList();
+    });
+    reviewPanel.addEventListener('click', (e) => {
+      const header = e.target.closest('.collapsible-header');
+      if (header) {
+        header.classList.toggle('collapsed');
+        header.nextElementSibling.classList.toggle('hidden');
+      }
+      const mainRow = e.target.closest('.item-main-row');
+      const doneBtn = e.target.closest('.done-btn');
+      if (mainRow && !doneBtn) {
+        mainRow.closest('.today-list-item').classList.toggle('expanded');
+      }
+      if (doneBtn) {
+        const id = Number(doneBtn.dataset.id);
+        const item = items.find(i => i.id === id);
+        if (!item) return;
+        item.completedInSession = true;
+        item.completionTime = new Date().toISOString();
 
-const toggleMultiSelect = (enable) => {
-  multiSelectMode = enable;
-  selectedItems = [];
-  document.querySelectorAll('.all-items-item .checkbox').forEach(cb => { cb.checked = false; cb.parentElement.classList.toggle('multi-select-mode', enable); });
-  multiSelectActions.classList.toggle('hidden', !enable);
-  renderAllItemsList();
-};
+        const parentLi = doneBtn.closest('.today-list-item');
+        if (parentLi) {
+          parentLi.style.opacity = '0';
+        }
+        setTimeout(() => {
+          item.reviewSchedule[item.level].completed = true;
+          item.level++;
+          if (item.level >= item.reviewSchedule.length) {
+            item.isMastered = true;
+            item.nextReview = null;
+          } else {
+            item.nextReview = item.reviewSchedule[item.level].scheduledFor;
+          }
+          saveToStorage();
+          renderAll();
+        }, 300);
+      }
+    });
+  });
+  const toggleMultiSelect = (enable) => {
+    multiSelectMode = enable;
+    selectedItems = [];
+    document.querySelectorAll('.all-items-item .checkbox').forEach(cb => {
+      cb.checked = false;
+      cb.parentElement.classList.toggle('multi-select-mode', enable);
+    });
+    multiSelectActions.classList.toggle('hidden', !enable);
+    renderAllItemsList();
+  };
+})();
