@@ -17,7 +17,7 @@
 
   --text-color-primary: #212121;
   --text-color-secondary: #757575;
-  --text-color-light: #BDBDBD;
+  --text-color-light: #9E9E9E; /* رنگ تیره‌تر برای کنتراست بهتر */
 
   --input-bg-color: #F5F5F5;
   --input-border-color: #E0E0E0;
@@ -26,7 +26,6 @@
   --progress-red-color: #EF5350;
   --progress-yellow-color: #FFCA28;
   --progress-green-color: #66BB6A;
-
   --review-schedule-box-bg: #FAFAFA;
   --review-schedule-item-bg-pending: #F5F5F5;
   --review-schedule-item-bg-completed: #E8F5E9;
@@ -36,7 +35,6 @@
   --schedule-date-color-pending: var(--text-color-secondary);
   --schedule-date-color-completed: #66BB6A;
   --schedule-tick-color: #4CAF50;
-
   /* اضافه‌های مهم */
   --modal-bg-color: var(--card-background);
   --note-bg-color: var(--light-grey);
@@ -65,7 +63,7 @@
   --border-color: #4A4A4A;
   --text-color-primary: #E0E0E0;
   --text-color-secondary: #B0B0B0;
-  --text-color-light: #757575;
+  --text-color-light: #9E9E9E;
   --input-bg-color: #212121;
   --input-border-color: #5A5A5A;
   --button-text-color: #212121;
@@ -73,7 +71,6 @@
   --progress-red-color: #FF8A80;
   --progress-yellow-color: #FFFF8D;
   --progress-green-color: #B9F6CA;
-
   --review-schedule-box-bg: #212121;
   --review-schedule-item-bg-pending: #2C2C2C;
   --review-schedule-item-bg-completed: #2E3D30;
@@ -222,6 +219,14 @@ main {
 
 .main-btn:hover {
   transform: translateY(-2px);
+}
+
+.main-btn:disabled {
+    background-color: var(--light-grey);
+    color: var(--text-color-light);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
 }
 
 .secondary-btn {
@@ -687,83 +692,59 @@ main {
   text-align: left;
 }
 
-/* === UI tidy patch for "افزودن عنوان جدید" === */
+/* === استایل‌های اصلاح‌شده برای "افزودن عنوان جدید" === */
 #new-item-panel .form-layout {
   max-width: 760px;
   margin: 12px auto 24px auto;
   background: var(--card-background);
   border: 1px solid var(--border-color);
   border-radius: 14px;
-  padding: 16px 16px 20px;
+  padding: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-}
-
-#new-item-panel #new-item-title {
-  margin: 0 0 16px;
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text-color-primary);
-  text-align: right;
-}
-
-#new-item-panel .form-label {
-  display: block;
-  margin: 12px 0 6px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-color-secondary);
 }
 
 #newTitleInput {
   width: 100%;
   box-sizing: border-box;
-  padding: 10px 12px;
+  padding: 12px 15px;
   border: 1px solid var(--input-border-color);
   background: var(--input-bg-color);
   color: var(--text-color-primary);
   border-radius: 10px;
   outline: none;
   transition: box-shadow .2s, border-color .2s, background-color .2s;
-}
-
-#newTitleInput {
   font-size: 16px;
   font-weight: 700;
+  margin-bottom: 15px; /* فاصله از نوار پیوست‌ها */
 }
+
+#newTitleInput::placeholder {
+    color: var(--text-color-light);
+    font-weight: 400;
+}
+
 
 #newTitleInput:focus {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 33, 150, 243), .15);
 }
 
-#new-item-panel .attachment-label {
-  margin: 14px 0 8px;
-  color: var(--text-color-secondary);
-}
-
+/* استایل جدید برای نوار ابزار پیوست‌ها */
 #new-item-panel .attachment-options {
   display: flex;
   gap: 10px;
   align-items: center;
-  padding: 12px;
-  border: 2px dashed var(--border-color);
+  padding: 10px;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   background: var(--app-background);
   transition: background-color .2s, border-color .2s;
 }
 
-#new-item-panel .attachment-options:hover {
-  background: var(--light-grey);
-}
-
-#new-item-panel .attachment-options.dragging {
-  border-color: var(--primary-color);
-  background: rgba(var(--primary-rgb, 76, 175, 80), .06);
-}
 
 #new-item-panel .option-box {
-  width: 44px;
-  height: 44px;
+  flex: 1; /* تقسیم مساوی فضا */
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -782,12 +763,12 @@ main {
 }
 
 #new-item-panel .option-box .material-icons-outlined {
-  font-size: 22px;
+  font-size: 24px;
   color: var(--text-color-secondary);
 }
 
 #attachments-preview, #edit-attachments-preview {
-  margin-top: 10px;
+  margin-top: 15px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 10px;
@@ -805,14 +786,14 @@ main {
 }
 
 #new-item-panel #saveItemBtn {
-  margin-top: 18px;
-  height: 46px;
+  margin-top: 20px;
+  height: 48px;
   font-size: 16px;
   border-radius: 12px;
   box-shadow: 0 6px 16px rgba(var(--primary-rgb, 76, 175, 80), .22);
 }
 
-#new-item-panel #saveItemBtn:hover {
+#new-item-panel #saveItemBtn:hover:not(:disabled) {
   transform: translateY(-1px);
 }
 
@@ -839,77 +820,10 @@ main {
 #custom-modal.alert-mode #custom-modal-cancel-btn {
   display: none;
 }
-/* استایل برای قرارگیری کادر عنوان و دکمه در یک ردیف */
-.title-input-wrapper {
-  position: relative; /* برای موقعیت‌دهی منوی پاپ‌آپ */
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
-/* کادر عنوان حالا فضای باقی‌مانده را پر می‌کند */
-#newTitleInput {
-  flex-grow: 1;
-  width: auto; /* حذف عرض ۱۰۰٪ قبلی */
-}
-
-/* استایل دکمه + جدید */
-.add-attachment-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0; /* جلوگیری از کوچک شدن دکمه */
-  background-color: var(--primary-color);
-  color: var(--button-text-color);
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: var(--element-transition);
-  box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
-}
-
-.add-attachment-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(var(--primary-rgb), 0.3);
-}
-
-.add-attachment-btn .material-icons-outlined {
-  font-size: 28px;
-}
-
-/* استایل منوی پاپ‌آپ پیوست‌ها */
+/* حذف استایل‌های مربوط به پاپ‌آپ و دکمه + */
+.title-input-wrapper,
+.add-attachment-btn,
 .attachment-popup {
-  position: absolute;
-  left: 0;
-  top: calc(100% + 8px); /* ۸ پیکسل پایین‌تر از دکمه */
-  z-index: 50;
-  background-color: var(--card-background);
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  padding: 8px;
-  animation: fadeIn 0.2s ease-out;
-}
-
-/* انیمیشن ظاهر شدن منو */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* نگهدارنده آیکن‌ها در منو */
-.attachment-popup .attachment-options {
-  display: flex;
-  gap: 8px;
-  padding: 0;
-  border: none;
-  background: none;
+    display: none;
 }
