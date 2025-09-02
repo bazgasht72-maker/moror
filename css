@@ -8,6 +8,8 @@
   --accent-rgb: 33, 150, 243;
   --warning-rgb: 255, 193, 7;
   --danger-rgb: 244, 67, 54;
+  --danger-light-color: #FFCDD2; /* قرمز ملایم برای دکمه انصراف */
+  --success-light-color: #E8F5E9; /* سبز ملایم برای toast */
 
   --background-color: #F7F7F7;
   --app-background: #FFFFFF;
@@ -203,18 +205,21 @@ main {
 }
 
 .main-btn {
-  width: 100%;
   padding: 12px;
   background: var(--primary-color);
   color: var(--button-text-color);
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   margin-top: 15px;
   transition: var(--element-transition);
   box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .main-btn:hover {
@@ -230,13 +235,17 @@ main {
 }
 
 .secondary-btn {
-  padding: 10px 15px;
-  background: var(--light-grey);
-  color: var(--text-color-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
+  padding: 12px 15px;
+  background: transparent;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+  border-radius: 15px;
   cursor: pointer;
   transition: var(--element-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .warning-btn {
@@ -244,7 +253,7 @@ main {
   background: var(--danger-color);
   color: var(--button-text-color);
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   font-size: 14px;
   cursor: pointer;
   transition: var(--element-transition);
@@ -558,7 +567,7 @@ main {
   background: #FFF8E1;
   color: #FFAB00;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
@@ -590,10 +599,10 @@ main {
 .modal-content {
   background: var(--modal-bg-color);
   padding: 25px;
-  border-radius: 15px;
+  border-radius: 20px;
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   transform: translateY(20px) scale(.95);
   opacity: 0;
   transition: var(--element-transition);
@@ -620,7 +629,7 @@ main {
   box-sizing: border-box;
   padding: 12px;
   margin-bottom: 15px;
-  border-radius: 8px;
+  border-radius: 15px;
   border: 1px solid var(--input-border-color);
   font-size: 16px;
   min-height: 150px;
@@ -629,10 +638,29 @@ main {
   color: var(--text-color-primary);
 }
 
+.modal-content select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--input-border-color);
+  border-radius: 15px;
+  background: var(--input-bg-color);
+  color: var(--text-color-primary);
+  font-size: 16px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23757575" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+  background-repeat: no-repeat;
+  background-position: left 10px center;
+  cursor: pointer;
+  transition: var(--element-transition);
+}
+
 .modal-actions {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .overall-progress-bar-container {
@@ -698,7 +726,7 @@ main {
   margin: 12px auto 24px auto;
   background: var(--card-background);
   border: 1px solid var(--border-color);
-  border-radius: 14px;
+  border-radius: 20px;
   padding: 20px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
 }
@@ -710,7 +738,7 @@ main {
   border: 1px solid var(--input-border-color);
   background: var(--input-bg-color);
   color: var(--text-color-primary);
-  border-radius: 10px;
+  border-radius: 15px;
   outline: none;
   transition: box-shadow .2s, border-color .2s, background-color .2s;
   font-size: 16px;
@@ -736,21 +764,22 @@ main {
   align-items: center;
   padding: 10px;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 15px;
   background: var(--app-background);
   transition: background-color .2s, border-color .2s;
 }
 
 
 #new-item-panel .option-box {
-  flex: 1; /* تقسیم مساوی فضا */
+  flex: 1;
+  /* تقسیم مساوی فضا */
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid var(--border-color);
   background: var(--card-background);
-  border-radius: 10px;
+  border-radius: 15px;
   cursor: pointer;
   transition: transform .12s, box-shadow .2s, background-color .2s, border-color .2s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
@@ -780,7 +809,7 @@ main {
   justify-content: space-between;
   background: var(--app-background);
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 8px 10px;
   font-size: 13px;
 }
@@ -789,7 +818,7 @@ main {
   margin-top: 20px;
   height: 48px;
   font-size: 16px;
-  border-radius: 12px;
+  border-radius: 15px;
   box-shadow: 0 6px 16px rgba(var(--primary-rgb, 76, 175, 80), .22);
 }
 
@@ -809,12 +838,10 @@ main {
   margin: 15px 0 25px;
 }
 
-#custom-modal-actions .main-btn {
-  min-width: 100px;
-}
-
+#custom-modal-actions .main-btn,
 #custom-modal-actions .secondary-btn {
-  min-width: 100px;
+  padding: 12px 15px;
+  font-size: 16px;
 }
 
 #custom-modal.alert-mode #custom-modal-cancel-btn {
@@ -826,4 +853,203 @@ main {
 .add-attachment-btn,
 .attachment-popup {
     display: none;
+}
+
+/* Tooltip Style */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--text-color-primary);
+  color: var(--app-background);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 20;
+}
+
+[data-tooltip]::after {
+  content: '';
+  position: absolute;
+  bottom: calc(100% - 2px);
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background-color: var(--text-color-primary);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 20;
+}
+
+/* Style for settings modal icons */
+.settings-section label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color-primary);
+}
+
+.settings-section label .material-icons-outlined {
+  color: var(--primary-color);
+  font-size: 20px;
+}
+
+/* New: Rounded borders for select elements */
+.modal-content select {
+  border-radius: 15px;
+}
+
+/* NEW: Styles for improved spacing and button sizing */
+.settings-section {
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-section label {
+  margin-bottom: 8px;
+}
+
+.modal-content select {
+  box-sizing: border-box;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.main-btn {
+  flex-grow: 2; /* 2/3 از فضا را می‌گیرد */
+  width: auto;
+}
+
+.main-btn:hover {
+  transform: translateY(-2px);
+}
+
+.secondary-btn {
+  flex-grow: 1; /* 1/3 از فضا را می‌گیرد */
+  width: auto;
+  background: var(--danger-color); /* پر کردن دکمه با قرمز */
+  color: var(--button-text-color); /* رنگ متن سفید */
+  border: none; /* حذف حاشیه */
+  transition: var(--element-transition);
+}
+
+.secondary-btn:hover {
+  transform: translateY(-2px); /* اضافه کردن افکت هاور */
+}
+
+.review-intervals-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-intervals-container input {
+  flex-grow: 1;
+  padding: 12px;
+  border-radius: 15px;
+  border: 1px solid var(--input-border-color);
+  background: var(--input-bg-color);
+  color: var(--text-color-primary);
+}
+
+.review-intervals-container .secondary-btn {
+  flex-grow: 0;
+  min-width: unset;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+/* New: Styles for Settings Modal Header */
+.modal-header-with-separator {
+  margin-bottom: 20px;
+}
+
+.modal-header-with-separator h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-color-primary);
+  margin-bottom: 10px;
+}
+
+.modal-header-with-separator .material-icons-outlined {
+  color: var(--primary-color);
+  font-size: 28px;
+}
+
+.header-separator {
+  height: 1px;
+  background-color: var(--border-color);
+  width: 100%;
+}
+
+/* New: Styles for Toast Messages */
+.toast-message-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast-message {
+  padding: 15px 25px;
+  border-radius: 15px;
+  font-weight: bold;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  min-width: 250px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.toast-message.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-message.success {
+  background-color: var(--success-light-color);
+  color: var(--success-color);
+}
+
+.toast-message.error {
+  background-color: var(--danger-light-color);
+  color: var(--danger-color);
 }
