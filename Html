@@ -1,3 +1,8 @@
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.0/dist/font-face.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+    <link rel="stylesheet" href="css/style.css">
+</head>
 <div class="app-container" dir="rtl" data-theme="light">
   <header>
     <h1 id="header-title">مرور امروز</h1>
@@ -46,8 +51,7 @@
 
     <div id="new-item-panel" class="content-panel">
         <div id="newItemForm" class="form-layout">
-            <input type="text" id="newTitleInput" placeholder="عنوان را 
-وارد کنید...">
+            <input type="text" id="newTitleInput" placeholder="عنوان را وارد کنید...">
             <div class="settings-section">
                 <label id="review-algorithm-select-label" for="review-algorithm-select"><span class="material-icons-outlined">alarm</span> انتخاب الگوریتم مرور:</label>
                 <div class="review-algorithm-select-container">
@@ -59,69 +63,42 @@
                 <div class="option-box" id="add-image-box" data-tooltip="اضافه کردن عکس"><span class="material-icons-outlined">image</span></div>
                 <div class="option-box" id="add-video-box" data-tooltip="اضافه کردن فیلم"><span class="material-icons-outlined">videocam</span></div>
                 <div class="option-box" id="add-audio-box" data-tooltip="اضافه کردن صوت"><span class="material-icons-outlined">audiotrack</span></div>
-                <div class="option-box" id="add-text-box" data-tooltip="اضافه کردن 
-یادداشت متنی"><span class="material-icons-outlined">notes</span></div>
+                <div class="option-box" id="add-text-box" data-tooltip="اضافه کردن یادداشت متنی"><span class="material-icons-outlined">notes</span></div>
             </div>
             <input type="file" id="file-upload-input" class="hidden" aria-hidden="true">
             <div id="attachments-preview"></div>
-            <button id="saveItemBtn" class="main-btn" type="button" aria-label="ذخیره عنوان" disabled>ذخیره 
-عنوان</button>
+            <button id="saveItemBtn" class="main-btn" type="button" aria-label="ذخیره عنوان" disabled>ذخیره عنوان</button>
         </div>
     </div>
 
 
     <div id="all-items-panel" class="content-panel">
-      <div class="panel-controls">
-        <label for="sort-select" id="sort-by" class="form-label">مرتب‌سازی بر 
-اساس:</label>
-        <select id="sort-select">
-          <option value="date" id="sort-date">تاریخ</option>
-          <option value="title" id="sort-title">عنوان</option>
-          <option value="progress" id="sort-progress">پیشرفت</option>
-        </select>
-        <label for="sort-order-select" id="sort-order" class="form-label">ترتیب:</label>
-        <select id="sort-order-select">
-          <option value="desc" id="sort-order-desc">نزولی</option>
-          <option value="asc" id="sort-order-asc">صعودی</option>
-       </select>
-      </div>
-      <div class="all-items-header">
-        <div id="header-stats-total">کل عناوین: <span id="total-count">0</span></div>
-        <div id="header-stats-mastered">پایان یافته: <span id="mastered-count">0</span></div>
-      </div>
-      <ul id="all-items-list" class="all-items-list"></ul>
-      <div id="multi-select-actions" class="hidden">
-        <button id="select-all-btn" class="secondary-btn" aria-label="انتخاب همه">انتخاب همه</button>
-        <button id="delete-selected-btn" class="warning-btn" aria-label="حذف انتخاب‌شده‌ها">حذف انتخاب‌شده‌ها</button>
-      </div>
+        <div class="panel-controls">
+            <label for="sort-select" id="sort-by" class="form-label">مرتب‌سازی بر اساس:</label>
+            <select id="sort-select">
+                <option value="date" id="sort-date">تاریخ</option>
+                <option value="title" id="sort-title">عنوان</option>
+                <option value="progress" id="sort-progress">پیشرفت</option>
+            </select>
+            <label for="sort-order-select" id="sort-order" class="form-label">ترتیب:</label>
+            <select id="sort-order-select">
+                <option value="desc" id="sort-order-desc">نزولی</option>
+                <option value="asc" id="sort-order-asc">صعودی</option>
+            </select>
+        </div>
+        <div class="all-items-header">
+            <div id="header-stats-total">کل عناوین: <span id="total-count">0</span></div>
+            <div id="header-stats-mastered">پایان یافته: <span id="mastered-count">0</span></div>
+        </div>
+        <ul id="all-items-list" class="all-items-list"></ul>
+        <div id="multi-select-actions" class="hidden">
+            <button id="select-all-btn" class="secondary-btn" aria-label="انتخاب همه">انتخاب همه</button>
+            <button id="delete-selected-btn" class="warning-btn" aria-label="حذف انتخاب‌شده‌ها">حذف انتخاب‌شده‌ها</button>
+        </div>
     </div>
-
-    <div id="edit-modal" class="modal-overlay hidden" 
-       tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title">
-      <div class="modal-content">
-        <div class="modal-header-with-separator">
-          <h3 id="edit-modal-title"><span class="material-icons-outlined">edit</span> ویرایش عنوان</h3>
-          <div class="header-separator"></div>
-        </div>
-        <input type="text" id="edit-title-input" placeholder="عنوان 
-جدید">
-        <div class="settings-section">
-            <label for="edit-review-algorithm-select"><span class="material-icons-outlined">alarm</span> انتخاب الگوریتم مرور:</label>
-            <div class="review-algorithm-select-container">
-              <select id="edit-review-algorithm-select"></select>
-              <p id="edit-review-algorithm-preview" class="preview-text"></p>
-            </div>
-        </div>
-        <div id="edit-attachments-preview"></div>
-        <div class="modal-actions">
-          <button id="save-edit-btn" class="main-btn" aria-label="ذخیره تغییرات"><span class="material-icons-outlined">check</span> ذخیره تغییرات</button>
-          <button id="cancel-edit-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
-        </div>
-      </div>
-    </div>
-    
   </main>
-   <nav class="tab-container">
+  
+  <nav class="tab-container">
     <button class="tab-btn active" data-tab="review-panel" data-title="مرور امروز" aria-label="مرور امروز">
       <span class="tab-icon material-icons-outlined">today</span><span class="tab-label" id="today-tab">امروز</span>
     </button>
@@ -132,106 +109,133 @@
       <span class="tab-icon material-icons-outlined">list_alt</span><span class="tab-label" id="all-tab">همه</span>
     </button>
   </nav>
-</div>
-<div id="text-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="text-modal-title">
-  <div class="modal-content">
-    <div class="modal-header-with-separator">
+
+  <div id="edit-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="edit-modal-title">
+    <div class="modal-content">
+      <div class="modal-header-with-separator">
+        <h3 id="edit-modal-title"><span class="material-icons-outlined">edit</span> ویرایش عنوان</h3>
+        <div class="header-separator"></div>
+      </div>
+      <input type="text" id="edit-title-input" placeholder="عنوان جدید">
+      <div class="settings-section">
+        <label for="edit-review-algorithm-select"><span class="material-icons-outlined">alarm</span> انتخاب الگوریتم مرور:</label>
+        <div class="review-algorithm-select-container">
+          <select id="edit-review-algorithm-select"></select>
+          <p id="edit-review-algorithm-preview" class="preview-text"></p>
+        </div>
+      </div>
+      <div id="edit-attachments-preview"></div>
+      <div class="modal-actions">
+        <button id="save-edit-btn" class="main-btn" aria-label="ذخیره تغییرات"><span class="material-icons-outlined">check</span> ذخیره تغییرات</button>
+        <button id="cancel-edit-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="text-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="text-modal-title">
+    <div class="modal-content">
+      <div class="modal-header-with-separator">
         <h3 id="text-modal-title"><span class="material-icons-outlined">notes</span> افزودن یادداشت متنی</h3>
         <div class="header-separator"></div>
-    </div>
-    <textarea id="modal-textarea" placeholder="یادداشت خود را اینجا بنویسید..."></textarea>
-    <div class="modal-actions">
-      <button id="save-text-btn" class="main-btn" aria-label="ذخیره متن"><span class="material-icons-outlined">check</span> ذخیره متن</button>
-      <button id="cancel-text-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
+      </div>
+      <textarea id="modal-textarea" placeholder="یادداشت خود را اینجا بنویسید..."></textarea>
+      <div class="modal-actions">
+        <button id="save-text-btn" class="main-btn" aria-label="ذخیره متن"><span class="material-icons-outlined">check</span> ذخیره متن</button>
+        <button id="cancel-text-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
+      </div>
     </div>
   </div>
-</div>
-<div id="settings-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
-  <div class="modal-content settings-content">
-    <div class="modal-header-with-separator">
+
+  <div id="settings-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+    <div class="modal-content settings-content">
+      <div class="modal-header-with-separator">
         <h3 id="settings-modal-title"><span class="material-icons-outlined">settings</span> تنظیمات</h3>
         <div class="header-separator"></div>
-    </div>
-    <div class="settings-section">
-      <label id="language-label" for="language-select"><span class="material-icons-outlined">language</span> زبان:</label>
-      <select id="language-select">
-        <option value="fa">فارسی</option>
-        <option value="en">English</option>
-        <option value="ar">عربي</option>
-      </select>
-    </div>
-    <div class="settings-section">
-      <label id="theme-label" for="theme-select"><span class="material-icons-outlined">palette</span> تم:</label>
-      <select id="theme-select">
-        <option value="light">روشن</option>
-        <option value="dark">تاریک</option>
-        <option value="auto">مطابق دستگاه</option>
-      </select>
-    </div>
-    <div class="settings-section">
-      <label id="font-label" for="font-select"><span class="material-icons-outlined">font_download</span> فونت:</label>
-      <select id="font-select">
-        <option value="system">پیش‌فرض سیستم</option>
-        <option value="Vazirmatn">Vazirmatn</option>
-      </select>
-    </div>
-    <div class="settings-section">
-      <button id="open-algorithm-modal-btn" class="secondary-btn">
-        <span class="material-icons-outlined">alarm</span>
-        مدیریت الگوریتم‌های مرور
-      </button>
-    </div>
-    <div class="modal-actions">
-      <button id="save-settings-btn" class="main-btn" aria-label="ذخیره"><span class="material-icons-outlined">check</span> ذخیره</button>
-      <button id="cancel-settings-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
+      </div>
+      <div class="settings-section">
+        <label id="language-label" for="language-select"><span class="material-icons-outlined">language</span> زبان:</label>
+        <select id="language-select">
+          <option value="fa">فارسی</option>
+        </select>
+      </div>
+      <div class="settings-section">
+        <label id="theme-label" for="theme-select"><span class="material-icons-outlined">palette</span> تم:</label>
+        <select id="theme-select">
+          <option value="light">روشن</option>
+          <option value="dark">تاریک</option>
+          <option value="auto">مطابق دستگاه</option>
+        </select>
+      </div>
+      <div class="settings-section">
+        <label id="font-label" for="font-select"><span class="material-icons-outlined">font_download</span> فونت:</label>
+        <select id="font-select">
+          <option value="system">پیش‌فرض سیستم</option>
+          <option value="Vazirmatn">Vazirmatn</option>
+        </select>
+      </div>
+      <div class="settings-section">
+        <button id="open-algorithm-modal-btn" class="secondary-btn">
+          <span class="material-icons-outlined">alarm</span>
+          مدیریت الگوریتم‌های مرور
+        </button>
+      </div>
+      <div class="modal-actions">
+        <button id="save-settings-btn" class="main-btn" aria-label="ذخیره"><span class="material-icons-outlined">check</span> ذخیره</button>
+        <button id="cancel-settings-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
+      </div>
     </div>
   </div>
-</div>
-<div id="review-algorithm-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="review-algorithm-modal-title">
-  <div class="modal-content algorithm-content">
-    <div class="modal-header-with-separator">
+
+  <div id="review-algorithm-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="review-algorithm-modal-title">
+    <div class="modal-content algorithm-content">
+      <div class="modal-header-with-separator">
         <h3 id="review-algorithm-modal-title"><span class="material-icons-outlined">alarm</span> الگوریتم‌های مرور</h3>
         <div class="header-separator"></div>
-    </div>
-    <button id="back-to-settings-btn" class="icon-btn back-btn" aria-label="برگشت به تنظیمات">
-      <span class="material-icons-outlined">arrow_back</span>
-    </button>
-    <div id="algorithm-list-container">
+      </div>
+      <button id="back-to-settings-btn" class="icon-btn back-btn" aria-label="برگشت به تنظیمات">
+        <span class="material-icons-outlined">arrow_back</span>
+      </button>
+      <div id="algorithm-list-container">
         <ul id="algorithm-list" class="algorithm-list"></ul>
+      </div>
+      <button id="add-algorithm-btn" class="main-btn"><span class="material-icons-outlined">add</span> اضافه کردن الگوریتم جدید</button>
     </div>
-    <button id="add-algorithm-btn" class="main-btn"><span class="material-icons-outlined">add</span> اضافه کردن الگوریتم جدید</button>
   </div>
-</div>
-<div id="edit-algorithm-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="edit-algorithm-modal-title">
-  <div class="modal-content">
-    <div class="modal-header-with-separator">
+
+  <div id="edit-algorithm-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="edit-algorithm-modal-title">
+    <div class="modal-content">
+      <div class="modal-header-with-separator">
         <h3 id="edit-algorithm-modal-title"><span class="material-icons-outlined">edit</span> ویرایش الگوریتم</h3>
         <div class="header-separator"></div>
-    </div>
-    <div class="settings-section">
-      <label for="algorithm-name-input"><span class="material-icons-outlined">drive_file_rename_outline</span> نام الگوریتم:</label>
-      <input type="text" id="algorithm-name-input" class="modern-input">
-    </div>
-    <div class="settings-section">
-      <label for="algorithm-intervals-list"><span class="material-icons-outlined">calendar_today</span> فاصله‌های مرور:</label>
-      <ul id="algorithm-intervals-list" class="intervals-list"></ul>
-      <button id="add-interval-btn" class="secondary-btn"><span class="material-icons-outlined">add</span> اضافه کردن مرور جدید</button>
-    </div>
-    <div class="modal-actions">
-      <button id="save-algorithm-btn" class="main-btn"><span class="material-icons-outlined">check</span> ذخیره الگوریتم</button>
-      <button id="cancel-algorithm-btn" class="secondary-btn"><span class="material-icons-outlined">close</span> انصراف</button>
-    </div>
-  </div>
-</div>
-<div id="custom-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="custom-modal-title">
-  <div class="modal-content">
-    <h3 id="custom-modal-title">پیام</h3>
-    <p id="custom-modal-text">آیا 
-از انجام این کار مطمئن هستید؟</p>
-    <div class="modal-actions" id="custom-modal-actions">
-      <button id="custom-modal-confirm-btn" class="main-btn"><span class="material-icons-outlined">check</span> تایید</button>
-      <button id="custom-modal-cancel-btn" class="secondary-btn"><span class="material-icons-outlined">close</span> انصراف</button>
+      </div>
+      <div class="settings-section">
+        <label for="algorithm-name-input"><span class="material-icons-outlined">drive_file_rename_outline</span> نام الگوریتم:</label>
+        <input type="text" id="algorithm-name-input" class="modern-input">
+      </div>
+      <div class="settings-section">
+        <label for="algorithm-intervals-list"><span class="material-icons-outlined">calendar_today</span> فاصله‌های مرور:</label>
+        <div class="scrollable-intervals">
+          <ul id="algorithm-intervals-list" class="intervals-list"></ul>
+        </div>
+        <button id="add-interval-btn" class="secondary-btn"><span class="material-icons-outlined">add</span> اضافه کردن مرور جدید</button>
+      </div>
+      <div class="modal-actions">
+        <button id="save-algorithm-btn" class="main-btn" aria-label="ذخیره الگوریتم"><span class="material-icons-outlined">check</span> ذخیره الگوریتم</button>
+        <button id="cancel-algorithm-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
+      </div>
     </div>
   </div>
+
+  <div id="custom-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="custom-modal-title">
+    <div class="modal-content">
+      <h3 id="custom-modal-title">پیام</h3>
+      <p id="custom-modal-text">آیا از انجام این کار مطمئن هستید؟</p>
+      <div class="modal-actions" id="custom-modal-actions">
+        <button id="custom-modal-confirm-btn" class="main-btn" aria-label="تایید"><span class="material-icons-outlined">check</span> تایید</button>
+        <button id="custom-modal-cancel-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-message-container" class="toast-message-container"></div>
 </div>
-<div id="toast-message-container" class="toast-message-container"></div>
