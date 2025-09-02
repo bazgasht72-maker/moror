@@ -12,11 +12,11 @@ let currentSortOrder = 'desc';
 const translations = {
   fa: {
     'header-title': 'مرور امروز',
-    'review-placeholder': 'امروز موردی برای مرور وجود ندارد. عالیه!',
+    'review-placeholder': 'امروز موردی برای مرور وجود ندارد.\nعالیه!',
     'remaining-section-title': 'باقی‌مانده',
     'completed-section-title': 'انجام‌شده در این بازدید',
     'new-item-title': 'افزودن عنوان جدید',
-    'new-title-placeholder': 'عنوان را وارد کنید...',
+    'new-title-placeholder': 'عنوان خود را اینجا بنویسید...', // متن بهبودیافته
     'attachment-label': 'پیوست‌ها (اختیاری)',
     'add-image-tooltip': 'اضافه کردن عکس',
     'add-video-tooltip': 'اضافه کردن فیلم',
@@ -27,7 +27,8 @@ const translations = {
     'header-stats-mastered': 'پایان یافته: ',
     'select-all-btn': 'انتخاب همه',
     'delete-selected-btn': 'حذف انتخاب‌شده‌ها',
-    'edit-modal-title': 'ویرایش عنوان',
+    'edit-modal-title': 
+    'ویرایش عنوان',
     'edit-title-placeholder': 'عنوان جدید',
     'save-edit-btn': 'ذخیره تغییرات',
     'cancel-edit-btn': 'انصراف',
@@ -45,12 +46,13 @@ const translations = {
     'modal-textarea-placeholder': 'یادداشت خود را اینجا بنویسید...',
     'save-text-btn': 'ذخیره متن',
     'cancel-text-btn': 'انصراف',
-    'attachments-title': 'پیوست‌ها:',
+   
+     'attachments-title': 'پیوست‌ها:',
     'review-schedule-title': 'برنامه‌ریزی مرور:',
     'error-empty-title': 'عنوان نمی‌تواند خالی باشد!',
-    'error-file-size': 'فایل خیلی بزرگ است! حداکثر اندازه ۵۰ مگابایت است.',
-    'error-save': 'خطا در ذخیره‌سازی داده‌ها. لطفاً دوباره تلاش کنید.',
-    'error-load': 'خطا در بارگذاری داده‌ها. لطفاً دوباره تلاش کنید.',
+    'error-file-size': 'فایل خیلی بزرگ است!\nحداکثر اندازه ۵۰ مگابایت است.',
+    'error-save': 'خطا در ذخیره‌سازی داده‌ها.\nلطفاً دوباره تلاش کنید.',
+    'error-load': 'خطا در بارگذاری داده‌ها.\nلطفاً دوباره تلاش کنید.',
     'error-login': 'ورود در حالت تست غیرفعال است.',
     'confirm-delete': 'آیا مطمئن هستید که می‌خواهید این عنوان را حذف کنید؟',
     'confirm-delete-selected': 'آیا مطمئن هستید که می‌خواهید عناوین انتخاب‌شده را حذف کنید؟',
@@ -62,7 +64,8 @@ const translations = {
     'image-alt': 'پیوست تصویر',
     'video-alt': 'پیوست ویدیو',
     'audio-alt': 'پیوست صوت',
-    'sort-by': 'مرتب‌سازی بر اساس:',
+   
+     'sort-by': 'مرتب‌سازی بر اساس:',
     'sort-date': 'تاریخ',
     'sort-title': 'عنوان',
     'sort-progress': 'پیشرفت',
@@ -76,13 +79,16 @@ const translations = {
     'overall-progress': 'پیشرفت کلی امروز:',
     'completed-at': 'تکمیل در: '
   },
-  en: { "header-title": "Today's Review", "review-placeholder": "No items to review today. Great job!", "remaining-section-title": "Remaining", "completed-section-title": "Completed in This Session", "new-item-title": "Add New Item", "new-title-placeholder": "Enter title...", "attachment-label": "Attachments (Optional)", "add-image-tooltip": "Add Image", "add-video-tooltip": "Add Video", "add-audio-tooltip": "Add Audio", "add-text-tooltip": "Add Text Note", "save-item-btn": "Save Item", "header-stats-total": "Total Items: ", "header-stats-mastered": "Mastered: ", "select-all-btn": "Select All", "delete-selected-btn": "Delete Selected", "edit-modal-title": "Edit Item", "edit-title-placeholder": "New Title", "save-edit-btn": "Save Changes", "cancel-edit-btn": "Cancel", "settings-modal-title": "Settings", "language-label": "Language:", "theme-label": "Theme:", "font-label": "Font:", "save-settings-btn": "Save", "cancel-settings-btn": "Cancel", "done-btn": "Done", "delete-btn": "Delete", "edit-btn": "Edit", "reset-btn": "Reset Progress", "text-modal-title": "Add Text Note", "modal-textarea-placeholder": "Write your note here...", "save-text-btn": "Save Text", "cancel-text-btn": "Cancel", "attachments-title": "Attachments:", "review-schedule-title": "Review Schedule:", "error-empty-title": "Title cannot be empty!", "error-file-size": "File is too large! Maximum size is 50MB.", "error-save": "Error saving data. Please try again.", "error-load": "Error loading data. Please try again.", "error-login": "Login disabled in demo mode.", "confirm-delete": "Are you sure you want to delete this item?", "confirm-delete-selected": "Are you sure you want to delete the selected items?", "confirm-reset": "Are you sure you want to reset the progress of this item?", "select-item": "Select item", "remove-attachment": "Remove attachment", "completed": "Completed", "text-note": "Text note", "image-alt": "Image attachment", "video-alt": "Video attachment", "audio-alt": "Audio attachment", "sort-by": "Sort by:", "sort-date": "Date", "sort-title": "Title", "sort-progress": "Progress", "sort-order": "Order:", "sort-order-asc": "Ascending", "sort-order-desc": "Descending", "all-items-title": "All Tasks", "today-tab": "Today", "new-tab": "New", "all-tab": "All", "overall-progress": "Overall Progress Today:", "completed-at": "Completed at: " },
-  ar: { "header-title": "مراجعة اليوم", "review-placeholder": "لا توجد عناصر للمراجعة اليوم. عمل رائع!", "remaining-section-title": "المتبقي", "completed-section-title": "تم الانتهاء في هذه الجلسة", "new-item-title": "إضافة عنصر جديد", "new-title-placeholder": "أدخل العنوان...", "attachment-label": "المرفقات (اختياري)", "add-image-tooltip": "إضافة صورة", "add-video-tooltip": "إضافة فيديو", "add-audio-tooltip": "إضافة صوت", "add-text-tooltip": "إضافة ملاحظة نصية", "save-item-btn": "حفظ العنصر", "header-stats-total": "إجمالي العناصر: ", "header-stats-mastered": "المكتمل: ", "select-all-btn": "تحديد الكل", "delete-selected-btn": "حذف المحدد", "edit-modal-title": "تعديل العنصر", "edit-title-placeholder": "عنوان جديد", "save-edit-btn": "حفظ التغييرات", "cancel-edit-btn": "إلغاء", "settings-modal-title": "الإعدادات", "language-label": "اللغة:", "theme-label": "الثيم:", "font-label": "الخط:", "save-settings-btn": "حفظ", "cancel-settings-btn": "إلغاء", "done-btn": "تم", "delete-btn": "حذف", "edit-btn": "تعديل", "reset-btn": "إعادة تعيين التقدم", "text-modal-title": "إضافة ملاحظة نصية", "modal-textarea-placeholder": "اكتب ملاحظتك هنا...", "save-text-btn": "حفظ النص", "cancel-text-btn": "إلغاء", "attachments-title": "المرفقات:", "review-schedule-title": "جدول المراجعة:", "error-empty-title": "العنوان لا يمكن أن يكون فارغًا!", "error-file-size": "الملف كبير جدًا! الحد الأقصى للحجم 50 ميجابايت.", "error-save": "خطأ في حفظ البيانات. حاول مرة أخرى.", "error-load": "خطأ في تحميل البيانات. حاول مرة أخرى.", "error-login": "تسجيل الدخول معطل في وضع العرض.", "confirm-delete": "هل أنت متأكد أنك تريد حذف هذا العنصر؟", "confirm-delete-selected": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟", "confirm-reset": "هل أنت متأكد أنك تريد إعادة تعيين تقدم هذا العنصر؟", "select-item": "تحديد العنصر", "remove-attachment": "إزالة المرفق", "completed": "مكتمل", "text-note": "ملاحظة نصية", "image-alt": "مرفق صورة", "video-alt": "مرفق فيديو", "audio-alt": "مرفق صوتي", "sort-by": "ترتيب حسب:", "sort-date": "التاريخ", "sort-title": "العنوان", "sort-progress": "التقدم", "sort-order": "الترتيب:", "sort-order-asc": "تصاعدي", "sort-order-desc": "تنازلي", "all-items-title": "كل المهام", "today-tab": "اليوم", "new-tab": "جديد", "all-tab": "الكل", "overall-progress": "التقدم الكلي اليوم:", "completed-at": "اكتمل في: " }
+  en: { "header-title": "Today's Review", "review-placeholder": "No items to review today.\nGreat job!", "remaining-section-title": "Remaining", "completed-section-title": "Completed in This Session", "new-item-title": "Add New Item", "new-title-placeholder": "Write your title here...", "attachment-label": "Attachments (Optional)", "add-image-tooltip": "Add Image", "add-video-tooltip": "Add Video", "add-audio-tooltip": "Add Audio", "add-text-tooltip": "Add Text Note", "save-item-btn": "Save Item", "header-stats-total": "Total Items: ", "header-stats-mastered": "Mastered: ", "select-all-btn": "Select All", "delete-selected-btn": "Delete Selected", "edit-modal-title": "Edit Item", "edit-title-placeholder": "New Title", "save-edit-btn": "Save Changes", "cancel-edit-btn": "Cancel", "settings-modal-title": "Settings", "language-label": "Language:", "theme-label": "Theme:", "font-label": "Font:", "save-settings-btn": "Save", "cancel-settings-btn": "Cancel", "done-btn": "Done", "delete-btn": "Delete", "edit-btn": "Edit", "reset-btn": "Reset Progress", "text-modal-title": "Add Text Note", "modal-textarea-placeholder": "Write your note here...", "save-text-btn": "Save Text", "cancel-text-btn": "Cancel", "attachments-title": "Attachments:", "review-schedule-title": "Review Schedule:", "error-empty-title": 
+    "Title cannot be empty!", "error-file-size": "File is too large! Maximum size is 50MB.", "error-save": "Error saving data.\nPlease try again.", "error-load": "Error loading data. Please try again.", "error-login": "Login disabled in demo mode.", "confirm-delete": "Are you sure you want to delete this item?", "confirm-delete-selected": "Are you sure you want to delete the selected items?", "confirm-reset": "Are you sure you want to reset the progress of this item?", "select-item": "Select item", "remove-attachment": "Remove attachment", "completed": "Completed", "text-note": "Text note", "image-alt": "Image attachment", "video-alt": "Video attachment", "audio-alt": "Audio attachment", "sort-by": "Sort by:", "sort-date": "Date", "sort-title": "Title", "sort-progress": "Progress", "sort-order": "Order:", "sort-order-asc": "Ascending", "sort-order-desc": "Descending", "all-items-title": "All Tasks", "today-tab": "Today", "new-tab": "New", "all-tab": "All", "overall-progress": "Overall Progress Today:", "completed-at": "Completed \nat: " },
+  ar: { "header-title": "مراجعة اليوم", "review-placeholder": "لا توجد عناصر للمراجعة اليوم.\nعمل رائع!", "remaining-section-title": "المتبقي", "completed-section-title": "تم الانتهاء في هذه الجلسة", "new-item-title": "إضافة عنصر جديد", "new-title-placeholder": "اكتب عنوانك هنا...", "attachment-label": "المرفقات (اختياري)", "add-image-tooltip": "إضافة صورة", "add-video-tooltip": "إضافة فيديو", "add-audio-tooltip": "إضافة صوت", "add-text-tooltip": "إضافة ملاحظة نصية", "save-item-btn": "حفظ العنصر", "header-stats-total": "إجمالي العناصر: ", "header-stats-mastered": "المكتمل: ", "select-all-btn": "تحديد الكل", "delete-selected-btn": "حذف المحدد", "edit-modal-title": "تعديل العنصر", "edit-title-placeholder": "عنوان جديد", "save-edit-btn": "حفظ التغييرات", "cancel-edit-btn": "إلغاء", "settings-modal-title": "الإعدادات", "language-label": "اللغة:", "theme-label": "الثيم:", "font-label": "الخط:", "save-settings-btn": "حفظ", "cancel-settings-btn": "إلغاء", "done-btn": "تم", "delete-btn": "حذف", "edit-btn": "تعديل", "reset-btn": "إعادة تعيين التقدم", "text-modal-title": "إضافة ملاحظة نصية", "modal-textarea-placeholder": "اكتب ملاحظتك هنا...", "save-text-btn": "حفظ النص", "cancel-text-btn": "إلغاء", "attachments-title": "المرفقات:", "review-schedule-title": "جدول المراجعة:", 
+    "error-empty-title": "العنوان لا يمكن أن يكون فارغًا!", "error-file-size": "الملف كبير جدًا!\nالحد الأقصى للحجم 50 ميجابايت.", "error-save": "خطأ في حفظ البيانات. حاول مرة أخرى.", "error-load": "خطأ في تحميل البيانات.\nحاول مرة أخرى.", "error-login": "تسجيل الدخول معطل في وضع العرض.", "confirm-delete": "هل أنت متأكد أنك تريد حذف هذا العنصر؟", "confirm-delete-selected": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟", "confirm-reset": "هل أنت متأكد أنك تريد إعادة تعيين تقدم هذا العنصر؟", "select-item": "تحديد العنصر", "remove-attachment": "إزالة المرفق", "completed": "مكتمل", "text-note": "ملاحظة نصية", "image-alt": "مرفق صورة", "video-alt": "مرفق فيديو", "audio-alt": "مرفق صوتي", "sort-by": "ترتيب حسب:", "sort-date": "التاريخ", "sort-title": "العنوان", "sort-progress": "التقدم", "sort-order": "الترتيب:", "sort-order-asc": "تصاعدي", "sort-order-desc": "تنازلي", "all-items-title": "كل المهام", "today-tab": "اليوم", "new-tab": "جديد", "all-tab": "الكل", "overall-progress": "التقدم الكلي اليوم:", "completed-at": "اكتمل في: " }
 };
 
 // ===== DOM =====
 const htmlEl = document.documentElement;
-const headerTitle = document.getElementById('header-title');
+const headerTitle = 
+ document.getElementById('header-title');
 const tabs = document.querySelectorAll('.tab-btn');
 const contentPanels = document.querySelectorAll('.content-panel');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
@@ -132,13 +138,11 @@ const customModalTitle = document.getElementById('custom-modal-title');
 const customModalText = document.getElementById('custom-modal-text');
 const customModalConfirmBtn = document.getElementById('custom-modal-confirm-btn');
 const customModalCancelBtn = document.getElementById('custom-modal-cancel-btn');
-// --- New DOM elements for attachment popup ---
-const addAttachmentBtn = document.getElementById('add-attachment-btn');
-const attachmentPopupMenu = document.getElementById('attachment-popup-menu');
 
 // ===== Helpers =====
 const applyTheme = (theme) => {
-  if (theme === 'auto') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  if (theme === 'auto') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ?
+ 'dark' : 'light';
   htmlEl.setAttribute('data-theme', theme);
   themeToggleBtn.querySelector('.material-icons-outlined').textContent = theme === 'light' ? 'dark_mode' : 'light_mode';
   localStorage.setItem('themePreference', theme);
@@ -147,10 +151,8 @@ const toggleTheme = () => {
   const t = htmlEl.getAttribute('data-theme');
   applyTheme(t === 'light' ? 'dark' : 'light');
 };
-
 const formatDate = (date) => new Intl.DateTimeFormat(currentLanguage === 'fa' ? 'fa-IR' : currentLanguage === 'ar' ? 'ar-EG' : 'en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date);
 const formatTime = (date) => new Intl.DateTimeFormat(currentLanguage === 'fa' ? 'fa-IR' : currentLanguage === 'ar' ? 'ar-EG' : 'en-US', { hour: '2-digit', minute: '2-digit', hour12: false }).format(date);
-
 const humanLabel = (idx) => {
   const fa = ['۲۰ دقیقه بعد', '۱ روز بعد', '۳ روز بعد', '۷ روز بعد', '۱۴ روز بعد', '۳۰ روز بعد', '۶۰ روز بعد', '۱۲۰ روز بعد', '۱۸۰ روز بعد', '۳۶۵ روز بعد'];
   const en = ['20 minutes later', '1 day later', '3 days later', '7 days later', '14 days later', '30 days later', '60 days later', '120 days later', '180 days later', '365 days later'];
@@ -183,14 +185,14 @@ const getAttachmentsHtml = (attachments) => {
             case 'video': return `<div class="attachment-content"><video src="${att.data}" controls aria-label="${translations[currentLanguage]['video-alt']}: ${att.name}"></video></div>`;
             case 'audio': return `<div class="attachment-content"><audio src="${att.data}" controls aria-label="${translations[currentLanguage]['audio-alt']}: ${att.name}"></audio></div>`;
             case 'text': return `<div class="attachment-content"><div class="attachment-text-note">${att.data}</div></div>`;
-            default: return '';
+     
+             default: return '';
         }
     }).join('')
 }</div>`;
 };
 
 const getProgressColorClass = (p) => p < 30 ? 'progress-red' : (p < 70 ? 'progress-yellow' : 'progress-green');
-
 const showConfirm = (text, title = 'تایید') => {
   return new Promise((resolve) => {
     customModalTitle.textContent = title;
@@ -218,14 +220,14 @@ const showAlert = (text, title = 'خطا') => {
   };
   customModalConfirmBtn.addEventListener('click', confirmHandler);
 };
-
 // ===== Storage (Local) =====
-const saveToStorage = () => { try { localStorage.setItem('studyItems_v5', JSON.stringify(items)); } catch (e) { showAlert(translations[currentLanguage]['error-save']); } };
-const loadFromLocalStorage = () => { try { items = JSON.parse(localStorage.getItem('studyItems_v5') || '[]'); } catch { items = []; } };
+const saveToStorage = () => { try { localStorage.setItem('studyItems_v5', JSON.stringify(items)); } catch (e) { showAlert(translations[currentLanguage]['error-save']);
+ } };
+const loadFromLocalStorage = () => { try { items = JSON.parse(localStorage.getItem('studyItems_v5') || '[]');
+ } catch { items = []; } };
 
 // ===== Render =====
 const renderAll = () => { renderTodayList(); renderAllItemsList(); };
-
 const renderTodayList = () => {
   const now = new Date();
   const todayItemsTotal = items.filter(item => !item.isMastered && item.nextReview && new Date(item.nextReview) <= now);
@@ -266,7 +268,8 @@ const createTodayListItem = (item, index, isCompleted = false) => {
   li.className = `today-list-item ${isCompleted?'completed':''}`;
   li.dataset.itemId = item.id;
   const attachmentsHtml = getAttachmentsHtml(item.attachments);
-  const completionTimeHtml = isCompleted && item.completionTime ? `<span class="completion-time">${translations[currentLanguage]['completed-at']} ${formatTime(new Date(item.completionTime))}</span>` : '';
+  const completionTimeHtml = isCompleted && item.completionTime ?
+  `<span class="completion-time">${translations[currentLanguage]['completed-at']} ${formatTime(new Date(item.completionTime))}</span>` : '';
   li.innerHTML = `<div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span>${completionTimeHtml}<span class="expand-arrow material-icons-outlined">expand_more</span></div><div class="item-details">${attachmentsHtml}${!isCompleted?`<button class="done-btn main-btn" data-id="${item.id}" aria-label="${translations[currentLanguage]['done-btn']}">${translations[currentLanguage]['done-btn']}</button>`:''}</div>`;
   return li;
 };
@@ -283,7 +286,8 @@ const renderAllItemsList = () => {
     else if (sortBy === 'progress') {
       const pa = a.reviewSchedule.length ? a.reviewSchedule.filter(r => r.completed).length / a.reviewSchedule.length : 0;
       const pb = b.reviewSchedule.length ? b.reviewSchedule.filter(r => r.completed).length / b.reviewSchedule.length : 0;
-      cmp = pa - pb;
+      cmp 
+      = pa - pb;
     }
     return sortOrder === 'asc' ? cmp : -cmp;
   });
@@ -298,7 +302,8 @@ const createAllItemsListItem = (item, index) => {
   const li = document.createElement('li');
   li.className = 'all-items-item';
   const completed = item.reviewSchedule.filter(r => r.completed).length;
-  const progress = item.reviewSchedule.length ? (completed / item.reviewSchedule.length) * 100 : 0;
+  const progress = item.reviewSchedule.length ?
+  (completed / item.reviewSchedule.length) * 100 : 0;
   const attachmentsHtml = getAttachmentsHtml(item.attachments);
   const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt);
   const created = formatDate(new Date(item.createdAt));
@@ -309,11 +314,17 @@ const createAllItemsListItem = (item, index) => {
 };
 
 // ===== CRUD & Attachments =====
-const resetNewItemForm = () => { newTitleInput.value = ''; tempAttachments = []; attachmentsPreview.innerHTML = ''; };
+const resetNewItemForm = () => { 
+    newTitleInput.value = ''; 
+    tempAttachments = [];
+    attachmentsPreview.innerHTML = ''; 
+    saveItemBtn.disabled = true; // دکمه را غیرفعال کن
+};
 
 const saveItem = () => {
   const title = newTitleInput.value.trim();
-  if (!title) { showAlert(translations[currentLanguage]['error-empty-title']); return; }
+  if (!title) { showAlert(translations[currentLanguage]['error-empty-title']); return;
+  }
   const now = new Date();
   const schedule = intervals.map((it, idx) => {
     const d = new Date(now);
@@ -328,7 +339,8 @@ const saveItem = () => {
   renderAll();
 };
 
-const openEditModal = (item) => { editingItemId = item.id; editTitleInput.value = item.title; tempAttachments = [...item.attachments]; renderAttachmentsPreview(editAttachmentsPreview); editModal.classList.remove('hidden'); editModal.focus(); };
+const openEditModal = (item) => { editingItemId = item.id; editTitleInput.value = item.title; tempAttachments = [...item.attachments];
+  renderAttachmentsPreview(editAttachmentsPreview); editModal.classList.remove('hidden'); editModal.focus(); };
 const saveEdit = () => {
   const item = items.find(i => i.id === editingItemId);
   if (!item) return;
@@ -340,9 +352,12 @@ const saveEdit = () => {
   closeEditModal();
   renderAll();
 };
-const closeEditModal = () => { editModal.classList.add('hidden'); editingItemId = null; tempAttachments = []; editTitleInput.value = ''; editAttachmentsPreview.innerHTML = ''; };
-const deleteItem = async (id) => { if (!await showConfirm(translations[currentLanguage]['confirm-delete'])) return; items = items.filter(i => i.id !== id); saveToStorage(); renderAll(); };
-const deleteSelected = async () => { if (!await showConfirm(translations[currentLanguage]['confirm-delete-selected'])) return; items = items.filter(i => !selectedItems.includes(i.id)); selectedItems = []; toggleMultiSelect(false); saveToStorage(); renderAll(); };
+const closeEditModal = () => { editModal.classList.add('hidden'); editingItemId = null; tempAttachments = []; editTitleInput.value = '';
+  editAttachmentsPreview.innerHTML = ''; };
+const deleteItem = async (id) => { if (!await showConfirm(translations[currentLanguage]['confirm-delete'])) return;
+  items = items.filter(i => i.id !== id); saveToStorage(); renderAll(); };
+const deleteSelected = async () => { if (!await showConfirm(translations[currentLanguage]['confirm-delete-selected'])) return; items = items.filter(i => !selectedItems.includes(i.id)); selectedItems = []; toggleMultiSelect(false);
+  saveToStorage(); renderAll(); };
 const resetProgress = async (id) => {
   if (!await showConfirm(translations[currentLanguage]['confirm-reset'])) return;
   const item = items.find(i => i.id === id);
@@ -377,14 +392,18 @@ const handleFileUpload = (e) => {
   reader.readAsDataURL(file);
   e.target.value = '';
 };
-const openTextModal = () => { modalTextarea.value = ''; textModal.classList.remove('hidden'); modalTextarea.focus(); };
+const openTextModal = () => { modalTextarea.value = '';
+  textModal.classList.remove('hidden'); modalTextarea.focus(); };
 const closeTextModal = () => { textModal.classList.add('hidden'); modalTextarea.value = ''; };
-const saveTextAttachment = () => { const txt = modalTextarea.value.trim(); if (txt) { tempAttachments.push({ type: 'text', data: txt, name: translations[currentLanguage]['text-note'] }); renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview); } closeTextModal(); };
+const saveTextAttachment = () => { const txt = modalTextarea.value.trim();
+  if (txt) { tempAttachments.push({ type: 'text', data: txt, name: translations[currentLanguage]['text-note'] }); renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview); } closeTextModal(); };
 const renderAttachmentsPreview = (container) => { container.innerHTML = tempAttachments.map((att, i) => `<div class="preview-item"><span>${att.name}</span><button type="button" class="icon-btn" data-index="${i}" aria-label="${translations[currentLanguage]['remove-attachment']}"><span class="material-icons-outlined">close</span></button></div>`).join(''); };
-const handleAttachmentRemove = (e, container) => { const removeBtn = e.target.closest('button[data-index]'); if (removeBtn) { const i = parseInt(removeBtn.dataset.index, 10); if (!isNaN(i)) { tempAttachments.splice(i, 1); renderAttachmentsPreview(container); } } };
+const handleAttachmentRemove = (e, container) => { const removeBtn = e.target.closest('button[data-index]'); if (removeBtn) { const i = parseInt(removeBtn.dataset.index, 10);
+  if (!isNaN(i)) { tempAttachments.splice(i, 1); renderAttachmentsPreview(container); } } };
 
 // ===== Language/Theme/Font =====
-const applyFont = (font) => { if (font === 'system') font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"; document.documentElement.style.setProperty('--font-family', font); localStorage.setItem('fontPreference', font); };
+const applyFont = (font) => { if (font === 'system') font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  document.documentElement.style.setProperty('--font-family', font); localStorage.setItem('fontPreference', font); };
 const applyLanguage = (lang) => {
   currentLanguage = lang;
   htmlEl.lang = lang;
@@ -400,7 +419,8 @@ const applyLanguage = (lang) => {
     if (key === 'new-title-placeholder') newTitleInput.placeholder = translations[lang][key];
     if (key === 'modal-textarea-placeholder') modalTextarea.placeholder = translations[lang][key];
     if (key === 'add-image-tooltip') addImageBox.dataset.tooltip = translations[lang][key];
-    if (key === 'add-video-tooltip') addVideoBox.dataset.tooltip = translations[lang][key];
+    if (key 
+    === 'add-video-tooltip') addVideoBox.dataset.tooltip = translations[lang][key];
     if (key === 'add-audio-tooltip') addAudioBox.dataset.tooltip = translations[lang][key];
     if (key === 'add-text-tooltip') addTextBox.dataset.tooltip = translations[lang][key];
     if (sortSelect) {
@@ -412,14 +432,16 @@ const applyLanguage = (lang) => {
       sortOrderSelect.querySelector('option[value="asc"]').textContent = translations[lang]['sort-order-asc'];
       sortOrderSelect.querySelector('option[value="desc"]').textContent = translations[lang]['sort-order-desc'];
     }
-    if (key === 'today-tab') { const t = document.getElementById('today-tab'); if (t) t.textContent = translations[lang][key]; }
-    if (key === 'new-tab') { const t = document.getElementById('new-tab'); if (t) t.textContent = translations[lang][key]; }
-    if (key === 'all-tab') { const t = document.getElementById('all-tab'); if (t) t.textContent = translations[lang][key]; }
+    if (key === 'today-tab') { const t = document.getElementById('today-tab');
+      if (t) t.textContent = translations[lang][key]; }
+    if (key === 'new-tab') { const t = document.getElementById('new-tab');
+      if (t) t.textContent = translations[lang][key]; }
+    if (key === 'all-tab') { const t = document.getElementById('all-tab');
+      if (t) t.textContent = translations[lang][key]; }
   });
   localStorage.setItem('languagePreference', lang);
   renderAll();
 };
-
 // ===== Events =====
 document.addEventListener('DOMContentLoaded', () => {
   applyTheme(localStorage.getItem('themePreference') || 'light');
@@ -443,7 +465,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   themeToggleBtn.addEventListener('click', toggleTheme);
   saveItemBtn.addEventListener('click', saveItem);
-  newTitleInput.addEventListener('keydown', e => { if (e.key === 'Enter') saveItem(); });
+  
+  // رویداد برای فعال/غیرفعال کردن دکمه ذخیره
+  newTitleInput.addEventListener('input', () => {
+      saveItemBtn.disabled = newTitleInput.value.trim() === '';
+  });
+  
+  newTitleInput.addEventListener('keydown', e => { 
+      if (e.key === 'Enter' && !saveItemBtn.disabled) {
+          saveItem();
+      }
+  });
 
   addImageBox.addEventListener('click', () => triggerFileUpload('image/*'));
   addVideoBox.addEventListener('click', () => triggerFileUpload('video/*'));
@@ -457,7 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
   saveEditBtn.addEventListener('click', saveEdit);
   cancelEditBtn.addEventListener('click', closeEditModal);
   editAttachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, editAttachmentsPreview));
-
   settingsBtn.addEventListener('click', () => {
     languageSelect.value = localStorage.getItem('languagePreference') || 'fa';
     themeSelect.value = localStorage.getItem('themePreference') || 'light';
@@ -477,11 +508,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn || checkbox) {
       if (btn && btn.classList.contains('edit-icon-btn')) { const it = items.find(i => i.id === Number(btn.dataset.id)); if (it) openEditModal(it); }
       else if (btn && btn.classList.contains('delete-icon-btn')) { deleteItem(Number(btn.dataset.id)); }
-      else if (btn && btn.classList.contains('reset-btn')) { resetProgress(Number(btn.dataset.id)); }
+      else if 
+      (btn && btn.classList.contains('reset-btn')) { resetProgress(Number(btn.dataset.id)); }
       return;
     }
     const mainRow = e.target.closest('.item-main-row');
-    if (mainRow) { mainRow.closest('.all-items-item').classList.toggle('expanded'); }
+    if (mainRow) { mainRow.closest('.all-items-item').classList.toggle('expanded');
+    }
   });
 
   let touchStartTime;
@@ -497,10 +530,8 @@ document.addEventListener('DOMContentLoaded', () => {
   allList.addEventListener('change', (e) => { if (e.target.classList.contains('checkbox')) { const id = Number(e.target.dataset.id); if (e.target.checked) selectedItems.push(id); else selectedItems = selectedItems.filter(x => x !== id); } multiSelectActions.classList.toggle('hidden', selectedItems.length === 0 && !multiSelectMode); });
   selectAllBtn.addEventListener('click', () => { selectedItems = []; document.querySelectorAll('#all-items-list .checkbox').forEach(cb => { cb.checked = true; selectedItems.push(Number(cb.dataset.id)); }); multiSelectActions.classList.remove('hidden'); });
   deleteSelectedBtn.addEventListener('click', deleteSelected);
-
   sortSelect.addEventListener('change', renderAllItemsList);
   sortOrderSelect.addEventListener('change', e => { currentSortOrder = e.target.value; renderAllItemsList(); });
-
   reviewPanel.addEventListener('click', (e) => {
     const header = e.target.closest('.collapsible-header');
     if (header) { header.classList.toggle('collapsed'); header.nextElementSibling.classList.toggle('hidden'); }
@@ -513,33 +544,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!item) return;
       item.completedInSession = true;
       item.completionTime = new Date().toISOString();
-      const parentLi = doneBtn.closest('.today-list-item');
+    
+         const parentLi = doneBtn.closest('.today-list-item');
       if (parentLi) { parentLi.style.opacity = '0'; }
       setTimeout(() => {
         item.reviewSchedule[item.level].completed = true;
         item.level++;
-        if (item.level >= item.reviewSchedule.length) { item.isMastered = true; item.nextReview = null; } else { item.nextReview = item.reviewSchedule[item.level].scheduledFor; }
+        if (item.level >= item.reviewSchedule.length) { item.isMastered = true; item.nextReview = null; } else { item.nextReview = item.reviewSchedule[item.level].scheduledFor;
+        }
         saveToStorage();
         renderAll();
       }, 300);
     }
   });
-
-  // --- New Event Listeners for attachment popup ---
-  addAttachmentBtn.addEventListener('click', (event) => {
-    event.stopPropagation();
-    attachmentPopupMenu.classList.toggle('hidden');
-  });
-  window.addEventListener('click', () => {
-    if (!attachmentPopupMenu.classList.contains('hidden')) {
-      attachmentPopupMenu.classList.add('hidden');
-    }
-  });
-  attachmentPopupMenu.addEventListener('click', (event) => {
-    event.stopPropagation();
-  });
 });
-
 const toggleMultiSelect = (enable) => {
   multiSelectMode = enable;
   selectedItems = [];
