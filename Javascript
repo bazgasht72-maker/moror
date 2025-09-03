@@ -18,13 +18,13 @@
 
   // ===== Translations =====
   const translations = {
-   fa: {
+    fa: {
       'header-title': 'مرور امروز',
       'review-placeholder-text': 'امروز موردی برای مرور وجود ندارد.\nعالیه!',
       'remaining-section-title': 'باقی‌مانده',
       'completed-section-title': 'انجام‌شده در این بازدید',
       'new-item-title': 'افزودن عنوان جدید',
-      'new-title-placeholder': 'عنوان خود را اینجا بنویسید...',
+      'new-title-placeholder': 'عنوان خود را وارد کنید...',
       'attachment-label': 'پیوست‌ها (اختیاری)',
       'add-image-tooltip': 'اضافه کردن عکس',
       'add-video-tooltip': 'اضافه کردن فیلم',
@@ -73,7 +73,7 @@
       'select-item': 'انتخاب آیتم',
       'remove-attachment': 'حذف پیوست',
       'completed': 'انجام‌شده',
-     'text-note': 'یادداشت متنی',
+      'text-note': 'یادداشت متنی',
       'image-alt': 'پیوست تصویر',
       'video-alt': 'پیوست ویدیو',
       'audio-alt': 'پیوست صوت',
@@ -103,7 +103,7 @@
       'previous-algorithm': 'قبلی:',
       'new-algorithm': 'جدید:',
       'cannot-delete-last-algorithm': 'زمانی که تنها یک الگوریتم موجود است، امکان حذف آن وجود ندارد.'
- }
+    }
   };
 
   // ===== DOM =====
@@ -180,7 +180,7 @@
   // ===== Helpers =====
   const applyTheme = (theme) => {
     if (theme === 'auto') theme = window.matchMedia('(prefers-color-scheme: dark)').matches ?
- 'dark' : 'light';
+      'dark' : 'light';
     htmlEl.setAttribute('data-theme', theme);
     themeToggleBtn.querySelector('.material-icons-outlined').textContent = theme === 'light' ? 'dark_mode' : 'light_mode';
     localStorage.setItem('themePreference', theme);
@@ -188,30 +188,30 @@
   const toggleTheme = () => {
     const t = htmlEl.getAttribute('data-theme');
     applyTheme(t === 'light' ? 'dark' : 'light');
- };
+  };
   const formatDate = (date) => {
     if (!date || isNaN(new Date(date).getTime())) {
       return '';
- }
+    }
     return new Intl.DateTimeFormat('fa-IR', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
     }).format(new Date(date));
- };
+  };
   const formatTime = (date) => {
     if (!date || isNaN(new Date(date).getTime())) {
       return '';
- }
+    }
     return new Intl.DateTimeFormat('fa-IR', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false
     }).format(new Date(date));
- };
+  };
   const getReviewScheduleHtml = (schedule, createdAt, intervals) => {
     const baseDate = new Date(createdAt);
- const title = translations['fa']['review-schedule-title'];
+    const title = translations['fa']['review-schedule-title'];
     const word = 'مرور';
     const inner = schedule.map((r, i) => {
       const d = new Date(baseDate);
@@ -221,13 +221,14 @@
       const statusClass = r.completed ? 'completed-schedule' : 'pending-schedule';
       const icon = r.completed ? '<span class="material-icons-outlined schedule-tick">check_circle</span>' : '';
       return `<div class="schedule-item ${statusClass}"><span class="schedule-label">${word} ${i + 1}: ${intervalInDays} Days</span><span class="schedule-date">${formatDate(d)}</span>${icon}</div>`;
-  }).join('');
+
+    }).join('');
     return `<div class="review-schedule-box"><h4>${title}</h4>${inner}</div>`;
   };
 
   const getAttachmentsHtml = (attachments) => {
     if (!attachments || !Array.isArray(attachments) || attachments.length === 0) return '';
- return `<div class="attachments-display"><h4>${translations['fa']['attachments-title']}</h4>${
+    return `<div class="attachments-display"><h4>${translations['fa']['attachments-title']}</h4>${
     attachments.map(att => {
       switch (att.type) {
         case 'image':
@@ -243,10 +244,10 @@
       }
     }).join('')
 }</div>`;
- };
+  };
 
   const getProgressColorClass = (p) => p < 30 ? 'progress-red' : (p < 70 ? 'progress-yellow' : 'progress-green');
- const showConfirm = (text, title = 'تایید') => {
+  const showConfirm = (text, title = 'تایید') => {
     return new Promise((resolve) => {
       customModalTitle.textContent = title;
       customModalText.textContent = text;
@@ -258,7 +259,7 @@
       };
       const cancelHandler = () => {
         customModal.classList.add('hidden');
- resolve(false);
+        resolve(false);
         cleanup();
       };
       const cleanup = () => {
@@ -268,54 +269,54 @@
       customModalConfirmBtn.addEventListener('click', confirmHandler);
       customModalCancelBtn.addEventListener('click', cancelHandler);
     });
- };
+  };
 
   const showAlert = (text, title = 'خطا') => {
     customModalTitle.textContent = title;
     customModalText.textContent = text;
     customModal.classList.remove('hidden');
- customModal.classList.add('alert-mode');
+    customModal.classList.add('alert-mode');
     const confirmHandler = () => {
       customModal.classList.add('hidden');
       customModalConfirmBtn.removeEventListener('click', confirmHandler);
     };
     customModalConfirmBtn.addEventListener('click', confirmHandler);
   };
- const showToast = (message, type = 'success') => {
+  const showToast = (message, type = 'success') => {
     const toast = document.createElement('div');
     toast.className = `toast-message ${type}`;
- toast.innerHTML = `<span class="material-icons-outlined">${type === 'success' ? 'check_circle_outline' : 'error_outline'}</span><span>${message}</span>`;
+    toast.innerHTML = `<span class="material-icons-outlined">${type === 'success' ? 'check_circle_outline' : 'error_outline'}</span><span>${message}</span>`;
     toastContainer.prepend(toast);
- setTimeout(() => {
+    setTimeout(() => {
       toast.classList.add('show');
     }, 10);
- setTimeout(() => {
+    setTimeout(() => {
       toast.classList.remove('show');
       setTimeout(() => toast.remove(), 400);
     }, 3000);
- };
+  };
 
   // ===== Storage (Local) =====
   const saveToStorage = () => {
     try {
       localStorage.setItem('studyItems_v5', JSON.stringify(items));
- localStorage.setItem('reviewAlgorithms', JSON.stringify(algorithms));
+      localStorage.setItem('reviewAlgorithms', JSON.stringify(algorithms));
       localStorage.setItem('selectedAlgorithmId', selectedAlgorithmId);
     } catch (e) {
       console.error("Error saving to local storage:", e);
- showToast(translations['fa']['error-save'], 'error');
+      showToast(translations['fa']['error-save'], 'error');
     }
   };
   const loadFromLocalStorage = () => {
     try {
       items = JSON.parse(localStorage.getItem('studyItems_v5') || '[]');
- const storedAlgorithms = JSON.parse(localStorage.getItem('reviewAlgorithms') || 'null');
+      const storedAlgorithms = JSON.parse(localStorage.getItem('reviewAlgorithms') || 'null');
       algorithms = storedAlgorithms || defaultAlgorithms;
       selectedAlgorithmId = localStorage.getItem('selectedAlgorithmId') || 'default';
- } catch (e) {
+    } catch (e) {
       console.error("Error loading from local storage:", e);
       items = [];
- algorithms = defaultAlgorithms;
+      algorithms = defaultAlgorithms;
       selectedAlgorithmId = 'default';
     }
   };
@@ -323,73 +324,73 @@
   // ===== Render =====
   const renderAll = () => {
     renderTodayList();
- renderAllItemsList();
+    renderAllItemsList();
     renderAlgorithmSelects();
   };
   const renderTodayList = () => {
     const now = new Date();
- const todayItemsTotal = items.filter(item => !item.isMastered && item.nextReview && new Date(item.nextReview) <= now);
+    const todayItemsTotal = items.filter(item => !item.isMastered && item.nextReview && new Date(item.nextReview) <= now);
     const todayRemaining = todayItemsTotal.filter(item => !item.completedInSession);
- const todayCompletedInSession = items.filter(item => item.completedInSession);
+    const todayCompletedInSession = items.filter(item => item.completedInSession);
     todayRemainingList.innerHTML = '';
     todayCompletedList.innerHTML = '';
     let overall = 0;
- if (todayItemsTotal.length > 0) overall = (todayCompletedInSession.length / todayItemsTotal.length) * 100;
+    if (todayItemsTotal.length > 0) overall = (todayCompletedInSession.length / todayItemsTotal.length) * 100;
     overallProgressBarFill.style.width = `${overall}%`;
     overallProgressBarText.textContent = `${translations['fa']['overall-progress']} ${Math.round(overall)}%`;
- overallProgressBarContainer.classList.toggle('hidden', todayItemsTotal.length === 0 && todayCompletedInSession.length === 0);
+    overallProgressBarContainer.classList.toggle('hidden', todayItemsTotal.length === 0 && todayCompletedInSession.length === 0);
 
     if (todayRemaining.length === 0 && todayCompletedInSession.length === 0) {
       reviewPlaceholder.classList.remove('hidden');
- remainingSection.classList.add('hidden');
+      remainingSection.classList.add('hidden');
       completedSection.classList.add('hidden');
     } else {
       reviewPlaceholder.classList.add('hidden');
- if (todayRemaining.length > 0) {
+      if (todayRemaining.length > 0) {
         remainingSection.classList.remove('hidden');
- todayRemaining.forEach((item, idx) => {
+        todayRemaining.forEach((item, idx) => {
           const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
           todayRemainingList.appendChild(createTodayListItem(item, idx, false, itemAlgorithm.intervals));
         });
- } else remainingSection.classList.add('hidden');
+      } else remainingSection.classList.add('hidden');
       if (todayCompletedInSession.length > 0) {
         completedSection.classList.remove('hidden');
         completedSection.querySelector('.today-list').classList.remove('hidden');
- todayCompletedInSession.forEach((item, idx) => {
+        todayCompletedInSession.forEach((item, idx) => {
           const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
           todayCompletedList.appendChild(createTodayListItem(item, idx, true, itemAlgorithm.intervals));
         });
- } else {
+      } else {
         completedSection.classList.add('hidden');
         completedSection.querySelector('.today-list').classList.add('hidden');
- }
+      }
     }
     document.querySelector('.tab-btn[data-tab="review-panel"]').classList.toggle('status-pending', todayRemaining.length > 0);
   };
- const createTodayListItem = (item, index, isCompleted = false, intervals) => {
+  const createTodayListItem = (item, index, isCompleted = false, intervals) => {
     const li = document.createElement('li');
- li.className = `today-list-item ${isCompleted?'completed':''}`;
+    li.className = `today-list-item ${isCompleted?'completed':''}`;
     li.dataset.itemId = item.id;
     const attachmentsHtml = getAttachmentsHtml(item.attachments);
-    
+
     let completionTimeHtml = '';
- if (isCompleted && item.completionTime) {
+    if (isCompleted && item.completionTime) {
       const completionDate = new Date(item.completionTime);
- if (!isNaN(completionDate.getTime())) {
+      if (!isNaN(completionDate.getTime())) {
         completionTimeHtml = `<span class="completion-time">${translations['fa']['completed-at']} ${formatTime(completionDate)}</span>`;
- }
+      }
     }
 
     const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
- const itemIntervals = intervals || itemAlgorithm.intervals;
+    const itemIntervals = intervals || itemAlgorithm.intervals;
     const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt, itemIntervals);
- li.innerHTML = `<div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span>${completionTimeHtml}<span class="expand-arrow material-icons-outlined">expand_more</span></div><div class="item-details">${attachmentsHtml}${!isCompleted?`<button class="done-btn main-btn" data-id="${item.id}" aria-label="${translations['fa']['done-btn']}">${translations['fa']['done-btn']}</button>`:''}${reviewHtml}</div>`;
+    li.innerHTML = `<div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span>${completionTimeHtml}<span class="expand-arrow material-icons-outlined">expand_more</span></div><div class="item-details">${attachmentsHtml}${!isCompleted?`<button class="done-btn main-btn" data-id="${item.id}" aria-label="${translations['fa']['done-btn']}">${translations['fa']['done-btn']}</button>`:''}${reviewHtml}</div>`;
     return li;
   };
- const renderAllItemsList = () => {
+  const renderAllItemsList = () => {
     const container = document.getElementById('all-items-list');
     let filtered = [...items];
- const sortBy = sortSelect.value;
+    const sortBy = sortSelect.value;
     const sortOrder = sortOrderSelect.value;
     filtered.sort((a, b) => {
       let cmp = 0;
@@ -398,32 +399,32 @@
       else if (sortBy === 'progress') {
         const pa = a.reviewSchedule.length ? a.reviewSchedule.filter(r => r.completed).length / a.reviewSchedule.length : 0;
         const pb = b.reviewSchedule.length ? b.reviewSchedule.filter(r => r.completed).length / b.reviewSchedule.length : 0;
- cmp = pa - pb;
+        cmp = pa - pb;
       }
       return sortOrder === 'asc' ? cmp : -cmp;
     });
- container.innerHTML = '';
+    container.innerHTML = '';
     filtered.forEach((item, idx) => container.appendChild(createAllItemsListItem(item, idx)));
     totalCountEl.textContent = items.length;
     masteredCountEl.textContent = items.filter(i => i.isMastered).length;
- multiSelectActions.classList.toggle('hidden', !multiSelectMode && selectedItems.length === 0);
+    multiSelectActions.classList.toggle('hidden', !multiSelectMode && selectedItems.length === 0);
   };
 
   const createAllItemsListItem = (item, index) => {
     const li = document.createElement('li');
- li.className = 'all-items-item';
+    li.className = 'all-items-item';
     const completed = item.reviewSchedule.filter(r => r.completed).length;
     const progress = item.reviewSchedule.length ?
- (completed / item.reviewSchedule.length) * 100 : 0;
+      (completed / item.reviewSchedule.length) * 100 : 0;
     const attachmentsHtml = getAttachmentsHtml(item.attachments);
     const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) ||
- defaultAlgorithms[0];
+      defaultAlgorithms[0];
     const reviewHtml = getReviewScheduleHtml(item.reviewSchedule, item.createdAt, itemAlgorithm.intervals);
     const created = formatDate(new Date(item.createdAt));
     const isChecked = selectedItems.includes(item.id) ? 'checked' : '';
- const color = getProgressColorClass(progress);
+    const color = getProgressColorClass(progress);
     li.innerHTML = `<input type="checkbox" class="checkbox" data-id="${item.id}" aria-label="${translations['fa']['select-item']}" ${isChecked}><div class="item-main-row"><span class="item-number">${index+1}</span><span class="item-title">${item.title}</span><span class="creation-date">${created}</span><div class="item-inline-actions"><button class="edit-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations['fa']['edit-btn']}"><span class="material-icons-outlined">edit</span></button><button class="delete-icon-btn icon-btn" data-id="${item.id}" aria-label="${translations['fa']['delete-btn']}"><span class="material-icons-outlined">delete</span></button></div></div><div class="item-details">${attachmentsHtml}<div class="review-progress-section"><div class="progress-circle ${color}" style="--p:${progress}">${Math.round(progress)}%</div><button class="review-collapsible-header collapsed"><h4>${translations['fa']['review-schedule-title']}</h4><span class="expand-arrow material-icons-outlined">expand_more</span></button><div class="collapsible-content hidden">${reviewHtml}</div></div><div class="item-actions-bottom"><button class="reset-btn" data-id="${item.id}" aria-label="${translations['fa']['reset-btn']}">${translations['fa']['reset-btn']}</button></div></div>`;
- return li;
+    return li;
   };
 
   const renderAlgorithmSelects = () => {
@@ -449,39 +450,39 @@
         previewEl.textContent = algo.intervals.join(', ');
       }
     });
- };
+  };
 
   const updateAlgorithmPreview = (selectId, previewId) => {
     const select = document.getElementById(selectId);
     const previewEl = document.getElementById(previewId);
- if (select && previewEl) {
+    if (select && previewEl) {
       const selectedAlgo = algorithms.find(a => a.id === select.value);
- if (selectedAlgo) {
+      if (selectedAlgo) {
         previewEl.textContent = selectedAlgo.intervals.join(', ');
- } else {
+      } else {
         previewEl.textContent = '';
       }
     }
   };
- // ===== CRUD & Attachments =====
+  // ===== CRUD & Attachments =====
   const resetNewItemForm = () => {
     newTitleInput.value = '';
- tempAttachments = [];
+    tempAttachments = [];
     attachmentsPreview.innerHTML = '';
     saveItemBtn.disabled = true;
     selectedAlgorithmId = localStorage.getItem('selectedAlgorithmId') || 'default';
     renderAlgorithmSelects();
   };
- const saveItem = () => {
+  const saveItem = () => {
     const title = newTitleInput.value.trim();
- if (!title) {
+    if (!title) {
       showAlert(translations['fa']['error-empty-title']);
       return;
     }
     const now = new Date();
- const selectedAlgo = algorithms.find(a => a.id === reviewAlgorithmSelect.value) || defaultAlgorithms[0];
+    const selectedAlgo = algorithms.find(a => a.id === reviewAlgorithmSelect.value) || defaultAlgorithms[0];
     const intervals = selectedAlgo.intervals;
- const schedule = intervals.map((it) => {
+    const schedule = intervals.map((it) => {
       const d = new Date(now);
       if (it === 0) d.setMinutes(d.getMinutes() + 20);
       else d.setDate(d.getDate() + it);
@@ -490,7 +491,7 @@
         completed: false
       };
     });
- const newItem = {
+    const newItem = {
       id: Date.now(),
       title,
       attachments: [...tempAttachments],
@@ -503,7 +504,7 @@
       completionTime: null,
       algorithmId: selectedAlgo.id
     };
- items.unshift(newItem);
+    items.unshift(newItem);
     saveToStorage();
     resetNewItemForm();
     renderAll();
@@ -512,30 +513,30 @@
   const openEditModal = (item) => {
     editingItemId = item.id;
     editTitleInput.value = item.title;
- tempAttachments = [...item.attachments];
+    tempAttachments = [...item.attachments];
     renderAttachmentsPreview(editAttachmentsPreview);
     editReviewAlgorithmSelect.value = item.algorithmId;
     updateAlgorithmPreview('edit-review-algorithm-select', 'edit-review-algorithm-preview');
     editModal.classList.remove('hidden');
     editModal.focus();
   };
- const saveEdit = () => {
+  const saveEdit = () => {
     const item = items.find(i => i.id === editingItemId);
     if (!item) return;
- const t = editTitleInput.value.trim();
+    const t = editTitleInput.value.trim();
     if (!t) {
       showAlert(translations['fa']['error-empty-title']);
       return;
- }
+    }
     item.title = t;
     item.attachments = [...tempAttachments];
     const newAlgorithmId = editReviewAlgorithmSelect.value;
- if (item.algorithmId !== newAlgorithmId) {
+    if (item.algorithmId !== newAlgorithmId) {
       const oldAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
- const newAlgorithm = algorithms.find(a => a.id === newAlgorithmId) || defaultAlgorithms[0];
+      const newAlgorithm = algorithms.find(a => a.id === newAlgorithmId) || defaultAlgorithms[0];
       const previousIntervals = oldAlgorithm.intervals.join(', ');
       const newIntervals = newAlgorithm.intervals.join(', ');
- const confirmationText = `${translations['fa']['confirm-change-algorithm']}\n\n${translations['fa']['previous-algorithm']} ${previousIntervals}\n${translations['fa']['new-algorithm']} ${newIntervals}`;
+      const confirmationText = `${translations['fa']['confirm-change-algorithm']}\n\n${translations['fa']['previous-algorithm']} ${previousIntervals}\n${translations['fa']['new-algorithm']} ${newIntervals}`;
       showConfirm(confirmationText).then(result => {
         if (result) {
           item.algorithmId = newAlgorithmId;
@@ -545,7 +546,8 @@
           item.completionTime = null;
 
           const now = new Date();
-        const newSchedule = newAlgorithm.intervals.map(it => {
+
+          const newSchedule = newAlgorithm.intervals.map(it => {
             const d = new Date(now);
             if (it === 0) d.setMinutes(d.getMinutes() + 20);
             else d.setDate(d.getDate() + it);
@@ -563,44 +565,44 @@
           renderAll();
         }
       });
- } else {
+    } else {
       saveToStorage();
       closeEditModal();
       renderAll();
     }
   };
- const closeEditModal = () => {
+  const closeEditModal = () => {
     editModal.classList.add('hidden');
     editingItemId = null;
     tempAttachments = [];
     editTitleInput.value = '';
- editAttachmentsPreview.innerHTML = '';
+    editAttachmentsPreview.innerHTML = '';
   };
   const deleteItem = async (id) => {
     if (!await showConfirm(translations['fa']['confirm-delete'])) return;
- items = items.filter(i => i.id !== id);
+    items = items.filter(i => i.id !== id);
     saveToStorage();
     renderAll();
   };
- const deleteSelected = async () => {
+  const deleteSelected = async () => {
     if (!await showConfirm(translations['fa']['confirm-delete-selected'])) return;
     items = items.filter(i => !selectedItems.includes(i.id));
- selectedItems = [];
+    selectedItems = [];
     toggleMultiSelect(false);
     saveToStorage();
     renderAll();
   };
   const resetProgress = async (id) => {
     if (!await showConfirm(translations['fa']['confirm-reset'])) return;
- const item = items.find(i => i.id === id);
+    const item = items.find(i => i.id === id);
     if (!item) return;
     item.level = 0;
     item.isMastered = false;
     item.completedInSession = false;
- item.completionTime = null;
+    item.completionTime = null;
     const now = new Date();
     const itemAlgorithm = algorithms.find(a => a.id === item.algorithmId) || defaultAlgorithms[0];
- item.reviewSchedule = itemAlgorithm.intervals.map((it) => {
+    item.reviewSchedule = itemAlgorithm.intervals.map((it) => {
       const d = new Date(now);
       if (it === 0) d.setMinutes(d.getMinutes() + 20);
       else d.setDate(d.getDate() + it);
@@ -609,7 +611,7 @@
         completed: false
       };
     });
- item.nextReview = item.reviewSchedule[0].scheduledFor;
+    item.nextReview = item.reviewSchedule[0].scheduledFor;
     saveToStorage();
     renderAll();
   };
@@ -618,71 +620,71 @@
     fileUploadInput.accept = accept;
     fileUploadInput.click();
   };
- const handleFileUpload = (e) => {
+  const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
- if (file.size > 50 * 1024 * 1024) {
+    if (file.size > 50 * 1024 * 1024) {
       showAlert(translations['fa']['error-file-size']);
       return;
- }
+    }
     const reader = new FileReader();
     reader.onload = (ev) => {
       const type = file.type.split('/')[0];
- tempAttachments.push({
+      tempAttachments.push({
         type,
         data: ev.target.result,
         name: file.name
       });
- renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
+      renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
     };
     reader.readAsDataURL(file);
     e.target.value = '';
   };
- const openTextModal = () => {
+  const openTextModal = () => {
     modalTextarea.value = '';
     textModal.classList.remove('hidden');
     modalTextarea.focus();
   };
- const closeTextModal = () => {
+  const closeTextModal = () => {
     textModal.classList.add('hidden');
     modalTextarea.value = '';
   };
- const saveTextAttachment = () => {
+  const saveTextAttachment = () => {
     const txt = modalTextarea.value.trim();
- if (txt) {
+    if (txt) {
       tempAttachments.push({
         type: 'text',
         data: txt,
         name: translations['fa']['text-note']
       });
- renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
+      renderAttachmentsPreview(editingItemId ? editAttachmentsPreview : attachmentsPreview);
     }
     closeTextModal();
   };
- const renderAttachmentsPreview = (container) => {
+  const renderAttachmentsPreview = (container) => {
     container.innerHTML = tempAttachments.map((att, i) => `<div class="preview-item"><span>${att.name}</span><button type="button" class="icon-btn" data-index="${i}" aria-label="${translations['fa']['remove-attachment']}"><span class="material-icons-outlined">close</span></button></div>`).join('');
- };
+  };
   const handleAttachmentRemove = (e, container) => {
     const removeBtn = e.target.closest('button[data-index]');
- if (removeBtn) {
+    if (removeBtn) {
       const i = parseInt(removeBtn.dataset.index, 10);
- if (!isNaN(i)) {
+      if (!isNaN(i)) {
         tempAttachments.splice(i, 1);
         renderAttachmentsPreview(container);
       }
     }
   };
- // ===== Language/Theme/Font =====
+  // ===== Language/Theme/Font =====
   const applyFont = (font) => {
     if (font === 'system') font = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
- document.documentElement.style.setProperty('--font-family', font);
+    document.documentElement.style.setProperty('--font-family', font);
     localStorage.setItem('fontPreference', font);
   };
 
   const applyLanguage = (lang) => {
     currentLanguage = lang;
     htmlEl.lang = lang;
- htmlEl.dir = 'rtl';
+    htmlEl.dir = 'rtl';
     // Update all elements with data-i18n attribute
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
@@ -690,32 +692,32 @@
         el.textContent = translations['fa'][key];
       }
     });
- // Handle placeholders and tooltips
+    // Handle placeholders and tooltips
     newTitleInput.placeholder = translations['fa']['new-title-placeholder'];
     modalTextarea.placeholder = translations['fa']['modal-textarea-placeholder'];
     addImageBox.dataset.tooltip = translations['fa']['add-image-tooltip'];
     addVideoBox.dataset.tooltip = translations['fa']['add-video-tooltip'];
- addAudioBox.dataset.tooltip = translations['fa']['add-audio-tooltip'];
+    addAudioBox.dataset.tooltip = translations['fa']['add-audio-tooltip'];
     addTextBox.dataset.tooltip = translations['fa']['add-text-tooltip'];
 
     // Handle specific elements
     if (sortSelect) {
       sortSelect.querySelector('option[value="date"]').textContent = translations['fa']['sort-date'];
- sortSelect.querySelector('option[value="title"]').textContent = translations['fa']['sort-title'];
+      sortSelect.querySelector('option[value="title"]').textContent = translations['fa']['sort-title'];
       sortSelect.querySelector('option[value="progress"]').textContent = translations['fa']['sort-progress'];
     }
     if (sortOrderSelect) {
       sortOrderSelect.querySelector('option[value="asc"]').textContent = translations['fa']['sort-order-asc'];
- sortOrderSelect.querySelector('option[value="desc"]').textContent = translations['fa']['sort-order-desc'];
+      sortOrderSelect.querySelector('option[value="desc"]').textContent = translations['fa']['sort-order-desc'];
     }
 
     localStorage.setItem('languagePreference', lang);
     renderAll();
   };
- // ===== Algorithm Management =====
+  // ===== Algorithm Management =====
   const renderAlgorithmList = () => {
     algorithmList.innerHTML = '';
- algorithms.forEach(algo => {
+    algorithms.forEach(algo => {
       const li = document.createElement('li');
       li.className = 'algorithm-item';
       li.innerHTML = `
@@ -724,36 +726,38 @@
               <p class="algorithm-item-intervals">${algo.intervals.join(', ')}</p>
           </div>
           <div class="algorithm-item-actions">
-          <button class="icon-btn edit-icon-btn" data-id="${algo.id}" aria-label="ویرایش">
+          
+ <button class="icon-btn edit-icon-btn" data-id="${algo.id}" aria-label="ویرایش">
                   <span class="material-icons-outlined">edit</span>
               </button>
               <button class="icon-btn delete-icon-btn" data-id="${algo.id}" aria-label="حذف">
                   <span class="material-icons-outlined">delete</span>
               </button>
         </div>
-      `;
+    
+   `;
       if (algo.id === 'default') {
         li.querySelector('.delete-icon-btn').disabled = true;
         li.querySelector('.delete-icon-btn').style.opacity = 0.5;
         li.querySelector('.edit-icon-btn').disabled = true;
- li.querySelector('.edit-icon-btn').style.opacity = 0.5;
+        li.querySelector('.edit-icon-btn').style.opacity = 0.5;
       }
       algorithmList.appendChild(li);
     });
   };
- const openAlgorithmModal = () => {
+  const openAlgorithmModal = () => {
     renderAlgorithmList();
     reviewAlgorithmModal.classList.remove('hidden');
   };
- const closeAlgorithmModal = () => {
+  const closeAlgorithmModal = () => {
     reviewAlgorithmModal.classList.add('hidden');
   };
- const openEditAlgorithmModal = (id = null) => {
+  const openEditAlgorithmModal = (id = null) => {
     let algo;
- if (id) {
+    if (id) {
       algo = algorithms.find(a => a.id === id);
       editingAlgorithmId = id;
- algorithmNameInput.value = algo.name;
+      algorithmNameInput.value = algo.name;
       renderIntervalsList(algo.intervals);
       document.getElementById('edit-algorithm-modal-title').textContent = translations['fa']['edit-algorithm-modal-title'];
     } else {
@@ -761,7 +765,7 @@
         name: '',
         intervals: [...defaultIntervals]
       };
- editingAlgorithmId = Date.now().toString();
+      editingAlgorithmId = Date.now().toString();
       algorithmNameInput.value = '';
       renderIntervalsList(algo.intervals);
       document.getElementById('edit-algorithm-modal-title').textContent = translations['fa']['add-algorithm-btn'];
@@ -769,15 +773,15 @@
     editAlgorithmModal.classList.remove('hidden');
     editAlgorithmModal.focus();
   };
- const closeEditAlgorithmModal = () => {
+  const closeEditAlgorithmModal = () => {
     editAlgorithmModal.classList.add('hidden');
     editingAlgorithmId = null;
     algorithmNameInput.value = '';
     algorithmIntervalsList.innerHTML = '';
   };
- const renderIntervalsList = (intervals) => {
+  const renderIntervalsList = (intervals) => {
     algorithmIntervalsList.innerHTML = '';
- intervals.forEach((interval, index) => {
+    intervals.forEach((interval, index) => {
       const li = document.createElement('li');
       li.className = 'interval-item';
       li.draggable = true;
@@ -787,32 +791,32 @@
             <input type="number" class="interval-input" value="${interval}">
             <button type="button" class="icon-btn delete-interval-btn"><span class="material-icons-outlined">delete</span></button>
         `;
-   algorithmIntervalsList.appendChild(li);
+      algorithmIntervalsList.appendChild(li);
     });
   };
 
   const saveAlgorithm = () => {
     const name = algorithmNameInput.value.trim();
- if (!name) {
+    if (!name) {
       showToast(translations['fa']['algorithm-name-empty'], 'error');
       return;
     }
     const intervalInputs = Array.from(algorithmIntervalsList.querySelectorAll('.interval-input'));
- const newIntervals = intervalInputs.map(input => parseInt(input.value, 10)).filter(n => !isNaN(n) && n >= 0);
- if (newIntervals.length === 0) {
+    const newIntervals = intervalInputs.map(input => parseInt(input.value, 10)).filter(n => !isNaN(n) && n >= 0);
+    if (newIntervals.length === 0) {
       showToast("فاصله‌ها نمی‌توانند خالی باشند.", 'error');
       return;
- }
+    }
 
     const newAlgo = {
       id: editingAlgorithmId,
       name: name,
       intervals: newIntervals
     };
- const existingIndex = algorithms.findIndex(a => a.id === editingAlgorithmId);
+    const existingIndex = algorithms.findIndex(a => a.id === editingAlgorithmId);
     if (existingIndex > -1) {
       algorithms[existingIndex] = newAlgo;
- } else {
+    } else {
       algorithms.push(newAlgo);
     }
     saveToStorage();
@@ -821,21 +825,21 @@
     renderAlgorithmList();
     renderAlgorithmSelects();
   };
- const deleteAlgorithm = async (id) => {
+  const deleteAlgorithm = async (id) => {
     if (algorithms.length <= 1) {
       showToast(translations['fa']['cannot-delete-last-algorithm'], 'error');
- return;
+      return;
     }
 
     if (!await showConfirm(translations['fa']['confirm-delete-algorithm'])) return;
     algorithms = algorithms.filter(a => a.id !== id);
- if (selectedAlgorithmId === id) {
+    if (selectedAlgorithmId === id) {
       selectedAlgorithmId = 'default';
     }
     saveToStorage();
     renderAlgorithmList();
     renderAll();
- showToast(translations['fa']['algorithm-delete-success'], 'success');
+    showToast(translations['fa']['algorithm-delete-success'], 'success');
   };
 
 
@@ -847,54 +851,31 @@
     applyFont(localStorage.getItem('fontPreference') || 'system');
     renderAll();
 
-    // Tooltip event listeners
-    document.querySelectorAll('[data-tooltip]').forEach(el => {
-      el.addEventListener('mouseover', (e) => {
-        const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.textContent = e.target.dataset.tooltip;
-        document.body.appendChild(tooltip);
-  });
-      el.addEventListener('mouseout', () => {
-        const tooltip = document.querySelector('.tooltip');
-        if (tooltip) tooltip.remove();
-      });
-    });
-
     loginBtn.addEventListener('click', () => showAlert(translations['fa']['error-login']));
 
     tabs.forEach(tab => tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
- tab.classList.add('active');
+      tab.classList.add('active');
       headerTitle.textContent = translations['fa'][tab.dataset.tab.replace('-panel', '-title')] || translations['fa'][`${tab.dataset.tab.split('-')[0]}-tab`] || tab.dataset.title;
       contentPanels.forEach(p => p.classList.remove('active'));
       document.getElementById(tab.dataset.tab).classList.add('active');
       if (tab.dataset.tab === 'review-panel') renderTodayList();
- if (tab.dataset.tab === 'all-items-panel') renderAllItemsList();
+      if (tab.dataset.tab === 'all-items-panel') renderAllItemsList();
       if (tab.dataset.tab === 'new-item-panel') resetNewItemForm();
     }));
 
     themeToggleBtn.addEventListener('click', toggleTheme);
     saveItemBtn.addEventListener('click', saveItem);
- // رویداد برای فعال/غیرفعال کردن دکمه ذخیره
+    // رویداد برای فعال/غیرفعال کردن دکمه ذخیره
     newTitleInput.addEventListener('input', () => {
       saveItemBtn.disabled = newTitleInput.value.trim() === '';
     });
- newTitleInput.addEventListener('keydown', e => {
+    newTitleInput.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !saveItemBtn.disabled) {
         saveItem();
       }
     });
-
-    // Handle new attachment button
-    const attachmentsToolbar = document.getElementById('attachment-toolbar');
-    const addAttachmentBtn = document.getElementById('add-attachment-btn');
-    addAttachmentBtn.addEventListener('click', () => {
-      attachmentsToolbar.classList.toggle('hidden');
-      const isHidden = attachmentsToolbar.classList.contains('hidden');
-      addAttachmentBtn.querySelector('.material-icons-outlined').textContent = isHidden ? 'add_circle' : 'remove_circle';
-    });
-
+    
     addImageBox.addEventListener('click', () => triggerFileUpload('image/*'));
     addVideoBox.addEventListener('click', () => triggerFileUpload('video/*'));
     addAudioBox.addEventListener('click', () => triggerFileUpload('audio/*'));
@@ -902,18 +883,18 @@
     fileUploadInput.addEventListener('change', handleFileUpload);
     saveTextBtn.addEventListener('click', saveTextAttachment);
     cancelTextBtn.addEventListener('click', closeTextModal);
- attachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, attachmentsPreview));
+    attachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, attachmentsPreview));
 
     saveEditBtn.addEventListener('click', saveEdit);
     cancelEditBtn.addEventListener('click', closeEditModal);
     editAttachmentsPreview.addEventListener('click', (e) => handleAttachmentRemove(e, editAttachmentsPreview));
- settingsBtn.addEventListener('click', () => {
+    settingsBtn.addEventListener('click', () => {
       languageSelect.value = localStorage.getItem('languagePreference') || 'fa';
       themeSelect.value = localStorage.getItem('themePreference') || 'light';
       fontSelect.value = localStorage.getItem('fontPreference') || 'system';
       settingsModal.classList.remove('hidden');
     });
- // New item dropdown logic
+    // New item dropdown logic
     if (reviewAlgorithmSelect) {
       reviewAlgorithmSelect.addEventListener('change', (e) => {
         const selectedId = e.target.value;
@@ -924,7 +905,7 @@
           updateAlgorithmPreview('review-algorithm-select', 'review-algorithm-preview');
         }
       });
- }
+    }
 
     // Edit item dropdown logic
     if (editReviewAlgorithmSelect) {
@@ -935,14 +916,14 @@
         }
         updateAlgorithmPreview('edit-review-algorithm-select', 'edit-review-algorithm-preview');
       });
- }
+    }
 
     if (openAlgorithmModalBtn) {
       openAlgorithmModalBtn.addEventListener('click', () => {
         settingsModal.classList.add('hidden');
         openAlgorithmModal();
       });
- }
+    }
 
     // Fix: Back button now correctly shows settings modal
     if (backToSettingsBtn) {
@@ -950,12 +931,12 @@
         reviewAlgorithmModal.classList.add('hidden');
         settingsModal.classList.remove('hidden');
       });
- }
+    }
 
     // Algorithm Modal Events
     if (addAlgorithmBtn) {
       addAlgorithmBtn.addEventListener('click', () => openEditAlgorithmModal());
- }
+    }
 
     if (algorithmList) {
       algorithmList.addEventListener('click', (e) => {
@@ -967,7 +948,7 @@
           deleteAlgorithm(deleteBtn.dataset.id);
         }
       });
- }
+    }
 
     if (addIntervalBtn) {
       addIntervalBtn.addEventListener('click', () => {
@@ -981,7 +962,7 @@
         `;
         algorithmIntervalsList.appendChild(li);
       });
- }
+    }
 
     if (algorithmIntervalsList) {
       // Add event listener for deleting interval items
@@ -990,15 +971,15 @@
           e.target.closest('.interval-item').remove();
         }
       });
- // Drag and Drop Logic
+      // Drag and Drop Logic
       let dragSrcEl;
- algorithmIntervalsList.addEventListener('dragstart', function(e) {
+      algorithmIntervalsList.addEventListener('dragstart', function(e) {
         dragSrcEl = e.target;
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', e.target.innerHTML);
         e.target.classList.add('drag-active');
       });
- algorithmIntervalsList.addEventListener('dragover', function(e) {
+      algorithmIntervalsList.addEventListener('dragover', function(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
         const target = e.target.closest('.interval-item');
@@ -1006,10 +987,10 @@
           target.classList.add('drag-over');
         }
       });
- algorithmIntervalsList.addEventListener('dragleave', function(e) {
+      algorithmIntervalsList.addEventListener('dragleave', function(e) {
         e.target.classList.remove('drag-over');
       });
- algorithmIntervalsList.addEventListener('drop', function(e) {
+      algorithmIntervalsList.addEventListener('drop', function(e) {
         e.stopPropagation();
         const target = e.target.closest('.interval-item');
         if (dragSrcEl !== target) {
@@ -1018,25 +999,26 @@
           if (srcIndex > targetIndex) {
             algorithmIntervalsList.insertBefore(dragSrcEl, target);
           } else {
+
             algorithmIntervalsList.insertBefore(dragSrcEl, target.nextSibling);
           }
         }
         e.target.classList.remove('drag-over');
       });
- algorithmIntervalsList.addEventListener('dragend', function(e) {
+      algorithmIntervalsList.addEventListener('dragend', function(e) {
         e.target.classList.remove('drag-active');
         const items = this.querySelectorAll('.interval-item');
         items.forEach((item, index) => item.dataset.index = index);
       });
- }
+    }
 
     if (saveAlgorithmBtn) {
       saveAlgorithmBtn.addEventListener('click', saveAlgorithm);
- }
+    }
 
     if (cancelAlgorithmBtn) {
       cancelAlgorithmBtn.addEventListener('click', closeEditAlgorithmModal);
- }
+    }
 
     saveSettingsBtn.addEventListener('click', () => {
       applyLanguage(languageSelect.value);
@@ -1046,7 +1028,7 @@
       settingsModal.classList.add('hidden');
       showToast(translations['fa']['settings-save-success'], 'success');
     });
- cancelSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
+    cancelSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
 
     const allList = document.getElementById('all-items-list');
     allList.addEventListener('click', (e) => {
@@ -1059,7 +1041,8 @@
         const content = parent.querySelector('.collapsible-content');
         revHeader.classList.toggle('collapsed');
         content.classList.toggle('hidden');
-       return;
+
+        return;
       }
       if (btn || checkbox) {
         if (btn && btn.classList.contains('edit-icon-btn')) {
@@ -1068,23 +1051,24 @@
         } else if (btn && btn.classList.contains('delete-icon-btn')) {
           deleteItem(Number(btn.dataset.id));
         } else if (btn && btn.classList.contains('reset-btn')) {
-        resetProgress(Number(btn.dataset.id));
+
+          resetProgress(Number(btn.dataset.id));
         }
         return;
       }
       const mainRow = e.target.closest('.item-main-row');
- if (mainRow) {
+      if (mainRow) {
         mainRow.closest('.all-items-item').classList.toggle('expanded');
       }
     });
 
     let touchStartTime;
- allList.addEventListener('touchstart', (e) => {
-   if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) {
-     touchStartTime = Date.now();
-   }
- });
- allList.addEventListener('touchend', (e) => {
+    allList.addEventListener('touchstart', (e) => {
+      if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) {
+        touchStartTime = Date.now();
+      }
+    });
+    allList.addEventListener('touchend', (e) => {
       if (Date.now() - touchStartTime > 500) {
         if (!e.target.closest('button') && !e.target.closest('input[type="checkbox"]')) {
           const li = e.target.closest('.all-items-item');
@@ -1092,14 +1076,14 @@
             const cb = li.querySelector('.checkbox');
             if (cb) {
               if (!multiSelectMode) toggleMultiSelect(true);
-   cb.checked = !cb.checked;
+              cb.checked = !cb.checked;
               cb.dispatchEvent(new Event('change'));
             }
           }
         }
       }
     });
- allList.addEventListener('change', (e) => {
+    allList.addEventListener('change', (e) => {
       if (e.target.classList.contains('checkbox')) {
         const id = Number(e.target.dataset.id);
         if (e.target.checked) selectedItems.push(id);
@@ -1107,7 +1091,7 @@
       }
       multiSelectActions.classList.toggle('hidden', selectedItems.length === 0 && !multiSelectMode);
     });
- selectAllBtn.addEventListener('click', () => {
+    selectAllBtn.addEventListener('click', () => {
       selectedItems = [];
       document.querySelectorAll('#all-items-list .checkbox').forEach(cb => {
         cb.checked = true;
@@ -1115,13 +1099,13 @@
       });
       multiSelectActions.classList.remove('hidden');
     });
- deleteSelectedBtn.addEventListener('click', deleteSelected);
+    deleteSelectedBtn.addEventListener('click', deleteSelected);
     sortSelect.addEventListener('change', renderAllItemsList);
     sortOrderSelect.addEventListener('change', e => {
       currentSortOrder = e.target.value;
       renderAllItemsList();
     });
- reviewPanel.addEventListener('click', (e) => {
+    reviewPanel.addEventListener('click', (e) => {
       const header = e.target.closest('.collapsible-header');
       if (header) {
         header.classList.toggle('collapsed');
@@ -1133,6 +1117,7 @@
         mainRow.closest('.today-list-item').classList.toggle('expanded');
       }
       if (doneBtn) {
+
         const id = Number(doneBtn.dataset.id);
         const item = items.find(i => i.id === id);
         if (!item) return;
@@ -1148,24 +1133,24 @@
           item.level++;
           if (item.level >= item.reviewSchedule.length) {
             item.isMastered = true;
-   item.nextReview = null;
+            item.nextReview = null;
           } else {
             item.nextReview = item.reviewSchedule[item.level].scheduledFor;
-   }
+          }
           saveToStorage();
           renderAll();
         }, 300);
       }
     });
   });
- const toggleMultiSelect = (enable) => {
+  const toggleMultiSelect = (enable) => {
     multiSelectMode = enable;
     selectedItems = [];
- document.querySelectorAll('.all-items-item .checkbox').forEach(cb => {
+    document.querySelectorAll('.all-items-item .checkbox').forEach(cb => {
       cb.checked = false;
       cb.parentElement.classList.toggle('multi-select-mode', enable);
     });
- multiSelectActions.classList.toggle('hidden', !enable);
+    multiSelectActions.classList.toggle('hidden', !enable);
     renderAllItemsList();
   };
 })();
