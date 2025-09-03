@@ -56,7 +56,6 @@
         <div id="newItemForm" class="form-layout">
             <div class="input-group">
   <input type="text" id="newTitleInput" placeholder="عنوان خود را اینجا بنویسید...">
-  <button id="add-attachment-btn" class="plain-icon-btn" aria-label="اضافه کردن پیوست"><span class="material-icons-outlined">add_circle</span></button>
 </div>
  
             <div class="algorithm-select-box">
@@ -65,13 +64,15 @@
                   <select id="review-algorithm-select" class="modern-input"></select>
                 </div>
             </div>
-            <div id="attachment-toolbar" class="attachment-options hidden">
-                <div class="option-box" id="add-image-box" data-tooltip="اضافه کردن عکس"><span class="material-icons-outlined">image</span></div>
-                <div class="option-box" id="add-video-box" data-tooltip="اضافه کردن فیلم"><span class="material-icons-outlined">videocam</span></div>
-                <div class="option-box" id="add-audio-box" data-tooltip="اضافه کردن صوت"><span class="material-icons-outlined">audiotrack</span></div>
-                <div class="option-box" id="add-text-box" data-tooltip="اضافه کردن یادداشت متنی"><span class="material-icons-outlined">notes</span></div>
-            </div>
-            <input type="file" id="file-upload-input" class="hidden" aria-hidden="true">
+<div class="details-box">
+    <label class="details-box-label">توضیحات بیشتر (اختیاری)</label>
+    <div id="attachment-toolbar" class="attachment-options">
+        <div class="option-box" id="add-image-box" data-tooltip="اضافه کردن عکس"><span class="material-icons-outlined">image</span></div>
+        <div class="option-box" id="add-video-box" data-tooltip="اضافه کردن فیلم"><span class="material-icons-outlined">videocam</span></div>
+        <div class="option-box" id="add-audio-box" data-tooltip="اضافه کردن صوت"><span class="material-icons-outlined">audiotrack</span></div>
+        <div class="option-box" id="add-text-box" data-tooltip="اضافه کردن یادداشت متنی"><span class="material-icons-outlined">notes</span></div>
+    </div>
+</div>            <input type="file" id="file-upload-input" class="hidden" aria-hidden="true">
             <div id="attachments-preview"></div>
             <button id="saveItemBtn" class="main-btn" type="button" aria-label="ذخیره عنوان" disabled>ذخیره عنوان</button>
         </div>
