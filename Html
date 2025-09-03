@@ -29,7 +29,7 @@
       </div>
       <div id="review-placeholder" class="placeholder">
         <p id="review-placeholder-text">امروز موردی برای مرور وجود ندارد.
- عالیه!</p>
+عالیه!</p>
       </div>
       <div id="remaining-section">
         <div class="collapsible-header">
@@ -52,19 +52,18 @@
 
     <div id="new-item-panel" class="content-panel">
         <div id="newItemForm" class="form-layout">
-            <input type="text" id="newTitleInput" placeholder="عنوان را وارد کنید...">
+            <input type="text" id="newTitleInput" placeholder="عنوان خود را اینجا بنویسید...">
  
-            <div class="settings-section">
+            <div class="algorithm-select-box">
                 <label id="review-algorithm-select-label" for="review-algorithm-select"><span class="material-icons-outlined">alarm</span> انتخاب الگوریتم مرور:</label>
                 <div class="review-algorithm-select-container">
-                  <select id="review-algorithm-select"></select>
-                  <p id="review-algorithm-preview" class="preview-text"></p>
-          
-              </div>
+                  <select id="review-algorithm-select" class="modern-input"></select>
+                </div>
             </div>
             <div id="attachment-toolbar" class="attachment-options">
                 <div class="option-box" id="add-image-box" data-tooltip="اضافه کردن عکس"><span class="material-icons-outlined">image</span></div>
                 <div class="option-box" id="add-video-box" data-tooltip="اضافه کردن فیلم"><span class="material-icons-outlined">videocam</span></div>
+             
                 <div class="option-box" id="add-audio-box" data-tooltip="اضافه کردن صوت"><span class="material-icons-outlined">audiotrack</span></div>
   
                 <div class="option-box" id="add-text-box" data-tooltip="اضافه کردن یادداشت متنی"><span class="material-icons-outlined">notes</span></div>
@@ -72,6 +71,7 @@
             <input type="file" id="file-upload-input" class="hidden" aria-hidden="true">
             <div id="attachments-preview"></div>
             <button id="saveItemBtn" class="main-btn" type="button" aria-label="ذخیره عنوان" disabled>ذخیره عنوان</button>
+      
         </div>
     </div>
 
@@ -83,6 +83,7 @@
             <select id="sort-select">
                 <option value="date" id="sort-date">تاریخ</option>
                 <option value="title" id="sort-title">عنوان</option>
+            
                 <option value="progress" id="sort-progress">پیشرفت</option>
         
             </select>
@@ -90,6 +91,7 @@
             <select id="sort-order-select">
                 <option value="desc" id="sort-order-desc">نزولی</option>
                 <option value="asc" id="sort-order-asc">صعودی</option>
+          
             </select>
         </div>
         <div class="all-items-header">
@@ -100,6 +102,7 @@
         <ul id="all-items-list" class="all-items-list"></ul>
         <div id="multi-select-actions" class="hidden">
             <button id="select-all-btn" class="secondary-btn" aria-label="انتخاب همه">انتخاب همه</button>
+   
             <button id="delete-selected-btn" class="warning-btn" aria-label="حذف انتخاب‌شده‌ها">حذف انتخاب‌شده‌ها</button>
         </div>
  
@@ -114,7 +117,8 @@
       <span class="tab-icon material-icons-outlined">add_circle_outline</span><span class="tab-label" id="new-tab">جدید</span>
     </button>
     <button class="tab-btn" data-tab="all-items-panel" data-title="همه کارها" aria-label="همه کارها">
-      <span class="tab-icon material-icons-outlined">list_alt</span><span class="tab-label" id="all-tab">همه</span>
+      <span 
+class="tab-icon material-icons-outlined">list_alt</span><span class="tab-label" id="all-tab">همه</span>
     </button>
   </nav>
 
@@ -129,7 +133,8 @@
       <div class="settings-section">
         <label for="edit-review-algorithm-select"><span class="material-icons-outlined">alarm</span> انتخاب الگوریتم مرور:</label>
         <div class="review-algorithm-select-container">
-          <select id="edit-review-algorithm-select"></select>
+   
+           <select id="edit-review-algorithm-select"></select>
           <p id="edit-review-algorithm-preview" class="preview-text"></p>
      
     </div>
@@ -143,7 +148,8 @@
   </div>
 
   <div id="text-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="text-modal-title">
-    <div class="modal-content">
+  
+       <div class="modal-content">
       <div class="modal-header-with-separator">
         <h3 id="text-modal-title"><span class="material-icons-outlined">notes</span> افزودن یادداشت متنی</h3>
    
@@ -157,7 +163,8 @@
     </div>
   </div>
 
-  <div id="settings-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+  
+ <div id="settings-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
     <div class="modal-content settings-content">
       <div class="modal-header-with-separator">
        
@@ -168,7 +175,8 @@
         <label id="language-label" for="language-select"><span class="material-icons-outlined">language</span> زبان:</label>
         <select id="language-select">
           <option value="fa">فارسی</option>
-        </select>
+      
+           </select>
       </div>
       <div class="settings-section">
         <label id="theme-label" for="theme-select"><span class="material-icons-outlined">palette</span> تم:</label>
@@ -180,7 +188,8 @@
         </select>
       </div>
       <div class="settings-section">
-        <label id="font-label" for="font-select"><span class="material-icons-outlined">font_download</span> فونت:</label>
+        
+         <label id="font-label" for="font-select"><span class="material-icons-outlined">font_download</span> فونت:</label>
         <select id="font-select">
           <option value="system">پیش‌فرض سیستم</option>
           <option value="Vazirmatn">Vazirmatn</option>
@@ -192,6 +201,7 @@
           <span class="material-icons-outlined">alarm</span>
           مدیریت الگوریتم‌های مرور
         </button>
+ 
       </div>
       <div class="modal-actions">
         <button id="save-settings-btn" class="main-btn" aria-label="ذخیره"><span class="material-icons-outlined">check</span> ذخیره</button>
@@ -206,7 +216,8 @@
       <div class="modal-header-with-separator">
         <h3 id="review-algorithm-modal-title"><span class="material-icons-outlined">alarm</span> الگوریتم‌های مرور</h3>
         <div class="header-separator"></div>
-      </div>
+      
+ </div>
       <button id="back-to-settings-btn" class="icon-btn back-btn" aria-label="برگشت به تنظیمات">
         <span class="material-icons-outlined">arrow_back</span>
       </button>
@@ -221,7 +232,8 @@
   <div id="edit-algorithm-modal" class="modal-overlay hidden" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="edit-algorithm-modal-title">
     <div class="modal-content">
       <div class="modal-header-with-separator">
-        <h3 id="edit-algorithm-modal-title"><span class="material-icons-outlined">edit</span> ویرایش الگوریتم</h3>
+   
+           <h3 id="edit-algorithm-modal-title"><span class="material-icons-outlined">edit</span> ویرایش الگوریتم</h3>
         <div class="header-separator"></div>
       </div>
       <div class="settings-section">
@@ -232,7 +244,8 @@
       <div class="settings-section">
         <label for="algorithm-intervals-list"><span class="material-icons-outlined">calendar_today</span> فاصله‌های مرور:</label>
         <div class="scrollable-intervals">
-          <ul id="algorithm-intervals-list" class="intervals-list"></ul>
+          <ul 
+id="algorithm-intervals-list" class="intervals-list"></ul>
         </div>
         <button id="add-interval-btn" class="secondary-btn"><span class="material-icons-outlined">add</span> اضافه کردن مرور جدید</button>
       </div>
@@ -247,7 +260,8 @@
   <div id="custom-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="custom-modal-title">
     <div class="modal-content">
       <h3 id="custom-modal-title">پیام</h3>
-      <p id="custom-modal-text">آیا از انجام این کار مطمئن هستید؟</p>
+  
+           <p id="custom-modal-text">آیا از انجام این کار مطمئن هستید؟</p>
       <div class="modal-actions" id="custom-modal-actions">
         <button id="custom-modal-confirm-btn" class="main-btn" aria-label="تایید"><span class="material-icons-outlined">check</span> تایید</button>
         <button id="custom-modal-cancel-btn" class="secondary-btn" aria-label="انصراف"><span class="material-icons-outlined">close</span> انصراف</button>
