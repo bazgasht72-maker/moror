@@ -629,8 +629,8 @@ main { flex-grow: 1; padding: 20px;
   overflow-y: auto;
 }
 
-/* New: Styles for the 'انجام دادم' button on the today-list */
-.today-list-item .done-btn {
+/* Custom styles for the 'انجام دادم' button */
+.done-all-btn {
   background-color: var(--primary-color);
   color: #000000;
   border: none;
@@ -641,10 +641,9 @@ main { flex-grow: 1; padding: 20px;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
   flex-shrink: 0;
-  margin-right: auto;
 }
 
-.today-list-item .done-btn:hover {
+.done-all-btn:hover {
   background-color: #5cb85c;
   transform: translateY(-1px);
 }
