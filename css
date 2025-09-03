@@ -18,7 +18,7 @@
   --text-color-primary: #212121;
   --text-color-secondary: #757575;
   --text-color-light: #9E9E9E;
-  --input-bg-color: #F5F5F5;
+  --input-bg-color: #FFFFFF;
   --input-border-color: #E0E0E0;
   --button-text-color: #FFFFFF;
   --progress-red-color: #EF5350;
@@ -288,7 +288,7 @@ main { flex-grow: 1; padding: 20px;
 .modern-input {
   width: 100%;
   box-sizing: border-box;
-  padding: 12px 15px;
+  padding:10px 10px;
  border: 1px solid var(--input-border-color);
   background: var(--input-bg-color);
   color: var(--text-color-primary);
@@ -337,17 +337,18 @@ main { flex-grow: 1; padding: 20px;
 #review-panel .placeholder p { color: var(--text-color-secondary); }
 
 /* New Item Panel */
-#new-item-panel .form-layout { max-width: 760px;
- margin: 12px auto 24px auto; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px;
- box-shadow: 0 8px 20px rgba(0, 0, 0, .06); }
-#new-item-panel .input-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
+#new-item-panel .form-layout {
+  max-width: 760px;
+  margin: 12px auto 24px auto;
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .06);
+  position: relative; /* <<<<<<< این خط را اینجا اضافه کنید */
 }
 #new-item-panel #newTitleInput {
-    padding: 18px 20px;
+    padding: 30px 20px;
     flex-grow: 1;
     width: 100%;
     box-sizing: border-box;
@@ -357,7 +358,7 @@ main { flex-grow: 1; padding: 20px;
     border-radius: 15px;
     outline: none;
     transition: box-shadow .2s, border-color .2s, background-color .2s;
-    font-size: 16px;
+    font-size: 30px;
     font-weight: 700;
 }
 #new-item-panel #add-attachment-btn {
@@ -391,12 +392,13 @@ main { flex-grow: 1; padding: 20px;
   border: 1px solid var(--border-color);
   border-radius: 15px;
   background: var(--app-background);
+  margin-top: 25px; /* <<<<<<< این خط را برای ایجاد فاصله از بالا اضافه کنید */
   margin-bottom: 25px;
 }
 
 #new-item-panel .review-algorithm-select-container {
   flex-grow: 1;
-  max-width: 30%;
+  max-width: 20%;
 }
 
 #new-item-panel #review-algorithm-select {
@@ -404,14 +406,140 @@ main { flex-grow: 1; padding: 20px;
   font-weight: normal;
 }
 
-#new-item-panel .attachment-options {
- justify-content: space-between;
- padding: 15px;
- margin-bottom: 25px;
- display: none;
-}
-
 #new-item-panel .option-box {
  flex: none;
  width: 48px;
+}
+/* استایل‌های جدید برای باکس توضیحات بیشتر */
+.details-box {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 15px;
+  background: var(--app-background);
+  margin-top: 25px; /* فاصله از عنصر بالایی */
+}
+
+.details-box-label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  font-size: 14px;
+  text-align: right; /* متن عنوان در سمت راست باشد */
+}
+
+#new-item-panel .attachment-options {
+  display: flex;
+  justify-content: space-around; /* آیکون‌ها با فاصله یکسان پخش شوند */
+  padding: 1px;
+}
+/* استایل برای هر یک از option-box ها */
+.option-box {
+    display: flex; /* برای وسط چین کردن محتوا */
+    flex-direction: column; /* چیدن آیکون و متن زیر هم (اگر متن هم داشتیم) */
+    align-items: center; /* وسط چین افقی */
+    justify-content: center; /* وسط چین عمودی */
+    width: 100px; /* پهنای ثابت برای هر باکس */
+    height: 50px; /* ارتفاع ثابت برای هر باکس */
+    border: 2px solid var(--border-color); /* کادر خاکستری دور هر باکس */
+    border-radius: 14px; /* گرد کردن گوشه‌های کادر */
+    cursor: pointer; /* نشانگر ماوس به شکل دست درآید */
+    transition: all 0.2s ease-in-out; /* انیمیشن نرم برای تغییر رنگ */
+    color: var(--text-color-secondary); /* رنگ پیش‌فرض آیکون */
+}
+
+/* استایل نهایی و صحیح برای option-box ها */
+#new-item-panel .option-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100px; /* عرض جدید */
+    height: 50px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: var(--text-color-secondary);
+    flex-shrink: 0; /* مهم: اجازه کوچک شدن به باکس نمی‌دهد */
+}
+
+/* افکت هاور با انتخابگر صحیح */
+#new-item-panel .option-box:hover {
+    background-color: rgba(var(--primary-rgb), 0.1); /* استفاده از رنگ اصلی با شفافیت */
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(var(--primary-rgb), 0.2);
+}
+
+/* استایل آیکون‌ها با انتخابگر صحیح */
+#new-item-panel .option-box .material-icons-outlined {
+    font-size: 25px;
+}
+/* استایل برای تولتیپ (نوشته شناور) */
+.tooltip {
+  position: fixed; /* موقعیت ثابت در صفحه */
+  background-color: #333; /* پس‌زمینه تیره */
+  color: #fff; /* متن سفید */
+  padding: 6px 12px; /* فاصله داخلی */
+  border-radius: 6px; /* گرد کردن گوشه‌ها */
+  font-size: 13px; /* اندازه فونت */
+  z-index: 1000; /* بالاتر از بقیه عناصر نمایش داده شود */
+  pointer-events: none; /* ماوس را از خود عبور دهد */
+
+  /* انیمیشن برای ظاهر شدن */
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* کلاس برای نمایش تولتیپ */
+.tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* تنظیم فاصله باکس‌ها در مودال تنظیمات */
+.settings-section {
+  margin-bottom: 15px; /* <<<<<<< این عدد فاصله را کنترل می‌کند */
+}
+/* سفید مطلق کردن باکس مدیریت الگوریتم‌ها */
+.modal-content.algorithm-content {
+  background: #FFFFFF !important; /* سفید مطلق */
+  color: #212121; /* رنگ متن تیره برای خوانایی */
+  border: 1px solid #E0E0E0; /* حاشیه روشن */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* سایه ملایم */
+}
+
+/* سفید کردن لیست الگوریتم‌ها */
+#algorithm-list {
+  background: #FFFFFF !important; /* سفید مطلق */
+  border-radius: 10px;
+  border: 1px solid #E0E0E0; /* حاشیه روشن */
+}
+
+/* تنظیم دکمه "مدیریت الگوریتم‌های مرور" برای هماهنگی */
+#open-algorithm-modal-btn {
+  background: #FFFFFF !important; /* سفید مطلق */
+  color: #212121; /* متن تیره */
+  border: 1px solid #E0E0E0; /* حاشیه روشن */
+  transition: var(--element-transition);
+}
+
+#open-algorithm-modal-btn:hover {
+  background: #F5F5F5 !important; /* خاکستری روشن برای هاور */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* تنظیم دکمه‌های داخل مودال (مثل اضافه کردن الگوریتم جدید) */
+#review-algorithm-modal .main-btn {
+  background: #4CAF50; /* سبز برای دکمه‌ها */
+  color: #FFFFFF; /* متن سفید */
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+#review-algorithm-modal .main-btn:hover:not(:disabled) {
+  background: #388E3C; /* سبز تیره‌تر برای هاور */
+  transform: translateY(-2px);
 }
